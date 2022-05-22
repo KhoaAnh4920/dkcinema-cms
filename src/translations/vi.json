@@ -1,0 +1,37 @@
+{
+    "menu": {
+        "admin": {
+            "header": "Hệ thống",
+            "user-management": "Quản lý người dùng",
+            "genres-management": "Thể loại",
+            "artists-management": "Nghệ sĩ",
+            "songs-management": "Bài Hát",
+            "albums-management": "Albums",
+            "playlist-management": "Playlist"
+        },
+        "user-management": {
+            "add": "Thêm mới người dùng",
+            "list-users": "Liệt kê người dùng"
+        },
+        "genres-management": {
+            "add": "Thêm thể loại",
+            "list-genres": "Danh sách thể loại"
+        },
+        "artists-management": {
+            "add": "Thêm nghệ sĩ",
+            "list-artists": "Danh sách nghệ sĩ"
+        },
+        "songs-management": {
+            "add": " Thêm bài hát",
+            "list-songs": "Danh sách bài hát"
+        },
+        "albums-management": {
+            "add": "Thêm Albums",
+            "list-albums": "Danh sách Albums"
+        },
+        "playlist-management": {
+            "add": "Thêm Playlist",
+            "list-playlist": "Danh sách Playlist"
+        }
+    }
+}
