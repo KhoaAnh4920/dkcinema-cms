@@ -1,0 +1,98 @@
+.container-fluid {
+    .previous-page {
+        color: #6777ef;
+        font-size: 20px;
+    }
+
+    .card {
+        .card-header {
+            background-color: #fff;
+            border-bottom: none;
+            /* padding       : 17px; */
+            /* padding-top   : 18px; */
+            /* padding-bottom: 20px; */
+            color: #6777ef !important;
+            font-weight: 700px;
+
+        }
+
+        .card-body {
+
+
+            .form-group {
+                margin-top: 10px;
+
+                label {
+                    display: inline-block;
+                    margin-bottom: .5rem;
+                    color: #000;
+                    font-size: 1rem;
+                    font-weight: 590;
+                    line-height: 1.5;
+                    color: #757575;
+                    text-align: left;
+                }
+
+                .form-controller {
+                    .disabled-input {
+                        background-color: red;
+                    }
+                }
+
+                .error-code-input {
+                    color: red;
+                    font-size: 12px;
+                    padding-top: 10px;
+                }
+
+
+
+                .imgPreview {
+                    text-align: left;
+                    height: 100px;
+                    width: 100px;
+                    margin-top: 10px;
+                    border-left: 1px solid gray;
+                    border-right: 1px solid gray;
+                    border-top: 1px solid gray;
+                    border-bottom: 1px solid gray;
+
+                    img {
+                        width: 100px;
+                        height: 100px;
+                    }
+
+                    .previewText {
+                        width: 100%;
+                        margin-top: 20px;
+                        font-size: 12px;
+                        margin-left: 2px;
+                        color: #000;
+                    }
+
+                }
+
+
+            }
+
+            .btn-submit {
+                color: #fff;
+                background-color: #6777ef;
+                border-color: #6777ef;
+                -webkit-box-shadow: 0 .125rem .25rem 0 rgba(58, 59, 69, .2) !important;
+                box-shadow: 0 .125rem .25rem 0 rgba(58, 59, 69, .2) !important;
+                border-radius: .25rem;
+                border: 1px solid transparent;
+                padding: .375rem .75rem;
+                font-size: 1rem;
+                line-height: 1.5;
+                display: inline-block;
+                font-weight: 500;
+                height: 35px;
+                text-align: center;
+                vertical-align: middle;
+            }
+        }
+    }
+
+}

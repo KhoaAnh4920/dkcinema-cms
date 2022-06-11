@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import { Link, useHistory } from "react-router-dom";
+
+
+
+
+
 
 function AdminMenu() {
 
@@ -12,45 +18,38 @@ function AdminMenu() {
                             <ul className="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
                                 <li className="active"><a data-toggle="tab" href="#Home"><i className="notika-icon notika-house" /> Home</a>
                                 </li>
-                                <li><a data-toggle="tab" href="#mailbox"><i className="notika-icon notika-mail" /> Email</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Interface"><i className="notika-icon notika-edit" /> Interface</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Charts"><i className="notika-icon notika-bar-chart" /> Charts</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Tables"><i className="notika-icon notika-windows" /> Tables</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Forms"><i className="notika-icon notika-form" /> Forms</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Appviews"><i className="notika-icon notika-app" /> App views</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#Page"><i className="notika-icon notika-support" /> Pages</a>
+                                <li><a data-toggle="tab" href="#mailbox"><i className="notika-icon notika-mail" /> Quản lý</a>
                                 </li>
                             </ul>
                             <div className="tab-content custom-menu-content">
                                 <div id="Home" className="tab-pane in active notika-tab-menu-bg animated flipInX">
                                     <ul className="notika-main-menu-dropdown">
-                                        <li><a href="index.html">Dashboard One</a>
-                                        </li>
-                                        <li><a href="index-2.html">Dashboard Two</a>
-                                        </li>
-                                        <li><a href="index-3.html">Dashboard Three</a>
-                                        </li>
-                                        <li><a href="index-4.html">Dashboard Four</a>
-                                        </li>
-                                        <li><a href="analytics.html">Analytics</a>
-                                        </li>
-                                        <li><a href="widgets.html">Widgets</a>
+                                        <li>
+                                            <Link to="/" className='nav-link'>Dashboard</Link>
+                                        
                                         </li>
                                     </ul>
                                 </div>
                                 <div id="mailbox" className="tab-pane notika-tab-menu-bg animated flipInX">
                                     <ul className="notika-main-menu-dropdown">
-                                        <li><a href="inbox.html">Inbox</a>
+                                        <li>
+                                            <Link to="/users-management" className='nav-link'>Users</Link>
                                         </li>
-                                        <li><a href="view-email.html">View Email</a>
+                                        <li><a href="view-email.html">Rạp chiếu</a>
                                         </li>
-                                        <li><a href="compose-email.html">Compose Email</a>
+                                        <li><a href="compose-email.html">Lịch chiếu</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Vé</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Phim</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Thực phẩm</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Tin tức</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Thông báo</a>
+                                        </li>
+                                        <li><a href="compose-email.html">Khuyến mãi</a>
                                         </li>
                                     </ul>
                                 </div>

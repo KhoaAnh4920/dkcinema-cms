@@ -12,12 +12,12 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 
 
 const reducers = combineReducers({
-    user: userReducer,
+    admin: userReducer,
 });
 
 // whitelist
 const persistConfig = {
-    key: 'user',
+    key: 'admin',
     storage: storage,
     stateReconciler: autoMergeLevel2,
     //whitelist: ['username', 'userInfo']

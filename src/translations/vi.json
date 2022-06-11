@@ -3,35 +3,41 @@
         "admin": {
             "header": "Hệ thống",
             "user-management": "Quản lý người dùng",
-            "genres-management": "Thể loại",
-            "artists-management": "Nghệ sĩ",
-            "songs-management": "Bài Hát",
-            "albums-management": "Albums",
-            "playlist-management": "Playlist"
+            "movieTheater-management": "Quản lý rạp",
+            "room-management": "Quản lý phòng chiếu",
+            "films-management": "Quản lý phim",
+            "showTime-management": "Quản lý suất chiếu",
+            "combo-management": "Quản lý combo",
+            "ticket-management": "Quản lý vé",
+            "news-management": "Quản lý bài viết",
+            "voucher-management": "Quản lý khuyến mãi"
         },
         "user-management": {
-            "add": "Thêm mới người dùng",
-            "list-users": "Liệt kê người dùng"
+            "list-users": "Quản lý người dùng"
         },
-        "genres-management": {
-            "add": "Thêm thể loại",
-            "list-genres": "Danh sách thể loại"
+        "movieTheater-management": {
+            "list-movieTheater": "Quản lý rạp"
         },
-        "artists-management": {
-            "add": "Thêm nghệ sĩ",
-            "list-artists": "Danh sách nghệ sĩ"
+        "room-management": {
+            "list-room": "Quản lý phong chiếu"
         },
-        "songs-management": {
-            "add": " Thêm bài hát",
-            "list-songs": "Danh sách bài hát"
+        "films-management": {
+            "list-films": "Quản lý phim"
         },
-        "albums-management": {
-            "add": "Thêm Albums",
-            "list-albums": "Danh sách Albums"
+        "showTime-management": {
+            "list-showTime": "Quản lý lịch chiếu"
         },
-        "playlist-management": {
-            "add": "Thêm Playlist",
-            "list-playlist": "Danh sách Playlist"
+        "combo-management": {
+            "list-combo": "Quản lý combo"
+        },
+        "ticket-management": {
+            "list-ticket": "Quản lý vé"
+        },
+        "news-management": {
+            "list-news": "Quản lý bài viết"
+        },
+        "voucher-management": {
+            "list-voucher": "Quản lý khuyến mãi"
         }
     }
 }

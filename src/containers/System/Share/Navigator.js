@@ -11,18 +11,20 @@ class MenuGroup extends Component {
         const { name, children, id } = this.props;
         return (
             // render title menu //
-            <>
-                <li className="active">
-                    <a data-toggle="tab" href="#Home">
-                        <i className="notika-icon notika-house" /> <FormattedMessage id={name} />
-                    </a>
+            <li className="nav-item">
+                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target={'#' + id} aria-expanded="true"
+                    aria-controls="collapseTableUser">
+                    <i className="fas fa-fw fa-table"></i>
+                    <FormattedMessage id={name} />
+                </a>
+                <div id={id} className="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+                    <div className="bg-white py-2 collapse-inner rounded">
+                        <h6 className="collapse-header">Tables</h6>
+                        {children}
+                    </div>
+                </div>
 
-                </li>
-                <li><a data-toggle="tab" href="#mailbox"><i class="notika-icon notika-mail"></i> Email</a>
-                </li>
-
-
-            </>
+            </li>
 
 
             // <li className="nav-item">
@@ -58,7 +60,7 @@ class Menu extends Component {
                             onClick={onClick}
                             aria-expanded={"false"}
                         >
-                            {/* <FormattedMessage id={name} /> */}
+                            <FormattedMessage id={name} />
                             <div className="icon-right">
                                 <i className={"far fa-angle-right"} />
                             </div>
@@ -71,7 +73,7 @@ class Menu extends Component {
                     </Fragment>
                 ) : (
                     <Link to={link} className="menu-link" onClick={onLinkClick}>
-                        {/* <FormattedMessage id={name} /> */}
+                        <FormattedMessage id={name} />
                     </Link>
                 )}
             </li>
@@ -212,7 +214,23 @@ class Navigator extends Component {
         const { menus, location, onLinkClick } = this.props;
         return (
             <Fragment>
-                <ul className="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
+                <ul className="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
+                    <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                        <div className="sidebar-brand-icon">
+                            <img src="/img/logo/logo2.png" />
+                        </div>
+                        <div className="sidebar-brand-text mx-3">RuangAdmin</div>
+                    </a>
+                    <hr className="sidebar-divider my-0" />
+                    <li className="nav-item active">
+                        <a className="nav-link" href="index.html">
+                            <i className="fas fa-fw fa-tachometer-alt" />
+                            <span>Dashboard</span></a>
+                    </li>
+                    <hr className="sidebar-divider" />
+                    <div className="sidebar-heading">
+                        Features
+                    </div>
                     {
                         menus.map((group, groupIndex) => {
                             return (
@@ -252,34 +270,7 @@ class Navigator extends Component {
                         })
                     }
                 </ul>
-                <div className="tab-content custom-menu-content">
-                    <div id="Home" className="tab-pane in active notika-tab-menu-bg animated flipInX">
-                        <ul className="notika-main-menu-dropdown">
-                            <li><a href="index.html">Dashboard One</a>
-                            </li>
-                            <li><a href="index-2.html">Dashboard Two</a>
-                            </li>
-                            <li><a href="index-3.html">Dashboard Three</a>
-                            </li>
-                            <li><a href="index-4.html">Dashboard Four</a>
-                            </li>
-                            <li><a href="analytics.html">Analytics</a>
-                            </li>
-                            <li><a href="widgets.html">Widgets</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div id="mailbox" class="tab-pane notika-tab-menu-bg animated flipInX">
-                        <ul class="notika-main-menu-dropdown">
-                            <li><a href="inbox.html">Inbox</a>
-                            </li>
-                            <li><a href="view-email.html">View Email</a>
-                            </li>
-                            <li><a href="compose-email.html">Compose Email</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+
 
             </Fragment>
         );

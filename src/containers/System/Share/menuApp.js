@@ -4,77 +4,80 @@ export const adminMenu = [
         id: 'tableUser',
         menus: [
             {
-                name: 'menu.user-management.add', link: '/admin/add-users',
+                name: 'menu.user-management.list-users', link: '/users-management',
             },
-            // {
-            //     name: 'menu.user-management.list-users', link: '/admin/list-users',
-            // },
         ]
     },
-
-    // { // Genres //
-    //     name: 'menu.admin.genres-management',
-    //     id: 'tableGenres',
-    //     menus: [
-    //         {
-    //             name: 'menu.genres-management.add', link: '/admin/add-genres'
-    //         },
-    //         {
-    //             name: 'menu.genres-management.list-genres', link: '/admin/list-genres'
-    //         },
-
-    //     ]
-    // },
-    // { // Artists //
-    //     name: 'menu.admin.artists-management',
-    //     id: 'tableArtists',
-    //     menus: [
-    //         {
-    //             name: 'menu.artists-management.add', link: '/admin/add-artists'
-    //         },
-    //         {
-    //             name: 'menu.artists-management.list-artists', link: '/admin/list-artists'
-    //         },
-
-    //     ]
-    // },
-    // { // Songs //
-    //     name: 'menu.admin.songs-management',
-    //     id: 'tableSongs',
-    //     menus: [
-    //         {
-    //             name: 'menu.songs-management.add', link: '/admin/add-songs'
-    //         },
-    //         {
-    //             name: 'menu.songs-management.list-songs', link: '/admin/list-songs'
-    //         },
-
-    //     ]
-    // },
-    // { // Albums //
-    //     name: 'menu.admin.albums-management',
-    //     id: 'tableAlbums',
-    //     menus: [
-    //         {
-    //             name: 'menu.albums-management.add', link: '/admin/add-albums'
-    //         },
-    //         {
-    //             name: 'menu.albums-management.list-albums', link: '/admin/list-albums'
-    //         },
-
-    //     ]
-    // },
-    // { // Playlists //
-    //     name: 'menu.admin.playlist-management',
-    //     id: 'tablePlaylist',
-    //     menus: [
-    //         {
-    //             name: 'menu.playlist-management.add', link: '/admin/add-playlist'
-    //         },
-    //         {
-    //             name: 'menu.playlist-management.list-playlist', link: '/admin/list-playlist'
-    //         },
-
-    //     ]
-    // },
+    {
+        name: 'menu.admin.movieTheater-management',
+        id: 'tableMovieTheater',
+        menus: [
+            {
+                name: 'menu.movieTheater-management.list-movieTheater', link: '/movieTheater-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.room-management',
+        id: 'tableRoom',
+        menus: [
+            {
+                name: 'menu.room-management.list-room', link: '/room-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.films-management',
+        id: 'tablefilms',
+        menus: [
+            {
+                name: 'menu.films-management.list-films', link: '/films-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.showTime-management',
+        id: 'tableshowTime',
+        menus: [
+            {
+                name: 'menu.showTime-management.list-showTime', link: '/showTime-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.combo-management',
+        id: 'tableCombo',
+        menus: [
+            {
+                name: 'menu.combo-management.list-combo', link: '/combo-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.ticket-management',
+        id: 'tableTicket',
+        menus: [
+            {
+                name: 'menu.ticket-management.list-ticket', link: '/ticket-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.news-management',
+        id: 'tableNews',
+        menus: [
+            {
+                name: 'menu.news-management.list-news', link: '/news-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.voucher-management',
+        id: 'tableVoucher',
+        menus: [
+            {
+                name: 'menu.voucher-management.list-voucher', link: '/voucher-management',
+            },
+        ]
+    },
 ];
