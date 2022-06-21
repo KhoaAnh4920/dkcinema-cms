@@ -7,6 +7,7 @@ import { adminLoginSuccess } from '../../redux/userSlice';
 import { useHistory } from "react-router-dom";
 import { userState } from "../../redux/userSlice";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 
 
 export default function Login() {
@@ -29,13 +30,18 @@ export default function Login() {
         setErrMessage('');
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
+            console.log("Check data: ", data);
             if (data && data.errorCode === 0) {
                 console.log('---login ok---');
+                console.log("Check data: ".data);
 
                 //this.props.testRedux();
 
                 dispatch(adminLoginSuccess(data.data));
+                toast.success("Login success");
                 history.push("/");
+            } else if (data.errorCode === 4) {
+                toast.error(data.message)
             } else {
                 console.log("Lỗi: ", data.message);
                 setErrMessage(data.message);

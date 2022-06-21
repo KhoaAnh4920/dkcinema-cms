@@ -1,39 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import AdminMenu from '../../containers/System/Share/AdminMenu';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { getAllRoles, createNewUserService } from '../../services/UserService';
+import { createNewMovieTheater, getAllMovieTheater } from '../../services/MovieTheater';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import Footer from '../../containers/System/Share/Footer';
 import Select from 'react-select';
-import './AddUser.scss';
-import useLocationForm from "./useLocationForm";
-import DatePicker from '../../containers/System/Share/DatePicker';
+import './AddMovieTheater.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import { CommonUtils } from '../../utils';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
+import useLocationForm from "../Users/useLocationForm";
+import { getUserByRole } from '../../services/UserService';
+//Image upload modules
+import { Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+
+import "antd/dist/antd.css";
 
 
-
-export default function AddUser() {
+export default function AddMovieTheater() {
     const [startDate, setStartDate] = useState(new Date());
     const [allValues, setAllValues] = useState({
-        phone: '',
-        userName: '',
-        email: '',
-        password: '',
-        userName: '',
+        soDienThoai: '',
+        tenRap: '',
         address: '',
-        listGender: [],
-        listRoles: [],
-        selectedGender: '',
-        selectedRoles: '',
         errors: {},
+        listUser: [],
+        selectedUser: '',
         isShowLoading: false
     });
+    const [valImg, setValImg] = useState({
+        previewVisible: false,
+        previewImage: '',
+        previewTitle: '',
+        fileList: [],
+    })
     let history = useHistory();
     const { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } =
         useLocationForm(true);
@@ -48,25 +52,17 @@ export default function AddUser() {
     } = state;
 
 
-    const buildDataInputSelect = (inputData, type) => {
+    const buildDataInputSelect = (inputData) => {
         let result = [];
-        if (type === 'GENDERS') {
-            result = [
-                { value: 1, label: 'Nam' },
-                { value: 0, label: 'Nữ' },
-            ];
-        }
         if (inputData && inputData.length > 0) {
-            if (type === 'ROLES') {
-                inputData.map((item, index) => {
-                    let object = {};
 
-                    object.label = item.rolesName;
-                    object.value = item.id;
-                    result.push(object);
-                })
-            }
+            inputData.map((item, index) => {
+                let object = {};
 
+                object.label = item.fullName;
+                object.value = item.id;
+                result.push(object);
+            })
         }
         return result;
     }
@@ -76,33 +72,45 @@ export default function AddUser() {
         let stateCopy = { ...allValues };
         stateCopy[stateName] = selectedOption;
         setAllValues({ ...stateCopy })
+
+        console.log("Check state: ", allValues);
     }
 
 
     useEffect(() => {
-        async function fetchDataRoles() {
+        async function fetchDataUser() {
             // You can await here
-            const userRoles = await getAllRoles();
 
-            if (userRoles && userRoles.dataRoles) {
-                let listRoles = buildDataInputSelect(userRoles.dataRoles, 'ROLES');
+            const userData = await getUserByRole(2);
+            const movieTheaterData = await getAllMovieTheater();
+
+
+            console.log("userData: ", userData.data);
+            console.log("movieTheaterData: ", movieTheaterData.movie);
+
+            if (userData && userData.data) {
+                let isFounded = userData.data.filter(o1 => !movieTheaterData.movie.some(o2 => o1.id === o2.userId));
+                console.log("Check: ", isFounded);
+
+                let listUser = buildDataInputSelect(isFounded);
 
                 setAllValues((prevState) => ({
                     ...prevState,
-                    listRoles: listRoles
+                    listUser: listUser,
                 }));
+
             }
         }
-        fetchDataRoles();
+        fetchDataUser();
 
-        let dateToday = moment().format('dddd, MMMM Do, YYYY');
-        let listGender = buildDataInputSelect([], 'GENDERS');
+        // let dateToday = moment().format('dddd, MMMM Do, YYYY');
+        // let listGender = buildDataInputSelect([], 'GENDERS');
 
-        setAllValues((prevState) => ({
-            ...prevState,
-            listGender: listGender,
-            dateToday: dateToday
-        }));
+        // setAllValues((prevState) => ({
+        //     ...prevState,
+        //     listGender: listGender,
+        //     dateToday: dateToday
+        // }));
 
 
     }, []);
@@ -110,7 +118,7 @@ export default function AddUser() {
     const checkValidateInput = () => {
         let isValid = true;
         let errors = {};
-        let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
+        let arrInput = ['email', 'password', 'tenRap', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
         for (let i = 0; i < arrInput.length; i++) {
             // this.state[arrInput[i]] == this.state.email or this.state.password
             if (!allValues[arrInput[i]]) {
@@ -136,46 +144,41 @@ export default function AddUser() {
     }
 
 
-    const handleSaveUser = async () => {
-
+    const handleSaveMovieTheater = async () => {
 
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
         }));
 
-        let isValid = checkValidateInput();
-        console.log("Check state: ", allValues);
-        if (isValid) {
-            let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
-            console.log("Check formatedDate: ", formatedDate);
+        let result = [];
 
-            let res = await createNewUserService({
-                email: allValues.email,
-                password: allValues.password,
-                fullName: allValues.fullName,
-                birthday: formatedDate,
-                phone: allValues.phone,
-                gender: allValues.selectedGender.value,
-                roleId: allValues.selectedRoles.value,
-                userName: allValues.userName,
-                address: allValues.address,
-                avatar: allValues.avatar,
-                fileName: allValues.fileName,
-                cityCode: selectedCity.value,
-                districtCode: selectedDistrict.value,
-                wardCode: selectedWard.value
-            })
+        await Promise.all(valImg.fileList.map(async (item, index) => {
+            console.log("Check item: ", item.originFileObj);
+            let obj = {};
+            obj.image = await getBase64(item.originFileObj);
+            obj.fileName = item.name;
+            result.push(obj);
+        }))
 
-            if (res && res.errCode == 0) {
-                history.push("/users-management")
-                toast.success("Thêm người dùng mới thành công");
-            } else {
-                history.push("/users-management")
-                toast.error("Thêm thất bại");
-            }
+        let res = await createNewMovieTheater({
+            tenRap: allValues.tenRap,
+            soDienThoai: allValues.soDienThoai,
+            address: allValues.address,
+            cityCode: selectedCity.value,
+            districtCode: selectedDistrict.value,
+            wardCode: selectedWard.value,
+            userId: allValues.selectedUser.value,
+            listImage: result,
+        })
+
+        if (res && res.errCode == 0) {
+            history.push("/movieTheater-management")
+            toast.success("Add new movie theater success");
+        } else {
+            history.push("/movieTheater-management")
+            toast.error("Add fail");
         }
-
     }
 
 
@@ -185,6 +188,16 @@ export default function AddUser() {
 
     const handleOnChangeDatePicker = (date) => {
         setAllValues({ ...allValues, birthday: date[0] })
+    }
+
+    //Uploaded url
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
     }
 
     const _handleImageChange = async (e) => {
@@ -216,9 +229,39 @@ export default function AddUser() {
 
             reader.readAsDataURL(file)
         }
-
-
     }
+
+    const handleCancel = () => {
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewVisible: false
+        }));
+    }
+
+    //Image Preview
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        }));
+
+    };
+
+    const handleChangeImage = ({ fileList }) => {
+        setValImg((prevState) => ({
+            ...prevState,
+            fileList
+        }));
+    }
+
+
 
 
 
@@ -254,93 +297,66 @@ export default function AddUser() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new usser</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Add new MovieTheater</h5>
                                         </div>
                                         <div className="card-body">
+                                            <div className="MainDiv">
+                                                <div className="container">
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Email address</label>
-                                                <input type="text" className="form-control input-sm" name='email' onChange={changeHandler} placeholder="Enter Email" />
-                                                <small id="emailHelp" className="form-text text-muted">We'll never share your
-                                                    email with anyone else.</small>
-
-                                                <span className='error-code-input'>{allValues.errors["email"]}</span>
-
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Username</label>
-                                                <input type="text" className="form-control input-sm" name='userName' onChange={changeHandler} placeholder="Enter Username" />
-
-                                                <span className='error-code-input'>{allValues.errors["userName"]}</span>
-
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputPassword1">Password</label>
-                                                <input type="password" className="form-control input-sm" name='password' onChange={changeHandler} placeholder="Password" />
-                                                <span className='error-code-input'>{allValues.errors["password"]}</span>
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">FullName</label>
-                                                <input type="text" className="form-control input-sm" name='fullName' onChange={changeHandler} placeholder="Fullname" />
-                                                <span className='error-code-input'>{allValues.errors["fullName"]}</span>
-
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Phone</label>
-                                                <input type="text" className="form-control input-sm" name='phone' onChange={changeHandler} placeholder="Phone" />
-                                                <span className='error-code-input'>{allValues.errors["phone"]}</span>
-
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Birthday</label>
-                                                <DatePicker
-                                                    onChange={handleOnChangeDatePicker}
-                                                    className="form-control"
-                                                    value={allValues.birthday}
-                                                />
-                                                <span className='error-code-input'>{allValues.errors["birthday"]}</span>
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Avatar</label>
-                                                <div className="custom-file">
-                                                    <input type="file"
-                                                        className="custom-file-input"
-                                                        onChange={(e) => _handleImageChange(e)}
-                                                        id="customFile" />
-                                                    <label className="custom-file-label" htmlFor="customFile">Choose file</label>
-                                                </div>
-                                                <div className="imgPreview">
-                                                    {allValues.imagePreviewUrl && <img src={allValues.imagePreviewUrl} />}
-                                                    {!allValues.imagePreviewUrl && <div className="previewText">Please select an Image for Preview</div>}
+                                                    <Upload
+                                                        beforeUpload={() => {
+                                                            /* update state here */
+                                                            return false;
+                                                        }}
+                                                        action={""}
+                                                        listType="picture-card"
+                                                        fileList={valImg.fileList}
+                                                        onPreview={handlePreview}
+                                                        onChange={handleChangeImage}
+                                                    >
+                                                        {
+                                                            valImg.fileList.length >= 8 ? null :
+                                                                <>
+                                                                    <div>
+                                                                        <PlusOutlined />
+                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                    </div>
+                                                                </>}
+                                                    </Upload>
+                                                    <Modal
+                                                        visible={valImg.previewVisible}
+                                                        title={valImg.previewTitle}
+                                                        footer={null}
+                                                        onCancel={handleCancel}
+                                                    >
+                                                        <img alt="example" style={{ width: '100%' }} src={valImg.previewImage} />
+                                                    </Modal>
                                                 </div>
                                             </div>
-
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Gender</label>
+                                                <label htmlFor="exampleInputEmail1">Tên rạp chiếu</label>
+                                                <input type="text" className="form-control input-sm" name='tenRap' onChange={changeHandler} placeholder="Enter name" />
+
+                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputPassword1">Số điện thoại</label>
+                                                <input type="text" className="form-control input-sm" name='soDienThoai' onChange={changeHandler} placeholder="Enter phone" />
+                                                {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Quản lý rạp</label>
                                                 <Select
                                                     className='gender-select'
-                                                    value={allValues.selectedGender}
+                                                    value={allValues.selectedUser}
                                                     onChange={handleChangeSelect}
-                                                    options={allValues.listGender}
-                                                    placeholder='Select gender'
+                                                    options={allValues.listUser}
+                                                    placeholder='Select manage'
                                                     name='selectedGender'
                                                 // styles={this.props.colourStyles}
                                                 />
-                                                <span className='error-code-input'>{allValues.errors["selectedGender"]}</span>
-
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Roles</label>
-                                                <Select
-                                                    value={allValues.selectedRoles}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listRoles}
-                                                    placeholder='Select roles'
-                                                    name='selectedRoles'
-                                                // styles={this.props.colourStyles}
-                                                />
-                                                <span className='error-code-input'>{allValues.errors["selectedRoles"]}</span>
+                                                {/* <span className='error-code-input'>{allValues.errors["selectedGender"]}</span> */}
 
                                             </div>
 
@@ -383,24 +399,17 @@ export default function AddUser() {
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">Address</label>
                                                 <input type="text" className="form-control input-sm" name='address' onChange={changeHandler} placeholder="Address" />
-                                                <span className='error-code-input'>{allValues.errors["address"]}</span>
+                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
 
                                             </div>
 
 
                                             {/* <button
                                                 type="submit"
-                                                onClick={() => handleSaveUser()}
+                                                onClick={() => handleSaveMovieTheater()}
                                                 className="btn btn-primary btn-submit">Submit</button> */}
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Address</label>
-                                                <input type="text" className="form-control input-sm" name='address' onChange={changeHandler} placeholder="Address" />
-                                                <span className='error-code-input'>{allValues.errors["address"]}</span>
-
-                                            </div>
-
-                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveUser()}>
+                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveMovieTheater()}>
                                                 {allValues.isShowLoading &&
                                                     <>
                                                         <Spinner
