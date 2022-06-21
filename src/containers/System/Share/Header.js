@@ -13,10 +13,16 @@ export default function Header() {
     const dispatch = useDispatch();
 
 
+
     useEffect(() => {
         console.log('userState from header: ', selectUser.isLoggedInAdmin);
-        if (!selectUser.isLoggedInAdmin)
+        if (!selectUser.isLoggedInAdmin) {
+            console.log("OK");
             history.push('/admin-login');
+        } else {
+            console.log("No");
+        }
+
     }, []);
 
     const handleLogout = async () => {
@@ -173,8 +179,8 @@ export default function Header() {
                 <div className="topbar-divider d-none d-sm-block" />
                 <li className="nav-item dropdown no-arrow">
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img className="img-profile rounded-circle" src={selectUser.adminInfo.avatar} style={{ maxWidth: '60px' }} />
-                        <span className="ml-2 d-none d-lg-inline text-white small">{selectUser.adminInfo.fullName}</span>
+                        <img className="img-profile rounded-circle" src={(selectUser.adminInfo.avatar) ? selectUser.adminInfo.avatar : ''} style={{ maxWidth: '60px' }} />
+                        <span className="ml-2 d-none d-lg-inline text-white small">{(selectUser.adminInfo.fullName) ? selectUser.adminInfo.fullName : ''}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                         <div className="dropdown-divider" />
