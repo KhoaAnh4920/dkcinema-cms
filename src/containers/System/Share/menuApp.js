@@ -81,3 +81,43 @@ export const adminMenu = [
         ]
     },
 ];
+
+
+export const merchantMenu = [
+    {
+        name: 'menu.admin.movieTheater-management',
+        id: 'tableMovieTheater',
+        menus: [
+            {
+                name: 'menu.movieTheater-management.list-movieTheater', link: '/movieTheater-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.room-management',
+        id: 'tableRoom',
+        menus: [
+            {
+                name: 'menu.room-management.list-room', link: '/room-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.showTime-management',
+        id: 'tableshowTime',
+        menus: [
+            {
+                name: 'menu.showTime-management.list-showTime', link: '/showTime-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.ticket-management',
+        id: 'tableTicket',
+        menus: [
+            {
+                name: 'menu.ticket-management.list-ticket', link: '/ticket-management',
+            },
+        ]
+    },
+];

@@ -168,12 +168,6 @@ export default function ModalAddUsers(props) {
 
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
         props.saveNewUser(allValuesInput);
-        // let isValid = this.checkValidateInput();
-        // if (isValid) {
-
-        //     this.props.saveEditPlaylist(this.state);
-
-        // }
 
     }
 

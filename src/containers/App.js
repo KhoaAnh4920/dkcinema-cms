@@ -10,6 +10,16 @@ import AddUser from '../components/Users/AddUser';
 import EditUser from '../components/Users/EditUser';
 import 'react-toastify/dist/ReactToastify.css';
 import TestModal from '../components/Users/TestModal';
+import ListFilms from '../components/Movie/ListFilms';
+import AddFilms from '../components/Movie/AddFilms';
+import DetailFilm from '../components/Movie/DetailFilm';
+import EditFilms from '../components/Movie/EditFilms';
+import ListMovieTheater from '../components/MovieTheater/ListMovieTheater';
+import AddMovieTheater from '../components/MovieTheater/AddMovieTheater';
+import EditMovieTheater from '../components/MovieTheater/EditMovieTheater';
+import ListRoom from '../components/Room/ListRoom';
+import AddRoom from '../components/Room/AddRoom';
+import EditRoom from '../components/Room/EditRoom';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -32,6 +42,16 @@ function App() {
             <Route path="/add-users" component={AddUser} />
             <Route path="/edit-user/:id" component={EditUser} />
             <Route path="/test-modal" component={TestModal} />
+            <Route path="/films-management" component={ListFilms} />
+            <Route path="/add-new-films" component={AddFilms} />
+            <Route path="/detail-film/:id" component={DetailFilm} />
+            <Route path="/edit-film/:id" component={EditFilms} />
+            <Route path="/movieTheater-management" component={ListMovieTheater} />
+            <Route path="/add-new-movieTheater" component={AddMovieTheater} />
+            <Route path="/edit-movie-theater/:id" component={EditMovieTheater} />
+            <Route path="/room-management" component={ListRoom} />
+            <Route path="/add-new-room" component={AddRoom} />
+            <Route path="/edit-room/:id" component={EditRoom} />
           </Switch>
         </span>
       </div>

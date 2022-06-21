@@ -1,0 +1,27 @@
+.row_chair {
+    display: flex;
+    flex-direction: row;
+
+    .chair {
+        display: flex;
+        flex-direction: column-reverse;
+        column-gap: 20px;
+        justify-content: center;
+        align-items: center;
+        row-gap: 20px;
+
+        .one_row {
+            display: flex;
+            flex-direction: row;
+            column-gap: 20px;
+        }
+
+        p {
+
+            height: fit-content;
+            background-color: aqua;
+            margin: 0;
+            padding: 0;
+        }
+    }
+}

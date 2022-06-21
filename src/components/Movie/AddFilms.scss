@@ -1,0 +1,40 @@
+.container-fluid {
+    .horizon-2-input {
+        display: flex;
+        gap: 30px;
+        width: 100%;
+
+        .horizon-input {
+            width: 50%;
+        }
+
+        .horizon-checkbox {
+            width: 50%;
+        }
+
+    }
+
+    .horizon-form {
+        display: flex;
+        gap: 30px;
+        width: 100%;
+
+        .horizon-input {
+            width: 25%;
+        }
+    }
+
+    .horizon-form-2 {
+        display: flex;
+        gap: 30px;
+        width: 100%;
+
+        .horizon-input-brand {
+            width: 70%;
+        }
+
+        .horizon-input-releaseTime {
+            width: 30%;
+        }
+    }
+}

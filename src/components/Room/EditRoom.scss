@@ -1,0 +1,131 @@
+.container-fluid {
+    .card-body {
+        .room-container {
+            display: flex;
+            gap: 30px;
+        }
+
+        .seet-container {
+            width: 100%;
+            padding-top: 40px;
+
+            .title-main {
+                margin-bottom: 50px;
+                color: #6777ef !important;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+
+            .row {
+                margin-left: 0px;
+                margin-right: 0px;
+
+                .room-seet {
+                    background-color: #fafafa;
+                    height: 520px;
+                    border: 1px solid #000;
+                    position: relative;
+
+                    .row_chair {
+                        display: flex;
+                        flex-direction: row;
+                        position: absolute;
+                        /* height: 100%; */
+                        bottom: 80px;
+                        left: 0;
+                        right: 0;
+
+                        .chair {
+                            margin: 0 auto;
+                            display: flex;
+                            flex-direction: column-reverse;
+                            column-gap: 20px;
+                            justify-content: center;
+                            align-items: center;
+                            row-gap: 20px;
+
+                            .one_row {
+                                display: flex;
+                                flex-direction: row;
+                                column-gap: 20px;
+
+                                .name-column {
+                                    background-color: transparent;
+                                }
+                            }
+
+                            .seet-item {
+
+                                height: fit-content;
+                                width: 20px;
+                                background-color: #C5EABF;
+                                text-align: center;
+                                margin: 0;
+                                padding: 0;
+
+                                &:hover {
+                                    cursor: pointer;
+                                    background-color: orange;
+                                }
+                            }
+                        }
+                    }
+
+                    .sreen-room {
+                        height: 50px;
+                        position: absolute;
+                        /* height: 100%; */
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+
+                        p {
+                            text-align: center;
+                        }
+
+                        .line {
+
+                            text-align: center;
+
+                            &::after {
+                                display: block;
+                                width: 300px;
+                                height: 2px;
+                                margin-top: 8px;
+                                content: '';
+                                background-color: #999999;
+                                margin: 0 auto;
+                            }
+                        }
+                    }
+                }
+
+                .room-info {
+                    position: relative;
+
+                    .button-sumit-seet-container {
+                        height: 100px;
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+
+                        button {
+                            margin-top: 10px;
+                            margin-left: 10px;
+                            display: block;
+                        }
+
+                        .delete-diagram-seet {
+                            background-color: #fff;
+                            border: 1px solid #6777ef;
+                            color: #6777ef;
+                        }
+                    }
+                }
+            }
+
+
+        }
+    }
+}

@@ -1,13 +1,14 @@
 import axios from '../axios';
-
+import authHeader from "./auth-header";
 
 const hanedleLoginUser = (userEmail, userPassword) => {
 
-    return axios.post('/admin-login', { email: userEmail, password: userPassword }) // req.body.email, req.body.password //
+    return axios.post('/cms/admin-login', { email: userEmail, password: userPassword }) // req.body.email, req.body.password //
 }
 
 const getAllUser = () => {
-    return axios.get(`/get-list-users`)
+    console.log("authHeader: ", authHeader());
+    return axios.get(`/get-list-users`, { headers: authHeader() })
 }
 
 const getAllRoles = () => {
@@ -16,6 +17,11 @@ const getAllRoles = () => {
 
 const getEditUser = (id) => {
     return axios.get(`/users/${id}`)
+}
+
+
+const getUserByRole = (roleId) => {
+    return axios.get(`/role/users/${roleId}`)
 }
 
 const createNewUserService = (data) => {
@@ -39,5 +45,6 @@ export {
     createNewUserService,
     getEditUser,
     updateUserService,
-    deleteUserService
+    deleteUserService,
+    getUserByRole
 };
