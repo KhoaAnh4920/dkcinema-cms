@@ -83,11 +83,63 @@ export default function AddFilms() {
     };
 
     const handleChangeImage = ({ fileList }) => {
+
+        console.log(fileList);
+        if (fileList.length > 2) {
+            toast.error("Maximum 2 poster");
+            return;
+        }
+        if (fileList.length > 0) {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileList[fileList.length - 1].originFileObj);
+            reader.addEventListener('load', event => {
+                const _loadedImageUrl = event.target.result;
+                const image = document.createElement('img');
+                image.src = _loadedImageUrl;
+                image.addEventListener('load', () => {
+                    const { width, height } = image;
+                    // set image width and height to your state here
+                    console.log(width, height);
+                    if (width >= height) {
+                        fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
+                    } else
+                        fileList[fileList.length - 1].typeImage = 2; // Hình dọc
+                });
+            });
+            const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
+            console.log(isJpgOrPng);
+            if (!isJpgOrPng) {
+                toast.error("Please choose image");
+                return;
+            }
+        }
+
+
+        console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
         }));
     }
+
+    const beforeUpload = file => {
+        console.log("file:", file);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.addEventListener('load', event => {
+            const _loadedImageUrl = event.target.result;
+            const image = document.createElement('img');
+            image.src = _loadedImageUrl;
+            image.addEventListener('load', () => {
+                const { width, height } = image;
+                // set image width and height to your state here
+                console.log(width, height);
+            });
+        });
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+        console.log(isJpgOrPng);
+        return isJpgOrPng;
+    };
 
 
 
@@ -176,6 +228,7 @@ export default function AddFilms() {
             let obj = {};
             obj.image = await getBase64(item.originFileObj);
             obj.fileName = item.name;
+            obj.typeImage = item.typeImage
             result.push(obj);
         }))
 
@@ -272,14 +325,14 @@ export default function AddFilms() {
                                                 <div className="container">
 
                                                     <Upload
-                                                        beforeUpload={() => {
-                                                            /* update state here */
-                                                            return false;
-                                                        }}
                                                         action={""}
                                                         listType="picture-card"
                                                         fileList={valImg.fileList}
                                                         onPreview={handlePreview}
+                                                        beforeUpload={() => {
+                                                            /* update state here */
+                                                            return false;
+                                                        }}
                                                         onChange={handleChangeImage}
                                                     >
                                                         {

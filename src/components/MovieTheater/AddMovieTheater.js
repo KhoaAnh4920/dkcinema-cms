@@ -245,6 +245,8 @@ export default function AddMovieTheater() {
             file.preview = await getBase64(file.originFileObj);
         }
 
+
+
         setValImg((prevState) => ({
             ...prevState,
             previewImage: file.url || file.preview,
