@@ -18,15 +18,6 @@ export const adminMenu = [
         ]
     },
     {
-        name: 'menu.admin.room-management',
-        id: 'tableRoom',
-        menus: [
-            {
-                name: 'menu.room-management.list-room', link: '/room-management',
-            },
-        ]
-    },
-    {
         name: 'menu.admin.films-management',
         id: 'tablefilms',
         menus: [
@@ -36,29 +27,11 @@ export const adminMenu = [
         ]
     },
     {
-        name: 'menu.admin.showTime-management',
-        id: 'tableshowTime',
-        menus: [
-            {
-                name: 'menu.showTime-management.list-showTime', link: '/showTime-management',
-            },
-        ]
-    },
-    {
         name: 'menu.admin.combo-management',
         id: 'tableCombo',
         menus: [
             {
                 name: 'menu.combo-management.list-combo', link: '/combo-management',
-            },
-        ]
-    },
-    {
-        name: 'menu.admin.ticket-management',
-        id: 'tableTicket',
-        menus: [
-            {
-                name: 'menu.ticket-management.list-ticket', link: '/ticket-management',
             },
         ]
     },

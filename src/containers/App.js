@@ -20,6 +20,8 @@ import EditMovieTheater from '../components/MovieTheater/EditMovieTheater';
 import ListRoom from '../components/Room/ListRoom';
 import AddRoom from '../components/Room/AddRoom';
 import EditRoom from '../components/Room/EditRoom';
+import AddSchedule from '../components/Schedule/AddSchedule';
+import ListSchedule from '../components/Schedule/ListSchedule';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -52,6 +54,8 @@ function App() {
             <Route path="/room-management" component={ListRoom} />
             <Route path="/add-new-room" component={AddRoom} />
             <Route path="/edit-room/:id" component={EditRoom} />
+            <Route path="/add-new-schedule" component={AddSchedule} />
+            <Route path="/showTime-management" component={ListSchedule} />
           </Switch>
         </span>
       </div>

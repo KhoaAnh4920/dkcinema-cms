@@ -14,7 +14,7 @@ function Sidebar() {
     useEffect(() => {
         console.log('userState from header: ', selectUser);
         let menuApp = [];
-        if (selectUser && !_.isEmpty(selectUser)) {
+        if (selectUser && !_.isEmpty(selectUser) && selectUser.adminInfo && selectUser.adminInfo.roleId) {
 
             let role = selectUser.adminInfo.roleId;
 
@@ -30,7 +30,7 @@ function Sidebar() {
         setMenuApp(menuApp);
 
         console.log(menuApp);
-    }, []);
+    }, [selectUser]);
 
     // Lấy role để set menu động //
     // componentDidMount() {

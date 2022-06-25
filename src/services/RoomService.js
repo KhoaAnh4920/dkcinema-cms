@@ -2,13 +2,17 @@ import axios from '../axios';
 
 
 
-const getAllRoom = () => {
-    return axios.get(`/room`);
+const getAllRoom = (movieTheaterId) => {
+    return axios.get(`/room`, { movieTheaterId });
 }
 
 const createNewRoom = (data) => {
     console.log("Check data: ", data);
     return axios.post('/room', data)
+}
+
+const updateRoom = (data) => {
+    return axios.put('/room', data)
 }
 
 const getEditRoom = (id) => {
@@ -24,5 +28,6 @@ export {
     getAllRoom,
     createNewRoom,
     getEditRoom,
-    deleteRoomService
+    deleteRoomService,
+    updateRoom
 };

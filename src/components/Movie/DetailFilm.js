@@ -66,12 +66,19 @@ export default function DetailFilm() {
 
 
     useEffect(() => {
-        async function fetchDetailMovie(){
+        async function fetchDetailMovie() {
             let dataMovie = await getDetailFilm(id);
             console.log("dataMovie:", dataMovie);
-            if(dataMovie && dataMovie.data){
+
+            if (dataMovie && dataMovie.data) {
+                let poster = '';
+                dataMovie.data.ImageOfMovie.map((item) => {
+                    if (item.typeImage === 2)
+                        poster = item.url;
+                })
+
                 setAllValues({
-                    poster: dataMovie.data.ImageOfMovie[0].url,
+                    poster: poster,
                     id: id,
                     name: dataMovie.data.name,
                     transName: dataMovie.data.transName,
@@ -80,12 +87,12 @@ export default function DetailFilm() {
                     language: dataMovie.data.language,
                     releaseTime: dataMovie.data.releaseTime,
                     brand: dataMovie.data.brand,
-                    cast:  dataMovie.data.cast,
+                    cast: dataMovie.data.cast,
                     typeMovie: dataMovie.data.MovieOfType,
                     status: dataMovie.data.status,
                     description: dataMovie.data.description
                 })
-               
+
             }
         }
         fetchDetailMovie();
@@ -136,9 +143,9 @@ export default function DetailFilm() {
                                         <div className="card-body">
                                             <div className='row'>
                                                 <div className='col-4 img-poster'>
-                                                <img src={allValues.poster} />
+                                                    <img src={allValues.poster} />
                                                 </div>
-{/* 
+                                                {/* 
                                                 poster: dataMovie.data.ImageOfMovie[0].url,
                                                 id: id,
                                                 name: dataMovie.data.name,
@@ -156,7 +163,7 @@ export default function DetailFilm() {
                                                 <div className='col-8 film-content'>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Mã phim</p>
+                                                            <p>Mã phim:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.id}</p>
@@ -164,7 +171,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Tên phim</p>
+                                                            <p>Tên phim:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.name}</p>
@@ -172,7 +179,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Tên phiên dịch</p>
+                                                            <p>Tên phiên dịch:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.transName}</p>
@@ -180,7 +187,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Quốc gia</p>
+                                                            <p>Quốc gia:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.country}</p>
@@ -188,7 +195,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Thời lượng</p>
+                                                            <p>Thời lượng:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.duration} phút</p>
@@ -196,7 +203,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Ngôn ngữ</p>
+                                                            <p>Ngôn ngữ:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.language}</p>
@@ -204,7 +211,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Ngày công chiếu</p>
+                                                            <p>Ngày công chiếu:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{moment(allValues.releaseTime).format('MM/DD/YYYY')}</p>
@@ -212,7 +219,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Nhà sản xuất</p>
+                                                            <p>Nhà sản xuất:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.brand}</p>
@@ -220,7 +227,7 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Diễn viên</p>
+                                                            <p>Diễn viên:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             <p>{allValues.cast}</p>
@@ -228,12 +235,12 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Thể loại phim</p>
+                                                            <p>Thể loại phim:</p>
                                                         </div>
                                                         <div className='content-right'>
                                                             {
-                                                                allValues.typeMovie.map((item, index)=>{
-                                                                    return(
+                                                                allValues.typeMovie.map((item, index) => {
+                                                                    return (
                                                                         <p key={index}>{item.name}</p>
                                                                     )
                                                                 })
@@ -242,15 +249,15 @@ export default function DetailFilm() {
                                                     </div>
                                                     <div className='wrap-content'>
                                                         <div className='content-left'>
-                                                            <p>Trạng thái</p>
+                                                            <p>Trạng thái:</p>
                                                         </div>
                                                         <div className='content-right'>
-                                                            <p>{(allValues.status) ? 'Đang chiếu' :'Sắp chiếu'}</p>
+                                                            <p>{(allValues.status) ? 'Đang chiếu' : 'Sắp chiếu'}</p>
                                                         </div>
                                                     </div>
                                                     <div className='wrap-content-desc'>
                                                         <div className='content-top'>
-                                                            <p>Mô tả</p>
+                                                            <p style={{ fontWeight: 'bold' }}>Mô tả:</p>
                                                         </div>
                                                         <div className='content-bottom'>
                                                             <p>{allValues.description}</p>

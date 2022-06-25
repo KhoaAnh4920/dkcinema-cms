@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { createNewRoom, getEditRoom } from '../../services/RoomService';
+import { updateRoom, getEditRoom } from '../../services/RoomService';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -14,7 +14,8 @@ import { Button } from 'react-bootstrap';
 //Image upload modules
 import Select from 'react-select';
 import { useParams } from 'react-router-dom';
-
+import { useSelector } from "react-redux";
+import { userState } from "../../redux/userSlice";
 
 
 
@@ -24,13 +25,16 @@ export default function EditRoom() {
         errors: {},
         listAlpha: [],
         listSeet: [],
+        newListSeetUpdate: [],
         isShowLoading: false,
         numberOfColumn: '',
         numberOfRow: '',
-        numberSeet: ''
+        numberSeet: '',
+        movieTheaterId: 0
     });
     let history = useHistory();
     const { id } = useParams();
+    let selectUser = useSelector(userState);
 
     const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -73,7 +77,7 @@ export default function EditRoom() {
                 let lastItem = dataRoom.data.RoomSeet[dataRoom.data.RoomSeet.length - 1]
 
 
-                for (let i = 0; i < +lastItem.posOfColumn; i++) {
+                for (let i = 0; i <= +lastItem.posOfColumn; i++) {
                     let objSeet = {};
                     let posOfRow = [];
                     objSeet.posOfColumn = i;
@@ -88,15 +92,18 @@ export default function EditRoom() {
                         else return;
                     })
                     objSeet.posOfRow = posOfRow;
+                    objSeet.posOfRow.sort((a, b) => (a.pos > b.pos) ? 1 : ((b.pos > a.pos) ? -1 : 0))
+                    console.log("Check objSeet: ", objSeet);
                     result.push(objSeet);
                 }
 
                 let listAlpha = buildDataInputSelect(dataRoom.data.numberOfColumn);
 
-                let selectedColumn = listAlpha[+lastItem.posOfColumn];
+                let selectedColumn = listAlpha[+lastItem.posOfColumn + 1];
 
 
-                setAllValues({
+                setAllValues((prevState) => ({
+                    ...prevState,
                     name: dataRoom.data.name,
                     errors: {},
                     listAlpha: listAlpha,
@@ -106,15 +113,24 @@ export default function EditRoom() {
                     numberOfRow: dataRoom.data.numberOfRow,
                     numberSeet: '',
                     selectedColumn: selectedColumn
-                });
-
-                console.log(allValues);
+                }));
             }
         }
         fetchDataRoom();
 
 
     }, []);
+
+    useEffect(() => {
+        setAllValues((prevState) => ({
+            ...prevState,
+            movieTheaterId: selectUser.adminInfo.movieTheaterId
+        }));
+
+        console.log(allValues);
+
+
+    }, [selectUser]);
 
     const checkValidateInput = () => {
         let isValid = true;
@@ -147,10 +163,9 @@ export default function EditRoom() {
 
 
     const changeHandler = (e, type) => {
+
         if (type) {
             let listAlpha = buildDataInputSelect(e.target.value);
-            console.log("Check listAlpha: ", listAlpha);
-
             setAllValues({ ...allValues, [e.target.name]: e.target.value, listAlpha: listAlpha, selectedColumn: { label: 'A', value: 0 } })
         }
         else
@@ -159,6 +174,11 @@ export default function EditRoom() {
 
 
     const handleAddSeet = () => {
+        if (allValues.numberSeet === '') {
+            toast.error("Please choose number Seet");
+            return;
+        }
+
         if (+allValues.numberSeet > +allValues.numberOfRow) {
             toast.error("The number of seats exceeds the limit");
             return;
@@ -168,6 +188,7 @@ export default function EditRoom() {
         let posOfColumn = allValues.selectedColumn.value;
         let posOfRow = [];
         let listSeet = allValues.listSeet;
+        let newListSeetUpdate = allValues.newListSeetUpdate;
         for (let i = 0; i < +allValues.numberSeet; i++) {
             let obj = {};
             obj.pos = i;
@@ -177,11 +198,12 @@ export default function EditRoom() {
         objSeet.posOfColumn = posOfColumn;
         objSeet.posOfRow = posOfRow;
 
-        console.log("objSeet: ", objSeet);
         listSeet.push(objSeet);
+        newListSeetUpdate.push(objSeet);
         setAllValues((prevState) => ({
             ...prevState,
             listSeet,
+            newListSeetUpdate,
             selectedColumn: allValues.listAlpha[posOfColumn + 1]
         }));
     }
@@ -197,27 +219,34 @@ export default function EditRoom() {
         })
     }
 
-    const handleSaveRoom = async () => {
+    const handleSaveUpdateRoom = async () => {
+        console.log("Check allvalue: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
         }));
-        let res = await createNewRoom({
+        let res = await updateRoom({
+            id: +id,
             numberOfColumn: +allValues.numberOfColumn,
             numberOfRow: +allValues.numberOfRow,
             name: allValues.name,
-            movieTheaterId: 1,
-            seets: allValues.listSeet
+            movieTheaterId: allValues.movieTheaterId,
+            seets: allValues.newListSeetUpdate
         })
 
         if (res && res.errCode == 0) {
-            history.push("/room-management")
-            toast.success("Add new room succeed");
+            toast.success("Update Room succeed");
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: false
+            }));
         } else {
-            history.push("/room-management")
-            toast.error("Add new room fail");
+            toast.error(res.errMessage);
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: false
+            }));
         }
-
 
     }
 
@@ -257,7 +286,7 @@ export default function EditRoom() {
                                 <div className="col-10">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new Room</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Update Room</h5>
                                         </div>
                                         <div className="card-body">
 
@@ -340,29 +369,12 @@ export default function EditRoom() {
                                                             <input type="number" max={allValues.numberOfRow} value={allValues.numberSeet} min={1} className="form-control input-sm" onChange={(e) => changeHandler(e)} name='numberSeet' placeholder="Enter number" />
 
                                                         </div>
-                                                        <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleAddSeet}>
-                                                            {allValues.isShowLoading &&
-                                                                <>
-                                                                    <Spinner
-                                                                        as="span"
-                                                                        animation="border"
-                                                                        size="sm"
-                                                                        role="status"
-                                                                        aria-hidden="true"
-                                                                    />
-                                                                    <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                </>
-
-                                                            }
-                                                            {!allValues.isShowLoading &&
-                                                                <>
-                                                                    <span className="visually">Thêm hàng ghế</span>
-                                                                </>
-                                                            }
+                                                        <Button variant="primary" onClick={handleAddSeet}>
+                                                            <span className="visually">Thêm hàng ghế</span>
                                                         </Button>
 
                                                         <div className='button-sumit-seet-container'>
-                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveRoom}>
+                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveUpdateRoom}>
                                                                 {allValues.isShowLoading &&
                                                                     <>
                                                                         <Spinner
@@ -382,25 +394,8 @@ export default function EditRoom() {
                                                                     </>
                                                                 }
                                                             </Button>
-                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="delete-diagram-seet" onClick={handleDeleteDiagam}>
-                                                                {allValues.isShowLoading &&
-                                                                    <>
-                                                                        <Spinner
-                                                                            as="span"
-                                                                            animation="border"
-                                                                            size="sm"
-                                                                            role="status"
-                                                                            aria-hidden="true"
-                                                                        />
-                                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                    </>
-
-                                                                }
-                                                                {!allValues.isShowLoading &&
-                                                                    <>
-                                                                        <span className="visually">Xóa sơ đồ</span>
-                                                                    </>
-                                                                }
+                                                            <Button variant="primary" className="delete-diagram-seet" onClick={handleDeleteDiagam}>
+                                                                <span className="visually">Xóa sơ đồ</span>
                                                             </Button>
                                                         </div>
 

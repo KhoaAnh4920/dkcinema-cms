@@ -146,6 +146,7 @@ class DatePicker extends Component {
             onClose: onClose,
             onOpen: this.onOpen
         };
+
         if (minDate) {
             options.minDate = minDate;
         }

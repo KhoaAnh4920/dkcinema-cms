@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss';
 import { userState, processLogoutUser } from "../../../redux/userSlice";
 import { useSelector } from "react-redux";
@@ -12,12 +12,25 @@ export default function Header() {
     let history = useHistory();
     const dispatch = useDispatch();
 
+    const [adminInfo, setAdminInfo] = useState({
+        avatar: '',
+        fullName: ''
+    })
 
     useEffect(() => {
-        console.log('userState from header: ', selectUser.isLoggedInAdmin);
         if (!selectUser.isLoggedInAdmin)
             history.push('/admin-login');
     }, []);
+
+    useEffect(() => {
+
+        setAdminInfo({
+            avatar: selectUser.adminInfo.avatar,
+            fullName: selectUser.adminInfo.fullName
+        });
+
+
+    }, [selectUser]);
 
     const handleLogout = async () => {
         dispatch(processLogoutUser());
@@ -173,8 +186,8 @@ export default function Header() {
                 <div className="topbar-divider d-none d-sm-block" />
                 <li className="nav-item dropdown no-arrow">
                     <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img className="img-profile rounded-circle" src={selectUser.adminInfo.avatar} style={{ maxWidth: '60px' }} />
-                        <span className="ml-2 d-none d-lg-inline text-white small">{selectUser.adminInfo.fullName}</span>
+                        <img className="img-profile rounded-circle" src={adminInfo.avatar} style={{ maxWidth: '60px' }} />
+                        <span className="ml-2 d-none d-lg-inline text-white small">{adminInfo.fullName}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                         <div className="dropdown-divider" />
