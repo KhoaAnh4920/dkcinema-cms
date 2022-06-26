@@ -167,15 +167,21 @@ function ListSchedule() {
                 listSchedule: [],
             }))
         }
-
-
-
-
     }
 
 
-    const fetchAllData = async (movieTheaterId) => {
+
+
+    const fetchAllData = async (movieTheaterId, status) => {
         let roomData = await getAllRoom(movieTheaterId);
+        const dataMovie = await getAllFilmsByStatus(status);
+
+        console.log("Check phim: ", dataMovie);
+
+        let listMovie = [];
+        if (dataMovie && dataMovie.data) {
+            listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
+        }
 
         if (roomData && roomData.room && roomData.room.length > 0) {
             let t = moment();
@@ -213,7 +219,6 @@ function ListSchedule() {
                         if (timeNow.isBetween(t1, t2)) {
                             item.status = 1
                             console.log(item.id, 'is between')
-
                         } else {
                             if (timeNow.isBefore(t1)) {
                                 item.status = 0
@@ -235,6 +240,7 @@ function ListSchedule() {
                     dataRoom: roomData.room,
                     listRoom: listRoom,
                     selectedRoom: listRoom[0] || {},
+                    listMovie: listMovie
                 }))
             } else {
                 setAllValues((prevState) => ({
@@ -244,6 +250,7 @@ function ListSchedule() {
                     dataRoom: roomData.room,
                     listRoom: listRoom,
                     selectedRoom: listRoom[0] || {},
+                    listMovie: listMovie
                 }))
             }
         }
@@ -255,23 +262,16 @@ function ListSchedule() {
     useEffect(() => {
         let dateToday = moment().format('dddd, MMMM Do, YYYY');
 
-        // Call API get room by movieTheaterId //
-        // if (allValues.movieTheaterId !== '') {
-        //     fetchDataRoom(allValues.movieTheaterId)
-        // }
-        fetchDataMovie(1);
-
         setAllValues((prevState) => ({
             ...prevState,
             dateToday: dateToday,
-            isShowLoading: false,
         }))
     }, []);
 
 
     useEffect(() => {
 
-        fetchAllData(selectUser.adminInfo.movieTheaterId)
+        fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -397,14 +397,14 @@ function ListSchedule() {
                                                 <DatePicker
                                                     onChange={handleOnChangeDatePicker}
                                                     className="form-control"
-                                                    value={allValues.dateSchedule}
+                                                    value={allValues.dateSchedule || {}}
                                                 />
                                             </div>
                                             <div className='horizon-input'>
                                                 <label htmlFor="exampleInputEmail1">Phòng</label>
                                                 <Select
                                                     className='room-select'
-                                                    value={allValues.selectedRoom}
+                                                    value={allValues.selectedRoom || {}}
                                                     onChange={handleChangeSelect}
                                                     options={allValues.listRoom}
                                                     placeholder='Select room'
@@ -417,7 +417,7 @@ function ListSchedule() {
                                                 <label htmlFor="exampleInputEmail1">Phim</label>
                                                 <Select
                                                     className='movie-select'
-                                                    value={allValues.selectedMovie}
+                                                    value={allValues.selectedMovie || {}}
                                                     onChange={handleChangeSelect}
                                                     options={allValues.listMovie}
                                                     placeholder='Select movie'

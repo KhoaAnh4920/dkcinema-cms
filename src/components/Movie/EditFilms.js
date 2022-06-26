@@ -93,13 +93,17 @@ export default function EditFilms() {
 
     const handleRemove = async (e) => {
 
-        console.log('item remove: ', e);
+        console.log('item remove: ', typeof (e.uid));
 
-        let res = await removeImageFilm(e.uid);
-        // setValImg((prevState) => ({
-        //     ...prevState,
-        //     fileList
-        // }));
+        if (e.public_id && typeof (e.uid) !== 'string') {
+            let res = await removeImageFilm(e.uid);
+
+            if (res && res.errCode === 0)
+                toast.success("Delete image succeed !!!");
+            else
+                toast.error(res.errMessage);
+        }
+
     }
 
     const buildDataInputSelect = (inputData, type) => {
@@ -142,7 +146,6 @@ export default function EditFilms() {
                         if (item.id === x.id) {
 
                             checked[index] = true;
-                            console.log("checked[index]: ", checked[index])
                         } else {
 
                             if (checked[index] !== true)
@@ -150,7 +153,6 @@ export default function EditFilms() {
                         }
                     })
                 })
-                console.log("Checked: ", checked);
 
                 let test = [];
                 dataMovie.data.MovieOfType.map((item, index) => {
@@ -191,7 +193,6 @@ export default function EditFilms() {
                     response: test,
                 });
 
-                console.log(typeCheck.typeMovie);
             }
         }
         fetchDetailMovie();
@@ -202,7 +203,6 @@ export default function EditFilms() {
 
     const setDefaultValue = (inputData, value) => {
         let result = inputData.filter(item => item.value === value);
-        console.log(value);
         if (result) {
             return result;
         }
@@ -214,7 +214,6 @@ export default function EditFilms() {
         stateCopy[stateName] = selectedOption;
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
     }
 
     // const checkValidateInput = () => {
@@ -266,19 +265,14 @@ export default function EditFilms() {
 
     const handleSaveEditFilms = async () => {
 
-        console.log("Check: ", valImg);
-        console.log("Check allvalue: ", allValues);
-
         // Lọc check type //
         let arrType = [];
 
         for (let i = 0; i < allValues.listTypeMovie.length; i++) {
             if (allValues.checked[i]) {
-                console.log(allValues.checked[i]);
                 arrType.push({ id: allValues.listTypeMovie[i].id })
             }
         }
-        console.log("Check arrType: ", arrType);
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -292,7 +286,6 @@ export default function EditFilms() {
         await Promise.all(valImg.fileList.map(async (item, index) => {
             let obj = {};
             if (item.originFileObj) {
-                console.log("Check item: ", item.originFileObj);
                 obj.image = await getBase64(item.originFileObj);
                 obj.fileName = item.name;
             } else {
@@ -301,7 +294,6 @@ export default function EditFilms() {
             }
 
             result.push(obj);
-            console.log("Check result: ", result);
         }))
 
         let res = await updateFilmsService({
@@ -333,18 +325,15 @@ export default function EditFilms() {
 
 
     const handleClickCheckbox = (e) => {
-        console.log("Check e: ", e.target);
         // Destructuring
         const { value, checked } = e.target;
         const { typeMovie } = typeCheck;
 
-        console.log(`${value} is ${checked}`);
 
         // Case 1 : The user checks the box
         if (checked) {
 
             let response = allValues.checked.map((item, index) => {
-                console.log(index === +e.target.id);
                 if (index === +e.target.id) {
                     item = !item;
                     return item;
@@ -353,7 +342,6 @@ export default function EditFilms() {
 
             })
 
-            console.log("Check all: ", response);
             setTypeMovie({
                 typeMovie: [...typeMovie, value],
                 response: [...typeMovie, value],
@@ -368,7 +356,6 @@ export default function EditFilms() {
         // Case 2  : The user unchecks the box
         else {
             let response = allValues.checked.map((item, index) => {
-                console.log(index === +e.target.id);
                 if (index === +e.target.id) {
                     item = !item;
                     return item;
