@@ -6,12 +6,15 @@ const getAllFilms = () => {
     return axios.get(`/movie`);
 }
 
+const getAllFilmsByStatus = (status) => {
+    return axios.get(`/status/movie`, { params: { status: status } });
+}
+
 const getAllTypeFilms = () => {
     return axios.get(`/type-of-movie`);
 }
 
 const createNewFilmsService = (data) => {
-    console.log("Check data: ", data);
     return axios.post('/movie', data)
 }
 
@@ -44,5 +47,6 @@ export {
     updateFilmsService,
     removeImageFilm,
     updateStatusFilms,
-    deleteMovieService
+    deleteMovieService,
+    getAllFilmsByStatus
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss';
 import { userState, processLogoutUser } from "../../../redux/userSlice";
 import { useSelector } from "react-redux";
@@ -12,18 +12,26 @@ export default function Header() {
     let history = useHistory();
     const dispatch = useDispatch();
 
+    const [adminInfo, setAdminInfo] = useState({
+        avatar: '',
+        fullName: ''
+    })
 
 
     useEffect(() => {
-        console.log('userState from header: ', selectUser.isLoggedInAdmin);
-        if (!selectUser.isLoggedInAdmin) {
-            console.log("OK");
+        if (!selectUser.isLoggedInAdmin)
             history.push('/admin-login');
-        } else {
-            console.log("No");
-        }
-
     }, []);
+
+    useEffect(() => {
+
+        setAdminInfo({
+            avatar: selectUser.adminInfo.avatar,
+            fullName: selectUser.adminInfo.fullName
+        });
+
+
+    }, [selectUser]);
 
     const handleLogout = async () => {
         dispatch(processLogoutUser());

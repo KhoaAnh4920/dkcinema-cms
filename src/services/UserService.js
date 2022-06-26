@@ -25,7 +25,6 @@ const getUserByRole = (roleId) => {
 }
 
 const createNewUserService = (data) => {
-    console.log("Data: ", data);
     return axios.post('/users', data)
 }
 

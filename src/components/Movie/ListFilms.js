@@ -12,6 +12,7 @@ import LoadingOverlay from 'react-loading-overlay';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { toast } from 'react-toastify';
 import Switch from "react-switch";
+import { Link } from "react-router-dom";
 
 
 
@@ -64,7 +65,7 @@ function ListFilms() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Tên phim', field: 'name' },
+        { title: 'Tên phim', field: 'name', render: rowData => <Link to={`/detail-film/${rowData.id}`}>{rowData.name}</Link> },
         { title: 'Quốc gia', field: 'country' },
         { title: 'Thời lượng / phút', field: 'duration' },
         { title: 'Ngày công chiếu', field: 'releaseTime' },

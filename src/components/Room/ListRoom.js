@@ -4,33 +4,33 @@ import Header from '../../containers/System/Share/Header';
 import { getAllRoom, deleteRoomService } from '../../services/RoomService';
 import MaterialTable from 'material-table';
 import Swal from 'sweetalert2';
-import moment from 'moment';
 import Footer from '../../containers/System/Share/Footer';
 import './ListRoom.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import LoadingOverlay from 'react-loading-overlay';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { toast } from 'react-toastify';
-import { testFunction } from '../Users/useLocationForm';
-import useLocationForm from "../Users/useLocationForm";
-
+import { useSelector } from "react-redux";
+import { userState } from "../../redux/userSlice";
 
 
 function ListRoom() {
 
     const [listRoom, setRoomData] = useState([]);
     const [isShowLoading, setShowLoading] = useState(true);
+    const [movieTheaterId, setMovieTheaterId] = useState();
     const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(false);
 
 
     let history = useHistory();
+    let selectUser = useSelector(userState);
 
 
 
-    async function fetchDataRoom() {
+    async function fetchDataRoom(movieTheaterId) {
         // You can await here
-        const roomData = await getAllRoom();
+        const roomData = await getAllRoom(movieTheaterId);
 
         console.log("Check room: ", roomData);
 
@@ -38,41 +38,33 @@ function ListRoom() {
             setRoomData(roomData.room);
             setShowLoading(false);
         }
-
-
-        // if (movieTheaterData && movieTheaterData.movie) {
-        //     let response = await Promise.all(movieTheaterData.movie.map(async (item, index) => {
-        //         const location = await testFunctionParent(item.cityCode, item.districtCode, item.wardCode);
-        //         item.address = item.address + ', ' + location.selectedWard.label + ', ' + location.selectedDistrict.label + ', ' + location.selectedCity.label;
-        //         item.userManage = item.UserMovieTheater.fullName;
-        //         return item;
-        //     }))
-        //     setRoomData(response);
-        //     setShowLoading(false);
-        // }
-
-
-
-        // if (filmsData && filmsData.dataMovie) {
-        //     let response = filmsData.dataMovie.map(item => {
-        //         item.poster = item.ImageOfMovie[0].url;
-        //         item.releaseTime = moment(item.releaseTime).format("DD/MM/YYYY");
-        //         return item;
-        //     })
-        //     setFilmsData(response);
-        //     setShowLoading(false);
-        // }
     }
 
 
     useEffect(() => {
-        fetchDataRoom();
+        if (movieTheaterId) {
+            fetchDataRoom(selectUser.adminInfo.movieTheaterId);
+        }
     }, []);
 
 
+    useEffect(() => {
+
+        fetchDataRoom(selectUser.adminInfo.movieTheaterId);
+
+        setMovieTheaterId({
+            movieTheaterId: selectUser.adminInfo.movieTheaterId
+        });
+
+
+    }, [selectUser]);
+
+
+
+
     const columns = [
-        { title: 'ID', field: 'id' },
-        { title: 'Tên phòng chiếu', field: 'name' },
+        { title: 'ID', field: 'id', key: 'RoomId' },
+        { title: 'Tên phòng chiếu', field: 'name', key: 'NameRoom' },
         { title: 'Số lượng ghế', field: 'NumberOfSeet', render: rowData => <span>{rowData.RoomSeet.length}</span> },
     ]
 
@@ -97,8 +89,6 @@ function ListRoom() {
             console.log(e);
         }
     }
-
-
 
 
 

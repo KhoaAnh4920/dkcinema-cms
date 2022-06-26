@@ -1,0 +1,223 @@
+.container-fluid {
+    .card-header {
+        h5 {
+            text-align: center;
+        }
+    }
+
+    .card-body {
+
+        .schedule-management {
+            width: 100%;
+            height: 500px;
+
+            // background-color: red;
+
+            .main-row {
+                border: 1px solid rgb(230, 230, 230);
+
+                .list-schedule {
+                    width: 100%;
+                    height: 500px;
+                    background-color: #fafafa;
+                    margin-bottom: 10px;
+
+                    .content-schedule-top {
+                        width: 100%;
+                        height: 150px;
+                        padding: 10px 50px;
+                        // background-color: #5fccea;
+
+                        .title-list {
+                            p {
+                                font-size: 18px;
+                                color: rgb(17, 81, 164);
+                                font-weight: 700;
+                            }
+                        }
+
+                        .flatpickr-input {
+
+                            height: 30px;
+                            margin-bottom: 10px;
+                        }
+
+
+                    }
+
+                    .content-schedule-bottom {
+                        width: 100%;
+                        height: 350px;
+                        background-color: rgb(255, 255, 255);
+                        overflow-y: scroll;
+                        border: 1px solid #d6d6d6;
+
+                        .movie-content {
+                            width: 100%;
+                            height: 85px;
+                            // background-color: pink;
+                            display: flex;
+                            border-bottom: 1px solid rgb(248, 248, 248);
+
+                            .time-schedule {
+                                width: 20%;
+                                height: 80px;
+                                // background-color: rgb(39, 176, 176);
+
+                                .time-start {
+                                    height: auto;
+                                    color: red;
+                                    text-align: center;
+                                }
+
+                                .time-end {
+                                    height: auto;
+                                    color: red;
+                                    text-align: center;
+                                }
+
+                                .dash-time {
+                                    position: relative;
+                                    text-transform: uppercase;
+                                    font-size: 13pt;
+                                    height: 40px;
+                                    width: 100%;
+                                    display: flex;
+
+                                    // height: 50%;
+
+                                    .dash-left {
+                                        width: 50%;
+                                        height: 40px;
+                                        border-right: 1px solid #000;
+                                        // background-color: azure;
+                                    }
+
+                                    .dash-right {
+                                        width: 50%;
+                                        height: 40px;
+                                        // background-color: azure;
+                                    }
+                                }
+                            }
+
+                            .movie-name {
+                                width: 80%;
+                                height: 80px;
+                                // background-color: rgb(254, 250, 22);
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                color: rgb(17, 81, 164);
+                            }
+
+                        }
+
+                        .waiting-time-content {
+                            width: 100%;
+                            height: 50px;
+                            background-color: rgb(247, 247, 247);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            p {
+                                margin-top: 0;
+                                margin-bottom: 0;
+                            }
+                        }
+                    }
+
+                }
+
+                .form-schedule-container {
+                    width: 100%;
+                    height: 500px;
+                    // background-color: yellow;
+
+                    .title-input-content {
+                        width: 100%;
+                        height: 130px;
+                        // background-color: red;
+
+                        .title-update {
+                            text-align: center;
+
+                            .image-content {
+
+                                .scheduleImage {
+                                    width: 130px;
+                                    height: 130px;
+                                }
+                            }
+
+
+                            .text-title {
+                                display: flex;
+                                flex-direction: column;
+                                text-align: left;
+                                justify-content: center;
+
+                                .text {
+                                    margin: 0;
+                                    font-size: 18px;
+                                    color: rgb(17, 81, 164);
+                                    font-weight: 700;
+                                }
+                            }
+
+
+                        }
+                    }
+
+                    .form-input-content {
+                        width: 100%;
+                        height: 370px;
+                        // background-color: #cfc1ce;
+                        padding: 26px 80px 0px 40px;
+                        position: relative;
+
+                        .form-group {
+                            // display: flex;
+                            // gap: 30px;
+                            margin-bottom: 20px;
+
+                            .flatpickr-input {
+
+                                height: 30px;
+
+                            }
+
+                            .movie-select {
+                                padding-left: 0px;
+                                padding-right: 0px
+                            }
+
+                        }
+
+                        .button-action {
+                            position: absolute;
+                            bottom: 15px;
+                            width: 100%;
+                            right: 0;
+                            padding: 26px 80px 0px 40px;
+
+                            .delete-schedule-data {
+                                float: right;
+                                background-color: #fff;
+                                border: 1px solid #6777ef;
+                                color: #6777ef;
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+
+
+    }
+}
