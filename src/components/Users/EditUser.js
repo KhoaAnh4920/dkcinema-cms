@@ -16,6 +16,7 @@ import { CommonUtils } from '../../utils';
 import { testFunction } from './useLocationForm';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 
 
@@ -320,8 +321,8 @@ export default function EditUser() {
                         <div className="container-fluid" id="container-wrapper">
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="./">Home</a></li>
-                                    <li className="breadcrumb-item">Quản lý người dùng</li>
+                                    <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/users-management`}>Quản lý người dùng</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page">Cập nhật người dùng</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>

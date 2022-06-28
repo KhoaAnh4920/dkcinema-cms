@@ -1,0 +1,85 @@
+.modal-edit-playlist-user {
+
+    .modal-content {
+        border: none !important;
+
+        .titleModal {
+            background-color: #fafafa !important;
+            padding: 25px !important;
+            height: 65px !important;
+            border: none;
+
+            .modal-title {
+                font-size: 20px !important;
+                font-weight: 700 !important;
+            }
+
+            .close {
+                color: #000;
+                font-weight: 700;
+                font-size: 25px;
+            }
+        }
+
+        .modal-body-container {
+            border: none;
+            background-color: #fafafa !important;
+            padding: 25px 70px;
+
+            .modal-add-food-body {
+                display: flex;
+                width: 100%;
+
+                .input-container {
+                    width: 100%;
+                    margin-left: auto;
+
+                    .input-flex {
+                        display: flex;
+                        gap: 30px;
+                        justify-content: right;
+                    }
+
+                    .input-row {
+                        margin-top: 20px;
+                        display: flex;
+                        gap: 20px;
+                        flex-direction: column;
+                        margin-left: auto;
+                    }
+
+                    .inputName {
+                        padding: 7px;
+                        margin-bottom: 10px;
+                        width: 100%;
+                    }
+
+                    .description-playlist {
+                        width: 100%;
+                        height: 135px;
+                    }
+
+                    // .input-small {
+                    //     width: 30%
+                    // }
+                }
+            }
+        }
+
+        .modal-footer-container {
+            border: none;
+            background-color: #fafafa !important;
+            padding: 25px 70px;
+
+            .btn-save-edit {
+                background-color: #6777ef;
+                color: #fafafa;
+                width: 100%;
+                border-radius: 20px;
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+}

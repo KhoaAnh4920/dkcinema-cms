@@ -27,6 +27,15 @@ export const adminMenu = [
         ]
     },
     {
+        name: 'menu.admin.food-management',
+        id: 'tableFood',
+        menus: [
+            {
+                name: 'menu.food-management.list-food', link: '/food-management',
+            },
+        ]
+    },
+    {
         name: 'menu.admin.combo-management',
         id: 'tableCombo',
         menus: [

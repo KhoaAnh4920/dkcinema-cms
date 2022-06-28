@@ -117,39 +117,47 @@ function ListSchedule() {
                 // time hien tai < start => sap chieu
                 // else => da chieu
 
+
+
                 console.log((moment(item.premiereDate)));
 
                 var duration = moment.duration(timeNow.diff(moment(item.premiereDate)));
 
                 console.log("Check duation: ", duration);
+                console.log("Check day: ", duration.asDays() / 10);
 
-                if (Math.round(duration.asDays()) < 0 || Math.round(duration.asHours()) < 0 || Math.round(duration.asMinutes()) < 0) {
+                console.log("Check day: ", Math.trunc(duration.asDays()));
+                console.log("Check asHours: ", Math.trunc(duration.asHours()));
+                console.log("Check asMinutes: ", Math.trunc(duration.asMinutes()));
+
+                if (Math.trunc(duration.asDays()) < 0 || Math.trunc(duration.asHours()) < 0 || Math.trunc(duration.asMinutes()) < 0) {
                     item.status = 0
-                } else if (Math.round(duration.asDays()) > 0) {
+                } else if (Math.trunc(duration.asDays()) > 0) {
                     item.status = 2
                 }
                 else {
+                    console.log("Chay vo else");
                     // time hien tai is between start va end => dang chieu
                     // time hien tai < start => sap chieu
                     // else => da chieu
-                    let t1 = moment(item.startTime, 'HH:mm');
-                    let t2 = moment(item.endTime, 'HH:mm');
 
-                    console.log("Timenow: ", timeNow);
-                    console.log("t1: ", t1);
-                    console.log("r2: ", t2);
+                    let h = moment(timeNow).format("HH");
+                    let m = moment(timeNow).format("mm");
+                    let h1 = moment(item.startTime).format("HH");
+                    let m1 = moment(item.startTime).format("mm");
+                    let h2 = moment(item.endTime).format("HH");
+                    let m2 = moment(item.endTime).format("mm");
 
-                    if (timeNow.isBetween(t1, t2)) {
+                    if ((h1 < h || h1 == h && m1 <= m) && (h < h2 || h == h2 && m <= m2)) {
+                        console.log("Dang chieu")
                         item.status = 1
-                        console.log(item.id, 'is between')
-
+                    }
+                    else if (h < h1) {
+                        console.log("Sap chieu");
+                        item.status = 0
                     } else {
-                        if (timeNow.isBefore(t1)) {
-                            item.status = 0
-                        }
-                        else {
-                            item.status = 2
-                        }
+                        item.status = 2
+                        console.log("Da chieu")
                     }
 
                 }
@@ -201,31 +209,44 @@ function ListSchedule() {
             if (reslistSchedule && reslistSchedule.data.length > 0) {
                 let listSchedule = reslistSchedule.data.reverse();
                 let res = listSchedule.map((item, index) => {
-                    console.log((moment(item.premiereDate)));
+                    console.log("Start: ", item.startTime);
+                    console.log((moment(item.startTime)));
 
                     var duration = moment.duration(timeNow.diff(moment(item.premiereDate)));
 
                     console.log("Check duation: ", duration);
 
-                    if (Math.round(duration.asDays()) < 0 || Math.round(duration.asHours()) < 0 || Math.round(duration.asMinutes()) < 0) {
+                    console.log("Check day: ", duration.asDays());
+
+                    if (Math.trunc(duration.asDays()) < 0 || Math.trunc(duration.asHours()) < 0 || Math.trunc(duration.asMinutes()) < 0) {
                         item.status = 0
-                    } else if (Math.round(duration.asDays()) > 0) {
+                    } else if (Math.trunc(duration.asDays()) > 0) {
+                        console.log("Cung ngay da chieu");
                         item.status = 2
                     }
                     else {
-                        let t1 = moment(item.startTime, 'HH:mm');
-                        let t2 = moment(item.endTime, 'HH:mm');
+                        console.log("Chay vo else");
+                        // time hien tai is between start va end => dang chieu
+                        // time hien tai < start => sap chieu
+                        // else => da chieu
 
-                        if (timeNow.isBetween(t1, t2)) {
+                        let h = moment(timeNow).format("HH");
+                        let m = moment(timeNow).format("mm");
+                        let h1 = moment(item.startTime).format("HH");
+                        let m1 = moment(item.startTime).format("mm");
+                        let h2 = moment(item.endTime).format("HH");
+                        let m2 = moment(item.endTime).format("mm");
+
+                        if ((h1 < h || h1 == h && m1 <= m) && (h < h2 || h == h2 && m <= m2)) {
+                            console.log("Dang chieu")
                             item.status = 1
-                            console.log(item.id, 'is between')
+                        }
+                        else if (h < h1) {
+                            console.log("Sap chieu");
+                            item.status = 0
                         } else {
-                            if (timeNow.isBefore(t1)) {
-                                item.status = 0
-                            }
-                            else {
-                                item.status = 2
-                            }
+                            item.status = 2
+                            console.log("Da chieu")
                         }
 
                     }
@@ -271,13 +292,14 @@ function ListSchedule() {
 
     useEffect(() => {
 
-        fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
+        if (selectUser.adminInfo && selectUser.adminInfo.movieTheaterId) {
+            fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
 
-        setAllValues((prevState) => ({
-            ...prevState,
-            movieTheaterId: selectUser.adminInfo.movieTheaterId
-        }));
-
+            setAllValues((prevState) => ({
+                ...prevState,
+                movieTheaterId: selectUser.adminInfo.movieTheaterId
+            }));
+        }
 
     }, [selectUser]);
 
@@ -335,7 +357,6 @@ function ListSchedule() {
     };
 
     const handleSubmitFilter = () => {
-        console.log("Check before filter: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: false,

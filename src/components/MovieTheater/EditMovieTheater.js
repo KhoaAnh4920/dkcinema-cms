@@ -23,7 +23,12 @@ import { testFunction } from '../Users/useLocationForm';
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css';
+import { Link } from "react-router-dom";
+
+
+
 
 
 
@@ -393,9 +398,9 @@ export default function EditMovieTheater() {
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
                                 <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="./">Home</a></li>
-                                    <li className="breadcrumb-item">Quản lý người dùng</li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm người dùng</li>
+                                    <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/movieTheater-management`}>Quản lý rạp</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Cập nhật rạp</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
