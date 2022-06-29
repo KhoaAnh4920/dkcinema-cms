@@ -22,6 +22,10 @@ import AddRoom from '../components/Room/AddRoom';
 import EditRoom from '../components/Room/EditRoom';
 import AddSchedule from '../components/Schedule/AddSchedule';
 import ListSchedule from '../components/Schedule/ListSchedule';
+import ListFood from '../components/Food/ListFood';
+import ListCombo from '../components/Combo/ListCombo';
+import AddCombo from '../components/Combo/AddCombo';
+import EditCombo from '../components/Combo/EditCombo';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -56,6 +60,10 @@ function App() {
             <Route path="/edit-room/:id" component={EditRoom} />
             <Route path="/add-new-schedule" component={AddSchedule} />
             <Route path="/showTime-management" component={ListSchedule} />
+            <Route path="/food-management" component={ListFood} />
+            <Route path="/combo-management" component={ListCombo} />
+            <Route path="/add-new-combo" component={AddCombo} />
+            <Route path="/edit-combo/:id" component={EditCombo} />
           </Switch>
         </span>
       </div>

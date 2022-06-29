@@ -1,0 +1,55 @@
+.add-combo-main {
+
+    .form-add-combo {
+        padding: 60px;
+
+        .vertical-input {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+    }
+
+    .inline-group {
+
+        max-width: 9rem;
+        width: 200px;
+        /* height: 20px; */
+        /* height: 2px; */
+        padding: .5rem;
+        // text-align: center;
+        // margin: 0 auto;
+
+        .input-group-prepend {
+            margin-right: -1px;
+            height: 30px;
+
+            /* width: 28px; */
+            /* height: 30%; */
+            button {
+                padding: 0px;
+                width: 30px;
+                font-size: 12px;
+            }
+        }
+
+        .input-group-append {
+            button {
+                padding: 0px;
+                width: 30px;
+                font-size: 12px;
+            }
+        }
+    }
+
+    .inline-group .form-control {
+        text-align: center;
+        height: 30px;
+    }
+
+    .form-control[type="number"]::-webkit-inner-spin-button,
+    .form-control[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}

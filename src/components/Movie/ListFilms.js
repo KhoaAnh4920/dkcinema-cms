@@ -180,8 +180,6 @@ function ListFilms() {
                                             onClick: async (event, rowData) => {
                                                 history.push(`/edit-film/${rowData.id}`);
                                             }
-
-
                                         },
                                         {
                                             icon: 'delete',

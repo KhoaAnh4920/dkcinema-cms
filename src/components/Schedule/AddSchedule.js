@@ -507,7 +507,7 @@ export default function AddSchedule() {
                                                                     <DatePicker
                                                                         onChange={handleOnChangePremiereTime}
                                                                         className="form-control col-8"
-                                                                        minDate={new Date().fp_incr(1)}
+                                                                        // minDate={new Date().fp_incr(1)}
                                                                         value={allValues.premiereDate}
                                                                     />
                                                                     {/* <span className='error-code-input'>{allValues.errors["birthday"]}</span> */}

@@ -7,6 +7,7 @@
             "room-management": "Quản lý phòng chiếu",
             "films-management": "Quản lý phim",
             "showTime-management": "Quản lý suất chiếu",
+            "food-management": "Quản lý thực phẩm",
             "combo-management": "Quản lý combo",
             "ticket-management": "Quản lý vé",
             "news-management": "Quản lý bài viết",
@@ -26,6 +27,9 @@
         },
         "showTime-management": {
             "list-showTime": "Quản lý lịch chiếu"
+        },
+        "food-management": {
+            "list-food": "Quản lý thực phẩm"
         },
         "combo-management": {
             "list-combo": "Quản lý combo"

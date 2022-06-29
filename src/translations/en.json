@@ -7,6 +7,7 @@
             "room-management": "Room Management",
             "films-management": "Films Management",
             "showTime-management": "ShowTime Management",
+            "food-management": "Food Management",
             "combo-management": "Combo Management",
             "ticket-management": "Ticket Management",
             "news-management": "News Management",
@@ -26,6 +27,9 @@
         },
         "showTime-management": {
             "list-showTime": "ShowTime Management"
+        },
+        "food-management": {
+            "list-food": "Food Management"
         },
         "combo-management": {
             "list-combo": "Combo Management"
