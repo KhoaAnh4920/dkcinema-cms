@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { createNewRoom, getAllRoom } from '../../services/RoomService';
+import { getAllRoom } from '../../services/RoomService';
+import LoadingOverlay from 'react-loading-overlay';
+import BeatLoader from 'react-spinners/BeatLoader';
 import { getAllFilmsByStatus } from '../../services/FilmsServices';
 import { getAllSchedule, createNewScheduleService } from '../../services/ScheduleServices';
 import Swal from 'sweetalert2';
@@ -20,6 +22,7 @@ import { TimePicker } from 'antd';
 import addScheduleImage from '../../assets/add-schedule-image.png';
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
+import { Link } from "react-router-dom";
 
 
 
@@ -28,7 +31,8 @@ import { userState } from "../../redux/userSlice";
 
 export default function AddSchedule() {
     const [allValues, setAllValues] = useState({
-        isShowLoading: false,
+        isShowLoading: true,
+        isShowLoadingButton: false,
         dateSchedule: new Date(),
         premiereDate: new Date().fp_incr(1),
         movieTheaterId: '',
@@ -153,8 +157,14 @@ export default function AddSchedule() {
         }))
     }
 
-    const fetchAllData = async (movieTheaterId) => {
+    const fetchAllData = async (movieTheaterId, status) => {
         let roomData = await getAllRoom(movieTheaterId);
+        const dataMovie = await getAllFilmsByStatus(status);
+
+        let listMovie = [];
+        if (dataMovie && dataMovie.data) {
+            listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
+        }
 
         if (roomData && roomData.room && roomData.room.length > 0) {
             let t = moment();
@@ -175,6 +185,7 @@ export default function AddSchedule() {
                 listRoom: listRoom,
                 selectedRoom: listRoom[0] || {},
                 listSchedule: listSchedule.data.reverse(),
+                listMovie: listMovie
             }));
         }
 
@@ -183,13 +194,6 @@ export default function AddSchedule() {
 
     useEffect(() => {
         let dateToday = moment().format('dddd, MMMM Do, YYYY');
-
-        // Call API get room by movieTheaterId //
-        // if (allValues.movieTheaterId !== '') {
-        //     fetchDataRoom(allValues.movieTheaterId)
-        // }
-        fetchDataMovie(1);
-
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -200,13 +204,7 @@ export default function AddSchedule() {
 
     useEffect(() => {
 
-        // fetchDataRoom(selectUser.adminInfo.movieTheaterId);
-
-
-
-        fetchAllData(selectUser.adminInfo.movieTheaterId)
-
-        // fetchDataSchedule(obj);
+        fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -270,19 +268,19 @@ export default function AddSchedule() {
 
     const handleSubmitSchedule = async () => {
 
-        console.log("Check allvalue: ", allValues);
+        // console.log("Check allvalue: ", allValues);
 
         let formatedPremiereDate = new Date(allValues.premiereDate).getTime(); // convert timestamp //
         let formatedStartTime = new Date(allValues.startTime).getTime(); // convert timestamp //
         let formatedEndTime = new Date(allValues.endTime).getTime(); // convert timestamp //
-        console.log("Check formatedPremiereDate: ", formatedPremiereDate);
-        console.log("Check formatedStartTime: ", formatedStartTime);
-        console.log("Check formatedEndTime: ", formatedEndTime);
+        // console.log("Check formatedPremiereDate: ", formatedPremiereDate);
+        // console.log("Check formatedStartTime: ", formatedStartTime);
+        // console.log("Check formatedEndTime: ", formatedEndTime);
 
 
         setAllValues((prevState) => ({
             ...prevState,
-            isShowLoading: true
+            isShowLoadingButton: true
         }));
         let res = await createNewScheduleService({
             movieId: allValues.selectedMovie.value,
@@ -313,7 +311,7 @@ export default function AddSchedule() {
 
         setAllValues((prevState) => ({
             ...prevState,
-            isShowLoading: false
+            isShowLoadingButton: false
         }));
     }
 
@@ -349,221 +347,234 @@ export default function AddSchedule() {
     return (
 
         <>
+            <LoadingOverlay
+                active={allValues.isShowLoading}
+                spinner={<BeatLoader color='#fff' size={20} />}
+                styles={{
+                    overlay: (base) => ({
+                        ...base,
+                        background: 'rgb(10 10 10 / 68%)'
+                    })
+                }}
+            >
+                <div id="wrapper">
+                    {/* Sidebar */}
 
-            <div id="wrapper">
-                {/* Sidebar */}
+                    <Sidebar />
 
-                <Sidebar />
+                    {/* Sidebar */}
+                    <div id="content-wrapper" className="d-flex flex-column">
+                        <div id="content">
+                            {/* TopBar */}
+                            <Header />
+                            {/* Topbar */}
+                            {/* Container Fluid*/}
+                            <div className="container-fluid" id="container-wrapper">
+                                <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
-                {/* Sidebar */}
-                <div id="content-wrapper" className="d-flex flex-column">
-                    <div id="content">
-                        {/* TopBar */}
-                        <Header />
-                        {/* Topbar */}
-                        {/* Container Fluid*/}
-                        <div className="container-fluid" id="container-wrapper">
-                            <div className="d-sm-flex align-items-center justify-content-between mb-4">
-
-                                <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><a href="./">Home</a></li>
-                                    <li className="breadcrumb-item">Quản lý lịch chiếu</li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm lịch chiếu</li>
-                                </ol>
-                                <span className='date-today'>{allValues.dateToday}</span>
-                                {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
-                            </div>
-                            <div className="row">
-                                <div className='col-1'></div>
-                                <div className="col-10">
-                                    <div className="card mb-4">
-                                        <div className="card-header">
-                                            <h5 className="m-0 font-weight-bold text-primary">Schedule Management</h5>
-                                        </div>
-                                        <div className="card-body">
-                                            <div className='schedule-management'>
-                                                <div className='row main-row'>
-                                                    <div className='list-schedule col-5'>
-                                                        <div className='content-schedule-top'>
-                                                            <div className='title-list'>
-                                                                <p>List Schedule</p>
-                                                            </div>
-                                                            <DatePicker
-                                                                onChange={handleOnChangeListSchedule}
-                                                                className="form-control"
-                                                                // minDate="today"
-                                                                value={allValues.dateSchedule}
-                                                            />
-                                                            <Select
-                                                                className='room-select'
-                                                                value={allValues.selectedRoom}
-                                                                onChange={handleChangeSelect}
-                                                                options={allValues.listRoom}
-                                                                placeholder='Select room'
-                                                                name='selectedRoom'
-                                                                styles={customStyles}
-                                                            // styles={this.props.colourStyles}
-                                                            />
-                                                        </div>
-                                                        <div className='content-schedule-bottom'>
-                                                            {allValues && allValues.listSchedule && allValues.listSchedule.length > 0 &&
-                                                                allValues.listSchedule.map((item, index) => {
-                                                                    return (
-                                                                        <div className='data-movie-content' key={index}>
-                                                                            <div className='movie-content'>
-                                                                                <div className='time-schedule'>
-                                                                                    <div className='time-start'>{moment(item.startTime).format("HH:mm")}</div>
-                                                                                    <div className='dash-time'>
-                                                                                        <div className='dash-left'></div>
-                                                                                        <div className='dash-right'></div>
-                                                                                    </div>
-                                                                                    <div className='time-end'>{moment(item.endTime).format("HH:mm")}</div>
-                                                                                </div>
-                                                                                <div className='movie-name'>
-                                                                                    <p>{item.ShowtimeMovie.name}</p>
-                                                                                </div>
-                                                                            </div>
-                                                                            {index < (allValues.listSchedule.length - 1) &&
-                                                                                <div className='waiting-time-content'>
-                                                                                    <p>Thời gian chờ: 15 phút</p>
-                                                                                </div>
-                                                                            }
-
-                                                                        </div>
-                                                                    )
-                                                                })
-                                                            }
-                                                            {allValues && allValues.listSchedule && allValues.listSchedule.length === 0 &&
-                                                                <div className='data-movie-content'>
-                                                                    <div className='movie-content'>
-                                                                        <p>No data...</p>
-                                                                    </div>
+                                    <ol className="breadcrumb">
+                                        <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                        <li className="breadcrumb-item"><Link to={`/showTime-management`}>Quản lý lịch chiếu</Link></li>
+                                        <li className="breadcrumb-item active" aria-current="page">Thêm lịch chiếu</li>
+                                    </ol>
+                                    <span className='date-today'>{allValues.dateToday}</span>
+                                    {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
+                                </div>
+                                <div className="row">
+                                    <div className='col-1'></div>
+                                    <div className="col-10">
+                                        <div className="card mb-4">
+                                            <div className="card-header">
+                                                <h5 className="m-0 font-weight-bold text-primary">Schedule Management</h5>
+                                            </div>
+                                            <div className="card-body">
+                                                <div className='schedule-management'>
+                                                    <div className='row main-row'>
+                                                        <div className='list-schedule col-5'>
+                                                            <div className='content-schedule-top'>
+                                                                <div className='title-list'>
+                                                                    <p>List Schedule</p>
                                                                 </div>
-                                                            }
-
-
-
-                                                        </div>
-                                                    </div>
-                                                    <div className='form-schedule-container col-7'>
-                                                        <div className='title-input-content'>
-                                                            <div className='title-update'>
-                                                                <div className='row'>
-                                                                    <div className='image-content col-4'>
-                                                                        <img src={addScheduleImage} className="scheduleImage" />
-
-                                                                    </div>
-                                                                    <div className='text-title col-8'>
-                                                                        <p className='text'>Update Schedule</p>
-                                                                        <p>Please complete all information</p>
-                                                                    </div>
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-                                                        <div className='form-input-content'>
-                                                            <div className="form-group row">
-                                                                <label htmlFor="exampleInputEmail1" className='col-4'>Tên phim</label>
-                                                                <Select
-                                                                    className='movie-select col-8'
-                                                                    value={allValues.selectedMovie}
-                                                                    onChange={handleChangeSelect}
-                                                                    options={allValues.listMovie}
-                                                                    placeholder='Select movie'
-                                                                    name='selectedMovie'
-                                                                    styles={customStyles}
-                                                                // styles={this.props.colourStyles}
+                                                                <DatePicker
+                                                                    onChange={handleOnChangeListSchedule}
+                                                                    className="form-control"
+                                                                    // minDate="today"
+                                                                    value={allValues.dateSchedule}
                                                                 />
-                                                                {/* <span className='error-code-input'>{allValues.errors["fullName"]}</span> */}
-
-                                                            </div>
-                                                            <div className="form-group row">
-                                                                <label htmlFor="exampleInputEmail1" className='col-4'>Phòng chiếu</label>
                                                                 <Select
-                                                                    className='movie-select col-8'
-                                                                    value={allValues.selectedRoom}
+                                                                    className='room-select'
+                                                                    value={allValues.selectedRoom || {}}
                                                                     onChange={handleChangeSelect}
                                                                     options={allValues.listRoom}
-                                                                    placeholder='Select Room'
+                                                                    placeholder='Select room'
                                                                     name='selectedRoom'
-                                                                    isDisabled
                                                                     styles={customStyles}
                                                                 // styles={this.props.colourStyles}
                                                                 />
-                                                                {/* <span className='error-code-input'>{allValues.errors["fullName"]}</span> */}
+                                                            </div>
+                                                            <div className='content-schedule-bottom'>
+                                                                {allValues && allValues.listSchedule && allValues.listSchedule.length > 0 &&
+                                                                    allValues.listSchedule.map((item, index) => {
+                                                                        return (
+                                                                            <div className='data-movie-content' key={index}>
+                                                                                <div className='movie-content'>
+                                                                                    <div className='time-schedule'>
+                                                                                        <div className='time-start'>{moment(item.startTime).format("HH:mm")}</div>
+                                                                                        <div className='dash-time'>
+                                                                                            <div className='dash-left'></div>
+                                                                                            <div className='dash-right'></div>
+                                                                                        </div>
+                                                                                        <div className='time-end'>{moment(item.endTime).format("HH:mm")}</div>
+                                                                                    </div>
+                                                                                    <div className='movie-name'>
+                                                                                        <p>{item.ShowtimeMovie.name}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                {index < (allValues.listSchedule.length - 1) &&
+                                                                                    <div className='waiting-time-content'>
+                                                                                        <p>Thời gian chờ: 15 phút</p>
+                                                                                    </div>
+                                                                                }
+
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+                                                                {allValues && allValues.listSchedule && allValues.listSchedule.length === 0 &&
+                                                                    <div className='data-movie-content'>
+                                                                        <div className='movie-content'>
+                                                                            <p>No data...</p>
+                                                                        </div>
+                                                                    </div>
+                                                                }
+
+
 
                                                             </div>
-                                                            <div className="form-group row">
-                                                                <label htmlFor="exampleInputEmail1" className='col-4'>Ngày chiếu</label>
-                                                                <DatePicker
-                                                                    onChange={handleOnChangePremiereTime}
-                                                                    className="form-control col-8"
-                                                                    minDate={new Date().fp_incr(1)}
-                                                                    value={allValues.premiereDate}
-                                                                />
-                                                                {/* <span className='error-code-input'>{allValues.errors["birthday"]}</span> */}
+                                                        </div>
+                                                        <div className='form-schedule-container col-7'>
+                                                            <div className='title-input-content'>
+                                                                <div className='title-update'>
+                                                                    <div className='row'>
+                                                                        <div className='image-content col-4'>
+                                                                            <img src={addScheduleImage} className="scheduleImage" />
+
+                                                                        </div>
+                                                                        <div className='text-title col-8'>
+                                                                            <p className='text'>Update Schedule</p>
+                                                                            <p>Please complete all information</p>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+
                                                             </div>
-                                                            <div className="form-group row">
-                                                                <label htmlFor="exampleInputEmail1" className='col-4'>Giờ bắt đầu</label>
-                                                                <TimePicker className='col-4' use12Hours format="h:mm a" name='selectedStartTime' value={(allValues.startTime) ? moment(allValues.startTime, 'h:mm a') : ''} onChange={onChange} />
-                                                                <div className='col-4'></div>
-                                                            </div>
-                                                            <div className="form-group row">
-                                                                <label htmlFor="exampleInputEmail1" className='col-4'>Giờ kết thúc</label>
-                                                                <TimePicker className='col-4' use12Hours format="h:mm a" value={(allValues.endTime) ? moment(allValues.endTime, 'h:mm a') : ''} disabled />
-                                                                <div className='col-4'></div>
-                                                            </div>
-                                                            <div className='button-action'>
-                                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSubmitSchedule}>
-                                                                    {allValues.isShowLoading &&
-                                                                        <>
-                                                                            <Spinner
-                                                                                as="span"
-                                                                                animation="border"
-                                                                                size="sm"
-                                                                                role="status"
-                                                                                aria-hidden="true"
-                                                                            />
-                                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                        </>
-                                                                    }
-                                                                    {!allValues.isShowLoading &&
-                                                                        <>
-                                                                            <span className="visually">Submit</span>
-                                                                        </>
-                                                                    }
-                                                                </Button>
-                                                                <Button variant="primary" className="delete-schedule-data" onClick={handleClearData}>
-                                                                    <span className="visually">Clear</span>
-                                                                </Button>
+                                                            <div className='form-input-content'>
+                                                                <div className="form-group row">
+                                                                    <label htmlFor="exampleInputEmail1" className='col-4'>Tên phim</label>
+                                                                    <Select
+                                                                        className='movie-select col-8'
+                                                                        value={allValues.selectedMovie || {}}
+                                                                        onChange={handleChangeSelect}
+                                                                        options={allValues.listMovie}
+                                                                        placeholder='Select movie'
+                                                                        name='selectedMovie'
+                                                                        styles={customStyles}
+                                                                    // styles={this.props.colourStyles}
+                                                                    />
+                                                                    {/* <span className='error-code-input'>{allValues.errors["fullName"]}</span> */}
+
+                                                                </div>
+                                                                <div className="form-group row">
+                                                                    <label htmlFor="exampleInputEmail1" className='col-4'>Phòng chiếu</label>
+                                                                    <Select
+                                                                        className='movie-select col-8'
+                                                                        value={allValues.selectedRoom || {}}
+                                                                        onChange={handleChangeSelect}
+                                                                        options={allValues.listRoom}
+                                                                        placeholder='Select Room'
+                                                                        name='selectedRoom'
+                                                                        isDisabled
+                                                                        styles={customStyles}
+                                                                    // styles={this.props.colourStyles}
+                                                                    />
+                                                                    {/* <span className='error-code-input'>{allValues.errors["fullName"]}</span> */}
+
+                                                                </div>
+                                                                <div className="form-group row">
+                                                                    <label htmlFor="exampleInputEmail1" className='col-4'>Ngày chiếu</label>
+                                                                    <DatePicker
+                                                                        onChange={handleOnChangePremiereTime}
+                                                                        className="form-control col-8"
+                                                                        minDate={new Date().fp_incr(1)}
+                                                                        value={allValues.premiereDate}
+                                                                    />
+                                                                    {/* <span className='error-code-input'>{allValues.errors["birthday"]}</span> */}
+                                                                </div>
+                                                                <div className="form-group row">
+                                                                    <label htmlFor="exampleInputEmail1" className='col-4'>Giờ bắt đầu</label>
+                                                                    <TimePicker className='col-4' use12Hours format="h:mm a" name='selectedStartTime' value={(allValues.startTime) ? moment(allValues.startTime, 'h:mm a') : ''} onChange={onChange} />
+                                                                    <div className='col-4'></div>
+                                                                </div>
+                                                                <div className="form-group row">
+                                                                    <label htmlFor="exampleInputEmail1" className='col-4'>Giờ kết thúc</label>
+                                                                    <TimePicker className='col-4' use12Hours format="h:mm a" value={(allValues.endTime) ? moment(allValues.endTime, 'h:mm a') : ''} disabled />
+                                                                    <div className='col-4'></div>
+                                                                </div>
+                                                                <div className='button-action'>
+                                                                    <Button variant="primary" {...allValues.isShowLoadingButton && 'disabled'} onClick={handleSubmitSchedule}>
+                                                                        {allValues.isShowLoadingButton &&
+                                                                            <>
+                                                                                <Spinner
+                                                                                    as="span"
+                                                                                    animation="border"
+                                                                                    size="sm"
+                                                                                    role="status"
+                                                                                    aria-hidden="true"
+                                                                                />
+                                                                                <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                                            </>
+                                                                        }
+                                                                        {!allValues.isShowLoadingButton &&
+                                                                            <>
+                                                                                <span className="visually">Submit</span>
+                                                                            </>
+                                                                        }
+                                                                    </Button>
+                                                                    <Button variant="primary" className="delete-schedule-data" onClick={handleClearData}>
+                                                                        <span className="visually">Clear</span>
+                                                                    </Button>
+                                                                </div>
+
                                                             </div>
 
                                                         </div>
 
+
                                                     </div>
-
-
                                                 </div>
-                                            </div>
 
+                                            </div>
                                         </div>
+
                                     </div>
+                                    <div className='col-1'></div>
 
                                 </div>
-                                <div className='col-1'></div>
 
                             </div>
-
+                            {/*-Container Fluid*/}
                         </div>
-                        {/*-Container Fluid*/}
+                        {/* Footer */}
+                        <Footer />
+                        {/* Footer */}
                     </div>
-                    {/* Footer */}
-                    <Footer />
-                    {/* Footer */}
                 </div>
-            </div>
+
+            </LoadingOverlay>
+
+
 
 
 

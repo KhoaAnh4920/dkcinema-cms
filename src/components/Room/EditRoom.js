@@ -25,12 +25,14 @@ export default function EditRoom() {
         errors: {},
         listAlpha: [],
         listSeet: [],
+        seetCopy: [],
         newListSeetUpdate: [],
         isShowLoading: false,
         numberOfColumn: '',
         numberOfRow: '',
         numberSeet: '',
-        movieTheaterId: 0
+        movieTheaterId: 0,
+        listSeetChangeType: []
     });
     let history = useHistory();
     const { id } = useParams();
@@ -71,13 +73,20 @@ export default function EditRoom() {
 
             const dataRoom = await getEditRoom(id);
             console.log("Check data room: ", dataRoom);
+
+            console.log("Check data room length: ", dataRoom.data.RoomSeet.length);
+
             if (dataRoom && dataRoom.data && dataRoom.data.RoomSeet && dataRoom.data.RoomSeet.length > 0) {
                 let result = [];
 
-                let lastItem = dataRoom.data.RoomSeet[dataRoom.data.RoomSeet.length - 1]
+                // tìm posOfColumn max 
+
+                let maxPosColoumn = Math.max(...dataRoom.data.RoomSeet.map(o => +o.posOfColumn))
+
+                console.log("Check maxPosColoumn: ", maxPosColoumn);
 
 
-                for (let i = 0; i <= +lastItem.posOfColumn; i++) {
+                for (let i = 0; i <= maxPosColoumn; i++) {
                     let objSeet = {};
                     let posOfRow = [];
                     objSeet.posOfColumn = i;
@@ -99,7 +108,7 @@ export default function EditRoom() {
 
                 let listAlpha = buildDataInputSelect(dataRoom.data.numberOfColumn);
 
-                let selectedColumn = listAlpha[+lastItem.posOfColumn + 1];
+                let selectedColumn = listAlpha[maxPosColoumn + 1];
 
 
                 setAllValues((prevState) => ({
@@ -108,6 +117,7 @@ export default function EditRoom() {
                     errors: {},
                     listAlpha: listAlpha,
                     listSeet: result,
+                    seetCopy: result,
                     isShowLoading: false,
                     numberOfColumn: dataRoom.data.numberOfColumn,
                     numberOfRow: dataRoom.data.numberOfRow,
@@ -220,7 +230,9 @@ export default function EditRoom() {
     }
 
     const handleSaveUpdateRoom = async () => {
-        console.log("Check allvalue: ", allValues);
+
+        console.log("Check: ", allValues);
+
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
@@ -231,7 +243,8 @@ export default function EditRoom() {
             numberOfRow: +allValues.numberOfRow,
             name: allValues.name,
             movieTheaterId: allValues.movieTheaterId,
-            seets: allValues.newListSeetUpdate
+            seets: allValues.newListSeetUpdate,
+            listSeetChangeType: allValues.listSeetChangeType
         })
 
         if (res && res.errCode == 0) {
@@ -250,6 +263,99 @@ export default function EditRoom() {
 
     }
 
+    const handleClickSeet = (item1, item2) => {
+
+        let listSeet = JSON.parse(JSON.stringify(allValues.listSeet));
+        let copyList = JSON.parse(JSON.stringify(allValues.seetCopy));
+        let newListSeetUpdate = JSON.parse(JSON.stringify(allValues.newListSeetUpdate));
+
+        console.log("newListSeetUpdate: ", newListSeetUpdate);
+
+        console.log("item1: ", item1);
+
+
+        let objIndexList = listSeet.findIndex((obj => obj.posOfColumn == item1.posOfColumn));
+        let objIndexNewList = newListSeetUpdate.findIndex((obj => obj.posOfColumn == item1.posOfColumn));
+
+        console.log("objIndexNewList: ", objIndexNewList);
+
+
+        let objIndexDetail = listSeet[objIndexList].posOfRow.findIndex((obj => obj.pos === item2.pos));
+
+
+
+        if (listSeet[objIndexList].posOfRow[objIndexDetail].typeId === 1) {
+            listSeet[objIndexList].posOfRow[objIndexDetail].typeId = 2;
+            let obj = {};
+
+            obj.posOfColumn = listSeet[objIndexList].posOfColumn;
+            obj.posOfRow = listSeet[objIndexList].posOfRow[objIndexDetail];
+
+            console.log("listSeetChangeType: ", allValues.listSeetChangeType);
+            let resResult = allValues.listSeetChangeType;
+
+            if (objIndexNewList !== -1) { // Co trong new //
+                let objIndexDetailNew = newListSeetUpdate[objIndexNewList].posOfRow.findIndex((obj => obj.pos === item2.pos));
+                console.log("objIndexNewList: ", objIndexNewList);
+                console.log('objIndexNewList[objIndexList].posOfRow[objIndexDetailNew]: ', newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew])
+                if (newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew].typeId === 1)
+                    newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew].typeId = 2;
+                else
+                    newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew].typeId = 1;
+
+            } // Ko co trong new //
+            else {
+                resResult.push(obj);
+            }
+
+
+            console.log('resResult: ', resResult);
+
+            console.log("newListSeetUpdate: ", newListSeetUpdate);
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                listSeet: listSeet,
+                listSeetChangeType: resResult,
+                newListSeetUpdate: newListSeetUpdate
+            }));
+
+        } else {
+
+            listSeet[objIndexList].posOfRow[objIndexDetail].typeId = 1;
+
+            let isTypeVip = copyList.some(item => (item.posOfColumn === objIndexList && item.posOfRow.some(y => (y.pos === objIndexDetail && y.typeId === 2))))
+
+            if (!isTypeVip) {
+
+                let copyList = allValues.listSeetChangeType;
+
+                let res = copyList.filter(item => !(item.posOfColumn === objIndexList && item.posOfRow.pos === objIndexDetail));
+
+                setAllValues((prevState) => ({
+                    ...prevState,
+                    listSeet: listSeet,
+                    listSeetChangeType: res
+                }));
+            } else {
+                let obj = {};
+
+                obj.posOfColumn = listSeet[objIndexList].posOfColumn;
+                obj.posOfRow = listSeet[objIndexList].posOfRow[objIndexDetail];
+                let resResult = allValues.listSeetChangeType;
+
+                resResult.push(obj);
+
+                setAllValues((prevState) => ({
+                    ...prevState,
+                    listSeet: listSeet,
+                    listSeetChangeType: resResult
+                }));
+            }
+
+        }
+
+    }
 
 
 
@@ -326,7 +432,10 @@ export default function EditRoom() {
                                                                                 <p className='name-column'>{alphabet[item.posOfColumn]}</p>
                                                                                 {
                                                                                     item.posOfRow.map((item2, index2) => {
-                                                                                        return (<p className='seet-item' key={index2}>{item2.pos + 1}</p>)
+                                                                                        if (item2.typeId === 2)
+                                                                                            return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                        else
+                                                                                            return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
                                                                                     })
                                                                                 }
                                                                                 <p className='name-column'>{alphabet[item.posOfColumn]}</p>
@@ -372,6 +481,19 @@ export default function EditRoom() {
                                                         <Button variant="primary" onClick={handleAddSeet}>
                                                             <span className="visually">Thêm hàng ghế</span>
                                                         </Button>
+
+                                                        <div className='info-seet-container'>
+                                                            <div className='seet-default'>
+                                                                <p className='color-default'></p>
+                                                                <p className='name-seet'>Ghế thường</p>
+                                                            </div>
+
+                                                            <div className='seet-vip'>
+                                                                <p className='color-vip'></p>
+                                                                <p className='name-seet'>Ghế Vip</p>
+                                                            </div>
+
+                                                        </div>
 
                                                         <div className='button-sumit-seet-container'>
                                                             <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveUpdateRoom}>

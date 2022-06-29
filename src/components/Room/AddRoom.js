@@ -13,20 +13,26 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
 //Image upload modules
 import Select from 'react-select';
+import { useSelector } from "react-redux";
+import { userState } from "../../redux/userSlice";
+
+
 
 
 export default function AddRoom() {
     const [allValues, setAllValues] = useState({
         name: '',
+        movieTheaterId: '',
         errors: {},
         listAlpha: [],
         listSeet: [],
         isShowLoading: false,
         numberOfColumn: '',
         numberOfRow: '',
-        numberSeet: ''
+        numberSeet: '',
     });
     let history = useHistory();
+    let selectUser = useSelector(userState);
 
     const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
@@ -61,6 +67,16 @@ export default function AddRoom() {
 
 
     }, []);
+
+    useEffect(() => {
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            movieTheaterId: selectUser.adminInfo.movieTheaterId
+        }));
+
+
+    }, [selectUser]);
 
     const checkValidateInput = () => {
         let isValid = true;
@@ -144,6 +160,7 @@ export default function AddRoom() {
     }
 
     const handleSaveRoom = async () => {
+        console.log("allValues: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
@@ -152,7 +169,7 @@ export default function AddRoom() {
             numberOfColumn: +allValues.numberOfColumn,
             numberOfRow: +allValues.numberOfRow,
             name: allValues.name,
-            movieTheaterId: 1,
+            movieTheaterId: allValues.movieTheaterId,
             seets: allValues.listSeet
         })
 
@@ -164,6 +181,48 @@ export default function AddRoom() {
             toast.error("Add new room fail");
         }
 
+
+    }
+
+    const handleClickSeet = (item1, item2) => {
+
+        let listSeet = JSON.parse(JSON.stringify(allValues.listSeet));
+
+
+        console.log("item1: ", item1);
+
+
+        let objIndexList = listSeet.findIndex((obj => obj.posOfColumn == item1.posOfColumn));
+
+
+        let objIndexDetail = listSeet[objIndexList].posOfRow.findIndex((obj => obj.pos === item2.pos));
+
+
+
+        if (listSeet[objIndexList].posOfRow[objIndexDetail].typeId === 1) {
+            listSeet[objIndexList].posOfRow[objIndexDetail].typeId = 2;
+            let obj = {};
+
+            obj.posOfColumn = listSeet[objIndexList].posOfColumn;
+            obj.posOfRow = listSeet[objIndexList].posOfRow[objIndexDetail];
+
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                listSeet: listSeet,
+            }));
+
+        } else {
+
+            listSeet[objIndexList].posOfRow[objIndexDetail].typeId = 1;
+
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                listSeet: listSeet,
+            }));
+
+        }
 
     }
 
@@ -243,7 +302,10 @@ export default function AddRoom() {
                                                                                 <p className='name-column'>{alphabet[item.posOfColumn]}</p>
                                                                                 {
                                                                                     item.posOfRow.map((item2, index2) => {
-                                                                                        return (<p className='seet-item' key={index2}>{item2.pos + 1}</p>)
+                                                                                        if (item2.typeId === 2)
+                                                                                            return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                        else
+                                                                                            return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
                                                                                     })
                                                                                 }
                                                                                 <p className='name-column'>{alphabet[item.posOfColumn]}</p>
@@ -287,25 +349,21 @@ export default function AddRoom() {
 
                                                         </div>
                                                         <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleAddSeet}>
-                                                            {allValues.isShowLoading &&
-                                                                <>
-                                                                    <Spinner
-                                                                        as="span"
-                                                                        animation="border"
-                                                                        size="sm"
-                                                                        role="status"
-                                                                        aria-hidden="true"
-                                                                    />
-                                                                    <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                </>
-
-                                                            }
-                                                            {!allValues.isShowLoading &&
-                                                                <>
-                                                                    <span className="visually">Thêm hàng ghế</span>
-                                                                </>
-                                                            }
+                                                            <span className="visually">Thêm hàng ghế</span>
                                                         </Button>
+
+                                                        <div className='info-seet-container'>
+                                                            <div className='seet-default'>
+                                                                <p className='color-default'></p>
+                                                                <p className='name-seet'>Ghế thường</p>
+                                                            </div>
+
+                                                            <div className='seet-vip'>
+                                                                <p className='color-vip'></p>
+                                                                <p className='name-seet'>Ghế Vip</p>
+                                                            </div>
+
+                                                        </div>
 
                                                         <div className='button-sumit-seet-container'>
                                                             <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveRoom}>
@@ -329,24 +387,7 @@ export default function AddRoom() {
                                                                 }
                                                             </Button>
                                                             <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="delete-diagram-seet" onClick={handleDeleteDiagam}>
-                                                                {allValues.isShowLoading &&
-                                                                    <>
-                                                                        <Spinner
-                                                                            as="span"
-                                                                            animation="border"
-                                                                            size="sm"
-                                                                            role="status"
-                                                                            aria-hidden="true"
-                                                                        />
-                                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                    </>
-
-                                                                }
-                                                                {!allValues.isShowLoading &&
-                                                                    <>
-                                                                        <span className="visually">Xóa sơ đồ</span>
-                                                                    </>
-                                                                }
+                                                                <span className="visually">Xóa sơ đồ</span>
                                                             </Button>
                                                         </div>
 
