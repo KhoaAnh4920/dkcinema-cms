@@ -197,6 +197,7 @@ function ListSchedule() {
             let obj = {};
             obj.date = formatedDate;
             obj.roomId = roomData.room[0].id;
+            obj.movieTheaterId = movieTheaterId;
 
             let reslistSchedule = await getAllSchedule(obj);
             let listRoom = buildDataInputSelect(roomData.room);
@@ -367,7 +368,8 @@ function ListSchedule() {
         let obj = {};
         obj.date = formatedDate;
         obj.roomId = allValues.selectedRoom.value;
-        obj.movieId = allValues.selectedMovie.value
+        obj.movieId = allValues.selectedMovie.value;
+        obj.movieTheaterId = allValues.movieTheaterId;
         fetchDataSchedule(obj);
     }
 
