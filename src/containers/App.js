@@ -29,6 +29,9 @@ import EditCombo from '../components/Combo/EditCombo';
 import ListBanner from '../components/Banner/ListBanner';
 import AddBanner from '../components/Banner/AddBanner';
 import EditBanner from '../components/Banner/EditBanner';
+import AddNews from '../components/News/AddNews';
+import ListNews from '../components/News/ListNews';
+import EditNews from '../components/News/EditNews';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -70,6 +73,9 @@ function App() {
             <Route path="/banner-management" component={ListBanner} />
             <Route path="/add-new-banner" component={AddBanner} />
             <Route path="/edit-banner/:id" component={EditBanner} />
+            <Route path="/add-new-post" component={AddNews} />
+            <Route path="/news-management" component={ListNews} />
+            <Route path="/edit-post/:id" component={EditNews} />
           </Switch>
         </span>
       </div>
