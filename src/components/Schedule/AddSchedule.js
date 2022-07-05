@@ -78,11 +78,12 @@ export default function AddSchedule() {
         let obj = {};
         obj.date = formatedDate;
         obj.roomId = stateCopy[stateName].value
+        obj.movieTheaterId = allValues.movieTheaterId
 
         if (stateName === 'selectedRoom') {
-            let dataRes = await getAllSchedule(obj);
-            console.log("Check res: ", dataRes);
-            stateCopy['listSchedule'] = dataRes.data.reverse();
+            let listSchedule = await getAllSchedule(obj);
+            console.log("Check res: ", listSchedule);
+            stateCopy['listSchedule'] = (listSchedule && listSchedule.data) ? listSchedule.data.reverse() : [];
         }
 
 
@@ -148,14 +149,14 @@ export default function AddSchedule() {
         }
     }
 
-    async function fetchDataSchedule(data) {
-        // You can await here
-        let dataRes = await getAllSchedule(data);
-        setAllValues((prevState) => ({
-            ...prevState,
-            listSchedule: dataRes.data.reverse(),
-        }))
-    }
+    // async function fetchDataSchedule(data) {
+    //     // You can await here
+    //     let dataRes = await getAllSchedule(data);
+    //     setAllValues((prevState) => ({
+    //         ...prevState,
+    //         listSchedule: dataRes.data.reverse(),
+    //     }))
+    // }
 
     const fetchAllData = async (movieTheaterId, status) => {
         let roomData = await getAllRoom(movieTheaterId);
@@ -172,11 +173,36 @@ export default function AddSchedule() {
             let obj = {};
             obj.date = formatedDate;
             obj.roomId = roomData.room[0].id;
+            obj.movieTheaterId = movieTheaterId;
 
             let listSchedule = await getAllSchedule(obj);
             let listRoom = buildDataInputSelect(roomData.room);
 
-            console.log("listSchedule: ", listSchedule);
+            if (listSchedule && listSchedule.data) {
+                listSchedule = listSchedule.data.reverse();
+                console.log('listSchedule: ', listSchedule)
+                listSchedule.map((item, index) => {
+                    if (index < (listSchedule.length - 1)) {
+                        let newDateEndTime = new Date(item.endTime);
+                        console.log('newDateEndTime: ', newDateEndTime)
+
+                        let test2 = moment(newDateEndTime).format("HH:mm:ss a");
+                        let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
+
+                        console.log("end: ", test2)
+                        console.log('startTime: ', startTime);
+
+                        var startTime2 = moment(test2, 'HH:mm:ss a');
+                        var endTime2 = moment(startTime, 'HH:mm:ss a');
+
+                        let duration = endTime2.diff(startTime2, 'minutes');
+
+                        item.duration = duration;
+
+                        return item;
+                    }
+                })
+            }
 
             setAllValues((prevState) => ({
                 ...prevState,
@@ -184,8 +210,9 @@ export default function AddSchedule() {
                 dataRoom: roomData.room,
                 listRoom: listRoom,
                 selectedRoom: listRoom[0] || {},
-                listSchedule: listSchedule.data.reverse(),
-                listMovie: listMovie
+                listSchedule: listSchedule,
+                listMovie: listMovie,
+                movieTheaterId: movieTheaterId
             }));
         }
 
@@ -297,13 +324,41 @@ export default function AddSchedule() {
             let obj = {};
             obj.date = formatedDate;
             obj.roomId = allValues.selectedRoom.value
-            let dataRes = await getAllSchedule(obj);
-            console.log(dataRes);
+            obj.movieTheaterId = allValues.movieTheaterId
+            let listSchedule = await getAllSchedule(obj);
+
+            if (listSchedule && listSchedule.data) {
+                listSchedule = listSchedule.data.reverse();
+                console.log('listSchedule: ', listSchedule)
+                listSchedule.map((item, index) => {
+                    if (index < (listSchedule.length - 1)) {
+                        let newDateEndTime = new Date(item.endTime);
+                        console.log('newDateEndTime: ', newDateEndTime)
+
+                        let test2 = moment(newDateEndTime).format("HH:mm:ss a");
+                        let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
+
+                        console.log("end: ", test2)
+                        console.log('startTime: ', startTime);
+
+                        var startTime2 = moment(test2, 'HH:mm:ss a');
+                        var endTime2 = moment(startTime, 'HH:mm:ss a');
+
+                        let duration = endTime2.diff(startTime2, 'minutes');
+
+                        item.duration = duration;
+
+                        return item;
+                    }
+                })
+            }
+
+
             setAllValues((prevState) => ({
                 ...prevState,
                 startTime: '',
                 endTime: '',
-                listSchedule: dataRes.data.reverse()
+                listSchedule: listSchedule,
             }))
         } else {
             toast.error(res.errMessage)
@@ -319,13 +374,43 @@ export default function AddSchedule() {
     const handleOnChangeListSchedule = async (date) => {
         let formatedDate = new Date(date[0]).getTime(); // convert timestamp //
 
+        allValues.isShowLoading = true;
+
         let obj = {};
         obj.date = formatedDate;
         obj.roomId = allValues.selectedRoom.value;
-        let dataRes = await getAllSchedule(obj);
+        obj.movieTheaterId = allValues.movieTheaterId
+        let listSchedule = await getAllSchedule(obj);
 
 
-        setAllValues({ ...allValues, dateSchedule: date[0], listSchedule: dataRes.data.reverse() })
+        if (listSchedule && listSchedule.data) {
+            listSchedule = listSchedule.data.reverse();
+            console.log('listSchedule: ', listSchedule)
+            listSchedule.map((item, index) => {
+                if (index < (listSchedule.length - 1)) {
+                    let newDateEndTime = new Date(item.endTime);
+                    console.log('newDateEndTime: ', newDateEndTime)
+
+                    let test2 = moment(newDateEndTime).format("HH:mm:ss a");
+                    let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
+
+                    console.log("end: ", test2)
+                    console.log('startTime: ', startTime);
+
+                    var startTime2 = moment(test2, 'HH:mm:ss a');
+                    var endTime2 = moment(startTime, 'HH:mm:ss a');
+
+                    let duration = endTime2.diff(startTime2, 'minutes');
+
+                    item.duration = duration;
+
+                    return item;
+                }
+            })
+        }
+
+
+        setAllValues({ ...allValues, isShowLoading: false, dateSchedule: date[0], listSchedule: listSchedule })
 
     }
 
@@ -431,8 +516,11 @@ export default function AddSchedule() {
                                                                                     </div>
                                                                                 </div>
                                                                                 {index < (allValues.listSchedule.length - 1) &&
+
                                                                                     <div className='waiting-time-content'>
-                                                                                        <p>Thời gian chờ: 15 phút</p>
+                                                                                        <p>
+                                                                                            Thời gian chờ: {item.duration} phút
+                                                                                        </p>
                                                                                     </div>
                                                                                 }
 
@@ -443,7 +531,7 @@ export default function AddSchedule() {
                                                                 {allValues && allValues.listSchedule && allValues.listSchedule.length === 0 &&
                                                                     <div className='data-movie-content'>
                                                                         <div className='movie-content'>
-                                                                            <p>No data...</p>
+                                                                            <p>No showtimes yet...</p>
                                                                         </div>
                                                                     </div>
                                                                 }

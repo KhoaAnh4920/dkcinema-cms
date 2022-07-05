@@ -8,12 +8,16 @@ import { useHistory } from "react-router-dom";
 import { userState } from "../../redux/userSlice";
 import { useSelector } from "react-redux";
 import { toast } from 'react-toastify';
+import { Button } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
+
 
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errMessage, setErrMessage] = useState('');
+    const [isLoadingButton, setLoadingButton] = useState(false);
     const dispatch = useDispatch();
     let history = useHistory();
     let selectUser = useSelector(userState);
@@ -27,7 +31,8 @@ export default function Login() {
 
     const handleLogin = async () => {
         // Clear mã lỗi //
-        setErrMessage('');
+        // setErrMessage('');
+        setLoadingButton(true);
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
             console.log("Check data: ", data);
@@ -100,17 +105,39 @@ export default function Login() {
                             {errMessage && errMessage !== '' &&
                                 <><span style={{ color: 'red', fontSize: '12px' }}>{errMessage}</span></>
                             }
-                            <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Quên mật khẩu ?</span>
+                            <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Forgot password ?</span>
 
                         </div>
 
                     </div>
                     <div className='col-12'>
-                        <button
+                        {/* <button
                             className='btn-login'
                             onClick={handleLogin}
                         >Đăng nhập
-                        </button>
+                        </button> */}
+
+                        <Button variant="primary" className='btn-login' {...isLoadingButton && 'disabled'} onClick={handleLogin} >
+                            {isLoadingButton &&
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                </>
+
+                            }
+                            {!isLoadingButton &&
+                                <>
+                                    <span className="visually">Login</span>
+                                </>
+                            }
+                        </Button>
+
                     </div>
                 </div>
             </div>

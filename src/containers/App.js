@@ -26,6 +26,9 @@ import ListFood from '../components/Food/ListFood';
 import ListCombo from '../components/Combo/ListCombo';
 import AddCombo from '../components/Combo/AddCombo';
 import EditCombo from '../components/Combo/EditCombo';
+import ListBanner from '../components/Banner/ListBanner';
+import AddBanner from '../components/Banner/AddBanner';
+import EditBanner from '../components/Banner/EditBanner';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -64,6 +67,9 @@ function App() {
             <Route path="/combo-management" component={ListCombo} />
             <Route path="/add-new-combo" component={AddCombo} />
             <Route path="/edit-combo/:id" component={EditCombo} />
+            <Route path="/banner-management" component={ListBanner} />
+            <Route path="/add-new-banner" component={AddBanner} />
+            <Route path="/edit-banner/:id" component={EditBanner} />
           </Switch>
         </span>
       </div>

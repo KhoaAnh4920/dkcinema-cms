@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import Swal from 'sweetalert2';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import Footer from '../../containers/System/Share/Footer';
-import Select from 'react-select';
-import './AddFilms.scss';
-import DatePicker from '../../containers/System/Share/DatePicker';
+import './AddBanner.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import { CommonUtils } from '../../utils';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
-import { getAllTypeFilms } from '../../services/FilmsServices';
-import { createNewFilmsService } from '../../services/FilmsServices';
+import { createNewBanner } from '../../services/BannerServices';
 
 //Bootstrap and jQuery libraries
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,24 +28,16 @@ import { Link } from "react-router-dom";
 
 
 
-export default function AddFilms() {
+export default function AddBanner() {
     const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
         name: '',
-        transName: '',
-        country: '',
-        language: '',
-        duration: '',
         description: '',
-        brand: '',
-        cast: '',
         status: 0,
-        typeMovie: [],
         url: '',
-        releaseTime: 0,
         errors: {},
-        isShowLoading: false
+        isLoadingButton: false
     });
     const [valImg, setValImg] = useState({
         previewVisible: false,
@@ -90,8 +78,8 @@ export default function AddFilms() {
     const handleChangeImage = ({ fileList }) => {
 
         console.log(fileList);
-        if (fileList.length > 2) {
-            toast.error("Maximum 2 poster");
+        if (fileList.length > 1) {
+            toast.error("Maximum 1 poster");
             return;
         }
         if (fileList.length > 0) {
@@ -157,23 +145,7 @@ export default function AddFilms() {
 
     useEffect(() => {
 
-        async function fetchDataTypeMovie() {
-            // You can await here
-            let dateToday = moment().format('dddd, MMMM Do, YYYY');
-            const typeData = await getAllTypeFilms();
 
-
-            if (typeData && typeData.dataTypeMovie) {
-
-                setAllValues((prevState) => ({
-                    ...prevState,
-                    dateToday: dateToday,
-                    listTypeMovie: typeData.dataTypeMovie
-                }));
-            }
-        }
-
-        fetchDataTypeMovie();
     }, []);
 
     // const checkValidateInput = () => {
@@ -219,19 +191,22 @@ export default function AddFilms() {
         });
     }
 
-    const handleOnChangeDatePicker = (date) => {
-        setAllValues({ ...allValues, releaseTime: date[0] })
-    }
 
-    const handleSaveFilms = async () => {
+
+    const handleSaveBanner = async () => {
+
+        // allValues.isLoadingButton = true;
 
         setAllValues((prevState) => ({
             ...prevState,
-            isShowLoading: true
-        }));
+            isLoadingButton: true,
+        }))
 
 
-        let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
+        if (valImg.fileList.length < 1) {
+            toast.error("Please upload image");
+            return;
+        }
 
         let result = [];
 
@@ -240,62 +215,29 @@ export default function AddFilms() {
             let obj = {};
             obj.image = await getBase64(item.originFileObj);
             obj.fileName = item.name;
-            obj.typeImage = item.typeImage
             result.push(obj);
         }))
 
-        let res = await createNewFilmsService({
+        console.log("Check result: ", result);
+
+        let res = await createNewBanner({
             name: allValues.name,
-            transName: allValues.transName,
-            country: allValues.country,
-            language: allValues.language,
-            duration: allValues.duration,
             description: allValues.description,
-            brand: allValues.brand,
-            cast: allValues.cast,
-            status: 0,
-            typeMovie: typeCheck.typeMovie,
-            poster: result,
-            url: allValues.url,
-            releaseTime: formatedDate,
+            imageBanner: result,
+            image: result[0].image,
+            fileName: result[0].fileName
         })
 
         if (res && res.errCode == 0) {
-            history.push("/films-management")
-            toast.success("Add new films succeed");
+            history.push("/banner-management")
+            toast.success("Add new banner success");
         } else {
-            history.push("/films-management")
-            toast.error("Add new films fail");
+            toast.error(res.errMessage);
         }
 
     }
 
 
-    const handleClickCheckbox = (e) => {
-        // Destructuring
-        const { value, checked } = e.target;
-        const { typeMovie } = typeCheck;
-
-        console.log(`${value} is ${checked}`);
-
-        // Case 1 : The user checks the box
-        if (checked) {
-            setUserInfo({
-                typeMovie: [...typeMovie, value],
-                response: [...typeMovie, value],
-            });
-            console.log(typeCheck);
-        }
-
-        // Case 2  : The user unchecks the box
-        else {
-            setUserInfo({
-                typeMovie: typeMovie.filter((e) => e !== value),
-                response: typeMovie.filter((e) => e !== value),
-            });
-        }
-
-    }
 
 
     return (
@@ -319,32 +261,32 @@ export default function AddFilms() {
 
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/films-management`}>Quản lý Phim</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm phim</li>
+                                    <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý banner</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Thêm banner</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
                             </div>
                             <div className="row">
-                                <div className='col-1'></div>
-                                <div className="col-10">
+                                <div className='col-3'></div>
+                                <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Thêm phim mới</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Add new Banner</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
                                                 <div className="container">
 
                                                     <Upload
-                                                        action={""}
-                                                        listType="picture-card"
-                                                        fileList={valImg.fileList}
-                                                        onPreview={handlePreview}
                                                         beforeUpload={() => {
                                                             /* update state here */
                                                             return false;
                                                         }}
+                                                        action={""}
+                                                        listType="picture-card"
+                                                        fileList={valImg.fileList}
+                                                        onPreview={handlePreview}
                                                         onChange={handleChangeImage}
                                                     >
                                                         {
@@ -366,87 +308,29 @@ export default function AddFilms() {
                                                     </Modal>
                                                 </div>
                                             </div>
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Tên Banner</label>
+                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} placeholder="Enter name" />
 
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phim</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên phim" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phiên dịch</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.transName} name='transName' placeholder="Nhập tên phiên dịch" />
-                                                </div>
-
-                                            </div>
-
-                                            <div className="form-group horizon-form">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Quốc gia</label>
-                                                    <input type="text" className="form-control input-sm" name='country' onChange={changeHandler} value={allValues.country} placeholder="Nhập quốc gia" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Thời lượng / phút</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.duration} name='duration' onChange={changeHandler} placeholder="Nhập thời lượng" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngôn ngữ</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.language} name='language' onChange={changeHandler} placeholder="Nhập ngôn ngữ" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngày công chiếu</label>
-                                                    <DatePicker
-                                                        onChange={handleOnChangeDatePicker}
-                                                        className="form-control"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Diễn viên</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.cast} name='cast' onChange={changeHandler} placeholder="Nhập diễn viên" />
-                                                </div>
-
-
-                                            </div>
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-checkbox'>
-                                                    <label htmlFor="exampleInputEmail1">Thể loại</label>
-                                                    <div className='row' style={{ marginLeft: '0px' }}>
-                                                        {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 &&
-                                                            allValues.listTypeMovie.map((item, index) => {
-
-                                                                return (
-                                                                    <div className="custom-control custom-checkbox col-4" key={index} >
-                                                                        <input type="checkbox" className="custom-control-input" name="typeMovie" onChange={((e) => handleClickCheckbox(e))} value={item.id} id={index} />
-                                                                        <label className="custom-control-label" for={index}>{item.name}</label>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Trailer</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.url} name='url' onChange={changeHandler} placeholder="Nhập url trailer" />
-                                                </div>
-
+                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="exampleFormControlTextarea1">Mô tả phim</label>
+                                                <label htmlFor="exampleInputEmail1">Mô tả</label>
                                                 <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
+                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+
                                             </div>
 
 
-                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveFilms()} >
-                                                {allValues.isShowLoading &&
+                                            {/* <button
+                                                type="submit"
+                                                onClick={() => handleSaveMovieTheater()}
+                                                className="btn btn-primary btn-submit">Submit</button> */}
+
+                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleSaveBanner()}>
+                                                {allValues.isLoadingButton &&
                                                     <>
                                                         <Spinner
                                                             as="span"
@@ -459,7 +343,7 @@ export default function AddFilms() {
                                                     </>
 
                                                 }
-                                                {!allValues.isShowLoading &&
+                                                {!allValues.isLoadingButton &&
                                                     <>
                                                         <span className="visually">Submit</span>
                                                     </>
@@ -470,7 +354,6 @@ export default function AddFilms() {
                                     </div>
 
                                 </div>
-                                <div className='col-1'></div>
 
                             </div>
 

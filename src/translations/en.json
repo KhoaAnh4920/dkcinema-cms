@@ -11,7 +11,8 @@
             "combo-management": "Combo Management",
             "ticket-management": "Ticket Management",
             "news-management": "News Management",
-            "voucher-management": "Voucher Management"
+            "voucher-management": "Voucher Management",
+            "banner-management": "Banner Management"
         },
         "user-management": {
             "list-users": "User Management"
@@ -42,6 +43,9 @@
         },
         "voucher-management": {
             "list-voucher": "Voucher Management"
+        },
+        "banner-management": {
+            "list-banner": "Banner Management"
         }
     }
 }

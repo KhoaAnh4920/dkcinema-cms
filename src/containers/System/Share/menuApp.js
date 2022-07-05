@@ -45,6 +45,15 @@ export const adminMenu = [
         ]
     },
     {
+        name: 'menu.admin.banner-management',
+        id: 'tableBanner',
+        menus: [
+            {
+                name: 'menu.banner-management.list-banner', link: '/banner-management',
+            },
+        ]
+    },
+    {
         name: 'menu.admin.news-management',
         id: 'tableNews',
         menus: [
