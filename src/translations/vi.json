@@ -11,7 +11,8 @@
             "combo-management": "Quản lý combo",
             "ticket-management": "Quản lý vé",
             "news-management": "Quản lý bài viết",
-            "voucher-management": "Quản lý khuyến mãi"
+            "voucher-management": "Quản lý khuyến mãi",
+            "banner-management": "Quản lý banner"
         },
         "user-management": {
             "list-users": "Quản lý người dùng"
@@ -42,6 +43,9 @@
         },
         "voucher-management": {
             "list-voucher": "Quản lý khuyến mãi"
+        },
+        "banner-management": {
+            "list-banner": "Quản lý banner"
         }
     }
 }
