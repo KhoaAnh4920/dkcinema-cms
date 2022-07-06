@@ -4,12 +4,14 @@ import Header from '../../containers/System/Share/Header';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import Footer from '../../containers/System/Share/Footer';
-import './EditBanner.scss';
+import './AddNews.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import { CommonUtils } from '../../utils';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
-import { editBanner, getDetailBanner } from '../../services/BannerServices';
+import { createNewPost } from '../../services/NewsServices';
+import { userState } from "../../redux/userSlice";
+import { useSelector } from "react-redux";
 
 //Bootstrap and jQuery libraries
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,20 +24,24 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import MyEditor from './MyEditor';
 
 
 
 
 
-export default function EditBanner() {
-    const { id } = useParams();
+
+export default function AddNews() {
+    let selectUser = useSelector(userState);
+    const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
         name: '',
         description: '',
-        status: 0,
+        status: 1,
         url: '',
+        content: '',
+        typeNews: 1,
         errors: {},
         isLoadingButton: false
     });
@@ -46,7 +52,21 @@ export default function EditBanner() {
         fileList: [],
     })
 
+    const [adminInfo, setAdminInfo] = useState({
+        id: 1,
+    })
+
+
     let history = useHistory();
+
+    useEffect(() => {
+
+        setAdminInfo({
+            id: (selectUser.adminInfo) ? selectUser.adminInfo.id : '',
+        });
+
+
+    }, [selectUser]);
 
 
     const handleCancel = () => {
@@ -74,6 +94,7 @@ export default function EditBanner() {
 
     const handleChangeImage = ({ fileList }) => {
 
+        console.log(fileList);
         if (fileList.length > 1) {
             toast.error("Maximum 1 poster");
             return;
@@ -103,6 +124,8 @@ export default function EditBanner() {
             }
         }
 
+
+        console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -129,44 +152,16 @@ export default function EditBanner() {
     };
 
 
-    async function fetchDataBanner() {
-        // You can await here
+    // function youtube_parser(url){
+    //     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    //     var match = url.match(regExp);
+    //     return (match&&match[7].length==11)? match[7] : false;
+    // }
 
-        let dataDetailBanner = await getDetailBanner(id);
-
-        console.log('dataDetailBanner: ', dataDetailBanner);
-
-        if (dataDetailBanner && dataDetailBanner.data) {
-
-            let dataBanner = dataDetailBanner.data;
-            let result = [];
-            let obj = {};
-            obj.uid = dataBanner.id;
-            obj.name = dataBanner.public_id_image;
-            obj.public_id = dataBanner.public_id_image;
-            obj.status = 'done';
-            obj.url = dataBanner.url;
-            result.push(obj)
-
-            setValImg((prevState) => ({
-                ...prevState,
-                fileList: result
-            }));
-
-            setAllValues((prevState) => ({
-                ...prevState,
-                name: dataBanner.name,
-                description: dataBanner.description
-            }));
-
-        }
-
-
-    }
 
 
     useEffect(() => {
-        fetchDataBanner()
+
 
     }, []);
 
@@ -215,57 +210,69 @@ export default function EditBanner() {
 
 
 
-    const handleEditBanner = async () => {
+    const handleSavePost = async () => {
 
 
-
-        if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isLoadingButton: true,
-            }))
-
-            let result = [];
-            await Promise.all(valImg.fileList.map(async (item, index) => {
-
-                let obj = {};
-                obj.image = await getBase64(item.originFileObj);
-                obj.fileName = item.name;
-                result.push(obj);
-
-            }))
-            let res = await editBanner({
-                id: id,
-                name: allValues.name,
-                description: allValues.description,
-                url: result[0].image,
-                fileName: result[0].fileName
-            })
-            if (res && res.errCode == 0) {
-                history.push("/banner-management")
-                toast.success("Update banner success");
-            } else {
-                toast.error(res.errMessage);
-            }
+        console.log(allValues);
 
 
-        } else {
+        setAllValues((prevState) => ({
+            ...prevState,
+            isLoadingButton: true,
+        }))
 
-            let res = await editBanner({
-                id: id,
-                name: allValues.name,
-                description: allValues.description
-            })
 
-            if (res && res.errCode == 0) {
-                history.push("/banner-management")
-                toast.success("Update banner success");
-            } else {
-                toast.error(res.errMessage);
-            }
+        if (valImg.fileList.length < 1) {
+            toast.error("Please upload image");
+            return;
         }
 
+        let result = [];
 
+        await Promise.all(valImg.fileList.map(async (item, index) => {
+            console.log("Check item: ", item.originFileObj);
+            let obj = {};
+            obj.image = await getBase64(item.originFileObj);
+            obj.fileName = item.name;
+            result.push(obj);
+        }))
+
+
+        let res = await createNewPost({
+            title: allValues.name,
+            noiDung: allValues.content,
+            tomTat: allValues.description,
+            userId: adminInfo.id,
+            type: allValues.typeNews,
+            thumbnail: result[0].image,
+            fileName: result[0].fileName
+
+        })
+
+        if (res && res.errCode == 0) {
+            history.push("/news-management")
+            toast.success("Add new banner success");
+        } else {
+            toast.error(res.errMessage);
+        }
+
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            typeNews: +value
+        }));
+
+    }
+
+    const handleChangeCKEdittor = (data) => {
+
+
+        setAllValues({ ...allValues, content: data })
     }
 
 
@@ -275,7 +282,7 @@ export default function EditBanner() {
 
         <>
 
-            <div id="wrapper">
+            <div id="wrapper" className='add-post-main'>
                 {/* Sidebar */}
 
                 <Sidebar />
@@ -292,18 +299,18 @@ export default function EditBanner() {
 
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý banner</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm banner</li>
+                                    <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý bài viết</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Thêm bài viết</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
                             </div>
                             <div className="row">
-                                <div className='col-3'></div>
-                                <div className="col-6">
+                                <div className='col-2'></div>
+                                <div className="col-8">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new Banner</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Add new post</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -340,16 +347,45 @@ export default function EditBanner() {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tên Banner</label>
-                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} value={allValues.name} placeholder="Enter name" />
+                                                <label htmlFor="exampleInputEmail1">Tiêu đề</label>
+                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} placeholder="Enter name" />
 
                                                 {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
                                             </div>
 
                                             <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Mô tả</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
+                                                <label htmlFor="exampleInputEmail1">Thể loại</label>
+                                                <div className="col-sm-9 radio-type-post">
+                                                    <div className="custom-control custom-radio">
+                                                        <input type="radio" id="customRadio1" name="typeNews" value={1} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                        <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
+                                                    </div>
+                                                    <div className="custom-control custom-radio">
+                                                        <input type="radio" id="customRadio2" name="typeNews" value={2} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                        <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
+                                                    </div>
+                                                    <div className="custom-control custom-radio">
+                                                        <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                        <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
+                                                    </div>
+                                                </div>
+
+                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Tóm tắt</label>
+                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="3"></textarea>
+                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Nội dung</label>
+                                                <MyEditor handleChangeCKEdittor={handleChangeCKEdittor} />
+                                                {/* <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea> */}
                                                 {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
 
                                             </div>
@@ -360,7 +396,7 @@ export default function EditBanner() {
                                                 onClick={() => handleSaveMovieTheater()}
                                                 className="btn btn-primary btn-submit">Submit</button> */}
 
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleEditBanner()}>
+                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleSavePost()}>
                                                 {allValues.isLoadingButton &&
                                                     <>
                                                         <Spinner
@@ -385,6 +421,7 @@ export default function EditBanner() {
                                     </div>
 
                                 </div>
+                                <div className='col-2'></div>
 
                             </div>
 
