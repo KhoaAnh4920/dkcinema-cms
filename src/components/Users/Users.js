@@ -39,6 +39,11 @@ function Users() {
                 if (item.UserRoles)
                     item.rolesName = item.UserRoles.rolesName;
                 item.birthday = moment(item.birthday).format("DD/MM/YYYY");
+                if (item.UserMovieTheater && item.UserMovieTheater.tenRap) {
+                    item.movieTheater = item.UserMovieTheater.tenRap;
+                } else {
+                    item.movieTheater = 'None'
+                }
                 return item;
             })
 
@@ -53,6 +58,7 @@ function Users() {
     }, []);
 
 
+
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
@@ -60,6 +66,7 @@ function Users() {
         { title: 'FullName', field: 'fullName' },
         { title: 'Gender', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
         { title: 'Role', field: 'rolesName' },
+        { title: 'Movie Theater', field: 'movieTheater' },
         { title: 'Status', field: 'isActive', render: rowData => (rowData.isActive) ? <span className="badge badge-success">Active</span> : <span className="badge badge-danger">InActive</span> },
     ]
 
@@ -111,6 +118,7 @@ function Users() {
                 phone: data.phone,
                 gender: data.selectedGender.value,
                 roleId: data.selectedRoles.value,
+                movietheaterid: (data.selectedMovieTheater && data.selectedMovieTheater.value) ? data.selectedMovieTheater.value : null,
                 userName: data.userName,
                 address: data.address,
                 avatar: data.avatar,
@@ -142,6 +150,7 @@ function Users() {
                 phone: data.phone,
                 gender: data.selectedGender.value,
                 roleId: data.selectedRoles.value,
+                movietheaterid: (data.selectedMovieTheater && data.selectedMovieTheater.value) ? data.selectedMovieTheater.value : null,
                 userName: data.userName,
                 address: data.address,
                 avatar: data.avatar,

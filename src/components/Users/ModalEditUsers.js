@@ -11,7 +11,7 @@ import Select from 'react-select';
 import DatePicker from '../../containers/System/Share/DatePicker';
 import useLocationForm from "./useLocationForm";
 import { testFunction } from './useLocationForm';
-
+import { getAllMovieTheater } from '../../services/MovieTheater';
 
 
 export default function ModalEditUsers(props) {
@@ -29,11 +29,13 @@ export default function ModalEditUsers(props) {
         testCity: { value: 278, label: 'An Giang' },
         selectedGender: '',
         selectedRoles: '',
+        selectedMovieTheater: '',
         districtCode: {},
         cityCode: {},
         wardCode: {},
         address: '',
         isShowLoading: false,
+        isShowMovieTheater: true,
         errors: {},
         imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png'
     });
@@ -71,6 +73,14 @@ export default function ModalEditUsers(props) {
                     object.value = item.id;
                     result.push(object);
                 })
+            } else {
+                inputData.map((item, index) => {
+                    let object = {};
+
+                    object.label = item.tenRap;
+                    object.value = item.id;
+                    result.push(object);
+                })
             }
 
         }
@@ -86,20 +96,34 @@ export default function ModalEditUsers(props) {
                 const location = await testFunctionParent(dataUser.cityCode, dataUser.districtCode, dataUser.wardCode);
                 let listGender = buildDataInputSelect([], 'GENDERS');
                 let listRoles = [];
+                let listMovieTheater = [];
                 let dataRoles = await getAllRoles();
+                let dataMovieTheater = await getAllMovieTheater();
                 let dateToday = moment().format('dddd, MMMM Do, YYYY');
                 if (dataRoles)
                     listRoles = buildDataInputSelect(dataRoles.dataRoles, 'ROLES');
+                if (dataMovieTheater)
+                    listMovieTheater = buildDataInputSelect(dataMovieTheater.movie);
 
                 let selectedGender = setDefaultValue(listGender, (dataUser.gender) ? 1 : 0);
                 let selectedRoles = setDefaultValue(listRoles, dataUser.UserRoles.id);
+
+                let selectedMovieTheater = '';
+                let isShowMovieTheater = true;
+                if (((dataUser.UserMovieTheater && dataUser.UserMovieTheater.id) || dataUser.UserRoles.id === 2 || dataUser.UserRoles.id === 3)) {
+                    selectedMovieTheater = setDefaultValue(listMovieTheater, dataUser.UserMovieTheater.id);
+                    isShowMovieTheater = false;
+                }
+
 
 
                 setAllValues({
                     listRoles,
                     listGender,
+                    listMovieTheater,
                     selectedGender,
                     selectedRoles,
+                    selectedMovieTheater,
                     phone: dataUser.phone,
                     email: dataUser.email,
                     userName: dataUser.userName,
@@ -108,7 +132,8 @@ export default function ModalEditUsers(props) {
                     imagePreviewUrl: dataUser.avatar,
                     address: dataUser.address,
                     location: location,
-                    dateToday: dateToday
+                    dateToday: dateToday,
+                    isShowMovieTheater
                 })
             }
         }
@@ -136,7 +161,7 @@ export default function ModalEditUsers(props) {
             // selectedCity,
             // selectedDistrict,
             // selectedWard,
-            console.log('allValues.location.cityOptions: ', allValues.location.cityOptions);
+
             state.cityOptions = allValues.location.cityOptions;
             state.districtOptions = allValues.location.districtOptions;
             state.wardOptions = allValues.location.wardOptions;
@@ -206,7 +231,18 @@ export default function ModalEditUsers(props) {
     const handleChangeSelect = async (selectedOption, name) => {
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
+
+
+
         stateCopy[stateName] = selectedOption;
+
+        if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3))
+            stateCopy['isShowMovieTheater'] = false;
+        else if (stateName !== 'selectedMovieTheater') {
+            stateCopy['isShowMovieTheater'] = true;
+            stateCopy['selectedMovieTheater'] = null;
+        }
+
         setAllValues({ ...stateCopy })
 
         console.log("Check state: ", allValues);
@@ -321,6 +357,16 @@ export default function ModalEditUsers(props) {
                                 />
                             </div>
                             <input type="text" className="form-control input-small" name='address' value={allValues.address} onChange={changeHandler} placeholder="Enter Address" />
+                            <Select
+                                className='movieTheater-select'
+                                value={allValues.selectedMovieTheater}
+                                onChange={handleChangeSelect}
+                                options={allValues.listMovieTheater}
+                                isDisabled={allValues.isShowMovieTheater}
+                                placeholder='Select movie theater'
+                                name='selectedMovieTheater'
+                            // styles={this.props.colourStyles}
+                            />
                         </div>
 
                     </div>

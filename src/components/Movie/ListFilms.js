@@ -25,19 +25,19 @@ function ListFilms() {
 
     let history = useHistory();
 
-    const handleChange = async (data) => {
+    // const handleChange = async (data) => {
 
-        let res = await updateStatusFilms({
-            id: data.id,
-            status: !data.isDelete
-        })
+    //     let res = await updateStatusFilms({
+    //         id: data.id,
+    //         status: !data.isDelete
+    //     })
 
-        if (res && res.errCode === 0) {
-            await fetchDataMovie();
-        }
+    //     if (res && res.errCode === 0) {
+    //         await fetchDataMovie();
+    //     }
 
-        // setChecked(nextChecked);
-    };
+    //     // setChecked(nextChecked);
+    // };
 
 
     async function fetchDataMovie() {
@@ -79,29 +79,15 @@ function ListFilms() {
                 </>
 
         },
-        {
-            title: 'Hiển thị', field: 'status', render: rowData => <>
-                <div className="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id={rowData.id} checked={!rowData.isDelete} onChange={() => handleChange(rowData)} />
-                    <label class="custom-control-label" for={rowData.id}></label>
-                </div>
-            </>
-        },
         // {
-        //     title: 'Trạng thái', field: 'status', render: rowData => <Switch checked={rowData.status} className="react-switch"
-        //         onChange={() => handleChange()}
-        //         onColor="#86d3ff"
-        //         onHandleColor="#2693e6"
-        //         handleDiameter={30}
-        //         uncheckedIcon={false}
-        //         checkedIcon={false}
-        //         boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-        //         activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-        //         height={15}
-        //         width={45}
-        //         value={rowData.id}
-        //     />
+        //     title: 'Hiển thị', field: 'status', render: rowData => <>
+        //         <div className="custom-control custom-switch">
+        //             <input type="checkbox" class="custom-control-input" id={rowData.id} checked={!rowData.isDelete} onChange={() => handleChange(rowData)} />
+        //             <label class="custom-control-label" for={rowData.id}></label>
+        //         </div>
+        //     </>
         // },
+
     ]
 
     const handleOnDeleteMovie = async (id) => {

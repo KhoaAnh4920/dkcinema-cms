@@ -42,13 +42,15 @@ function ListRoom() {
 
 
     useEffect(() => {
-        if (movieTheaterId) {
-            fetchDataRoom(selectUser.adminInfo.movieTheaterId);
-        }
+        // if (movieTheaterId) {
+        //     fetchDataRoom(selectUser.adminInfo.movieTheaterId);
+        // }
     }, []);
 
 
     useEffect(() => {
+
+        console.log('movieTheaterId: ', selectUser.adminInfo.movieTheaterId)
 
         fetchDataRoom(selectUser.adminInfo.movieTheaterId);
 
@@ -78,7 +80,7 @@ function ListRoom() {
 
             let res = await deleteRoomService(id);
             if (res && res.errCode === 0) {
-                await fetchDataRoom();
+                await fetchDataRoom(movieTheaterId);
             } else {
                 alert(res.errMessage)
             }
