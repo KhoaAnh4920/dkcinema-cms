@@ -48,7 +48,7 @@ function ListMovieTheater() {
             let response = await Promise.all(movieTheaterData.movie.map(async (item, index) => {
                 const location = await testFunctionParent(item.cityCode, item.districtCode, item.wardCode);
                 item.address = item.address + ', ' + location.selectedWard.label + ', ' + location.selectedDistrict.label + ', ' + location.selectedCity.label;
-                item.userManage = item.UserMovieTheater.fullName;
+                // item.userManage = item.UserMovieTheater.fullName;
                 return item;
             }))
             setMovieTheaterData(response);
@@ -87,7 +87,7 @@ function ListMovieTheater() {
         { title: 'Tên rạp chiếu', field: 'tenRap' },
         { title: 'Địa chỉ', field: 'address' },
         { title: 'Số điện thoại', field: 'soDienThoai' },
-        { title: 'Quản lý rạp', field: 'userManage' },
+        // { title: 'Quản lý rạp', field: 'userManage' },
 
     ]
 

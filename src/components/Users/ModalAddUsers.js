@@ -7,6 +7,7 @@ import { CommonUtils } from '../../utils';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { getAllRoles, createNewUserService } from '../../services/UserService';
+import { getAllMovieTheater } from '../../services/MovieTheater';
 import Select from 'react-select';
 import DatePicker from '../../containers/System/Share/DatePicker';
 import useLocationForm from "./useLocationForm";
@@ -29,6 +30,8 @@ export default function ModalAddUsers(props) {
         listRoles: [],
         selectedGender: '',
         selectedRoles: '',
+        selectedMovieTheater: '',
+        isShowMovieTheater: true,
         errors: {},
         isShowLoading: false,
         imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png'
@@ -66,6 +69,14 @@ export default function ModalAddUsers(props) {
                     object.value = item.id;
                     result.push(object);
                 })
+            } else {
+                inputData.map((item, index) => {
+                    let object = {};
+
+                    object.label = item.tenRap;
+                    object.value = item.id;
+                    result.push(object);
+                })
             }
 
         }
@@ -88,7 +99,23 @@ export default function ModalAddUsers(props) {
                 }));
             }
         }
+        async function fetchDataMovieTheater() {
+            // You can await here
+            const userMovieTheater = await getAllMovieTheater();
+
+            if (userMovieTheater && userMovieTheater.movie) {
+                let listMovieTheater = buildDataInputSelect(userMovieTheater.movie);
+
+                console.log('listMovieTheater: ', listMovieTheater);
+
+                setAllValues((prevState) => ({
+                    ...prevState,
+                    listMovieTheater: listMovieTheater
+                }));
+            }
+        }
         fetchDataRoles();
+        fetchDataMovieTheater()
 
         let dateToday = moment().format('dddd, MMMM Do, YYYY');
         let listGender = buildDataInputSelect([], 'GENDERS');
@@ -147,9 +174,25 @@ export default function ModalAddUsers(props) {
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
         stateCopy[stateName] = selectedOption;
+
+        // if (selectedOption && (selectedOption.value === 2 || selectedOption.value === 1))
+        //     stateCopy['isShowMovieTheater'] = false;
+        // else {
+        //     stateCopy['isShowMovieTheater'] = true;
+        //     stateCopy['selectedMovieTheater'] = null;
+        // }
+
+        if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3))
+            stateCopy['isShowMovieTheater'] = false;
+        else if (stateName !== 'selectedMovieTheater') {
+            stateCopy['isShowMovieTheater'] = true;
+            stateCopy['selectedMovieTheater'] = null;
+        }
+
+
+
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
     }
 
     const handleOnChangeDatePicker = (date) => {
@@ -255,6 +298,16 @@ export default function ModalAddUsers(props) {
                                 />
                             </div>
                             <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
+                            <Select
+                                className='movieTheater-select'
+                                value={allValues.selectedMovieTheater}
+                                onChange={handleChangeSelect}
+                                options={allValues.listMovieTheater}
+                                isDisabled={allValues.isShowMovieTheater}
+                                placeholder='Select movie theater'
+                                name='selectedMovieTheater'
+                            // styles={this.props.colourStyles}
+                            />
                         </div>
 
                     </div>

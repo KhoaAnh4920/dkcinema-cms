@@ -39,8 +39,8 @@ export default function EditMovieTheater() {
         tenRap: '',
         address: '',
         errors: {},
-        listUser: [],
-        selectedUser: '',
+        // listUser: [],
+        // selectedUser: '',
         isShowLoading: false,
         id: 1
     });
@@ -106,25 +106,25 @@ export default function EditMovieTheater() {
         async function fetchDataMovieTheater() {
             // You can await here
 
-            const userData = await getUserByRole(2);
+            //  const userData = await getUserByRole(2);
             const movieTheaterData = await getAllMovieTheater();
             const movieTheaterEdit = await getEditMovieTheater(id);
 
             console.log("movieTheaterEdit: ", movieTheaterEdit);
 
-            if (userData && userData.data && movieTheaterEdit && movieTheaterEdit.data) {
+            if (movieTheaterEdit && movieTheaterEdit.data) {
                 const location = await testFunctionParent(movieTheaterEdit.data.cityCode, movieTheaterEdit.data.districtCode, movieTheaterEdit.data.wardCode);
 
-                let isFounded = userData.data.filter(function (o1) {
+                // let isFounded = userData.data.filter(function (o1) {
 
-                    return !movieTheaterData.movie.some(function (o2) {
-                        if (o1.id !== movieTheaterEdit.data.userId)
-                            return o1.id === o2.userId;
-                    });
-                });
+                //     return !movieTheaterData.movie.some(function (o2) {
+                //         if (o1.id !== movieTheaterEdit.data.userId)
+                //             return o1.id === o2.userId;
+                //     });
+                // });
 
-                let listUser = buildDataInputSelect(isFounded);
-                let selectedUser = setDefaultValue(listUser, movieTheaterEdit.data.userId);
+                //let listUser = buildDataInputSelect(isFounded);
+                //  let selectedUser = setDefaultValue(listUser, movieTheaterEdit.data.userId);
 
                 let result = [];
                 if (movieTheaterEdit.data.MovieTheaterImage && movieTheaterEdit.data.MovieTheaterImage.id) {
@@ -146,9 +146,9 @@ export default function EditMovieTheater() {
                     tenRap: movieTheaterEdit.data.tenRap,
                     soDienThoai: movieTheaterEdit.data.soDienThoai,
                     address: movieTheaterEdit.data.address,
-                    listUser: listUser,
+                    // listUser: listUser,
                     location: location,
-                    selectedUser: selectedUser,
+                    // selectedUser: selectedUser,
                     id: id
                 }));
 
@@ -266,7 +266,7 @@ export default function EditMovieTheater() {
             cityCode: selectedCity.value,
             districtCode: selectedDistrict.value,
             wardCode: selectedWard.value,
-            userId: allValues.selectedUser.value,
+            // userId: allValues.selectedUser.value,
             cityCode: selectedCity.value,
             districtCode: selectedDistrict.value,
             wardCode: selectedWard.value,
@@ -459,7 +459,7 @@ export default function EditMovieTheater() {
                                                 <input type="text" className="form-control input-sm" name='soDienThoai' value={allValues.soDienThoai} onChange={changeHandler} placeholder="Enter phone" />
                                                 {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
                                             </div>
-                                            <div className="form-group">
+                                            {/* <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">Quản lý rạp</label>
                                                 <Select
                                                     className='gender-select'
@@ -470,9 +470,8 @@ export default function EditMovieTheater() {
                                                     name='selectedGender'
                                                 // styles={this.props.colourStyles}
                                                 />
-                                                {/* <span className='error-code-input'>{allValues.errors["selectedGender"]}</span> */}
 
-                                            </div>
+                                            </div> */}
 
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">City</label>

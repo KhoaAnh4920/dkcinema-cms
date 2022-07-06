@@ -102,6 +102,8 @@ function ListSchedule() {
         // You can await here
         let dataRes = await getAllSchedule(data);
 
+        console.log('dataRes: ', dataRes);
+
         let timeNow = moment();
 
 
@@ -184,7 +186,9 @@ function ListSchedule() {
         let roomData = await getAllRoom(movieTheaterId);
         const dataMovie = await getAllFilmsByStatus(status);
 
-        console.log("Check phim: ", dataMovie);
+        // console.log("Check phim: ", dataMovie);
+
+        console.log('roomData: ', roomData);
 
         let listMovie = [];
         if (dataMovie && dataMovie.data) {
@@ -275,6 +279,15 @@ function ListSchedule() {
                     listMovie: listMovie
                 }))
             }
+        } else {
+            setAllValues((prevState) => ({
+                ...prevState,
+                listSchedule: [],
+                isShowLoading: false,
+                dataRoom: [],
+                listRoom: [],
+                selectedRoom: {},
+            }))
         }
     }
 
@@ -479,7 +492,9 @@ function ListSchedule() {
                                         {
                                             icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm suất chiếu</button>,
                                             onClick: async (event, rowData) => {
-                                                history.push('/add-new-schedule');
+                                                if (allValues.dataRoom.length === 0)
+                                                    toast.error("Please add a screening room")
+                                                else history.push('/add-new-schedule');
                                             },
                                             isFreeAction: true,
                                         },

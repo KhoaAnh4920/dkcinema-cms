@@ -47,9 +47,11 @@ export default function Login() {
                 history.push("/");
             } else if (data.errorCode === 4) {
                 toast.error(data.message)
+                setLoadingButton(false);
             } else {
                 console.log("Lỗi: ", data.message);
                 setErrMessage(data.message);
+                setLoadingButton(false);
             }
         } catch (e) {
             // Lấy mã lỗi // 
@@ -57,6 +59,7 @@ export default function Login() {
             if (e.response) {
                 if (e.response.data) {
                     setErrMessage(e.response.data);
+                    setLoadingButton(false);
                 }
             }
         }

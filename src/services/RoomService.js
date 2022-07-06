@@ -3,7 +3,7 @@ import axios from '../axios';
 
 
 const getAllRoom = (movieTheaterId) => {
-    return axios.get(`/room`, { movieTheaterId });
+    return axios.get(`/room`, { params: { movieTheaterId: movieTheaterId } });
 }
 
 const createNewRoom = (data) => {

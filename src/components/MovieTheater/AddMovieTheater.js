@@ -33,8 +33,8 @@ export default function AddMovieTheater() {
         tenRap: '',
         address: '',
         errors: {},
-        listUser: [],
-        selectedUser: '',
+        //listUser: [],
+        // selectedUser: '',
         isShowLoading: false
     });
     const [valImg, setValImg] = useState({
@@ -83,30 +83,30 @@ export default function AddMovieTheater() {
 
 
     useEffect(() => {
-        async function fetchDataUser() {
-            // You can await here
+        // async function fetchDataUser() {
+        //     // You can await here
 
-            const userData = await getUserByRole(2);
-            const movieTheaterData = await getAllMovieTheater();
+        //     const userData = await getUserByRole(2);
+        //     const movieTheaterData = await getAllMovieTheater();
 
 
-            console.log("userData: ", userData.data);
-            console.log("movieTheaterData: ", movieTheaterData.movie);
+        //     console.log("userData: ", userData.data);
+        //     console.log("movieTheaterData: ", movieTheaterData.movie);
 
-            if (userData && userData.data) {
-                let isFounded = userData.data.filter(o1 => !movieTheaterData.movie.some(o2 => o1.id === o2.userId));
-                console.log("Check: ", isFounded);
+        //     if (userData && userData.data) {
+        //         let isFounded = userData.data.filter(o1 => !movieTheaterData.movie.some(o2 => o1.id === o2.userId));
+        //         console.log("Check: ", isFounded);
 
-                let listUser = buildDataInputSelect(isFounded);
+        //         let listUser = buildDataInputSelect(isFounded);
 
-                setAllValues((prevState) => ({
-                    ...prevState,
-                    listUser: listUser,
-                }));
+        //         setAllValues((prevState) => ({
+        //             ...prevState,
+        //             listUser: listUser,
+        //         }));
 
-            }
-        }
-        fetchDataUser();
+        //     }
+        // }
+        // fetchDataUser();
 
         // let dateToday = moment().format('dddd, MMMM Do, YYYY');
         // let listGender = buildDataInputSelect([], 'GENDERS');
@@ -173,7 +173,7 @@ export default function AddMovieTheater() {
             cityCode: selectedCity.value,
             districtCode: selectedDistrict.value,
             wardCode: selectedWard.value,
-            userId: allValues.selectedUser.value,
+            // userId: allValues.selectedUser.value,
             listImage: result,
         })
 
@@ -352,7 +352,7 @@ export default function AddMovieTheater() {
                                                 <input type="text" className="form-control input-sm" name='soDienThoai' onChange={changeHandler} placeholder="Enter phone" />
                                                 {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
                                             </div>
-                                            <div className="form-group">
+                                            {/* <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">Quản lý rạp</label>
                                                 <Select
                                                     className='gender-select'
@@ -363,9 +363,9 @@ export default function AddMovieTheater() {
                                                     name='selectedGender'
                                                 // styles={this.props.colourStyles}
                                                 />
-                                                {/* <span className='error-code-input'>{allValues.errors["selectedGender"]}</span> */}
+                          
 
-                                            </div>
+                                            </div> */}
 
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">City</label>

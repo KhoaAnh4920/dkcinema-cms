@@ -127,6 +127,13 @@ export default function AddRoom() {
             return;
         }
 
+        console.log('allValue: ', allValues);
+
+        if (allValues.listSeet.length > +allValues.numberOfRow - 1) {
+            toast.error("Maximum number of columns exceeded");
+            return;
+        }
+
         let objSeet = {};
         let posOfColumn = allValues.selectedColumn.value;
         let posOfRow = [];
@@ -150,18 +157,19 @@ export default function AddRoom() {
     }
 
     const handleDeleteDiagam = () => {
-        setAllValues({
+        setAllValues((prevState) => ({
+            ...prevState,
             listAlpha: [],
             listSeet: [],
             isShowLoading: false,
             numberOfColumn: '',
             numberOfRow: '',
             numberSeet: ''
-        })
+        }));
     }
 
     const handleSaveRoom = async () => {
-        console.log("allValues: ", allValues);
+        // console.log("allValues: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
@@ -181,7 +189,6 @@ export default function AddRoom() {
             history.push("/room-management")
             toast.error("Add new room fail");
         }
-
 
     }
 
