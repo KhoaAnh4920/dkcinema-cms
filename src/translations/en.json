@@ -3,6 +3,7 @@
         "admin": {
             "header": "System",
             "user-management": "User Management",
+            "staff-management": "Staff Management",
             "movieTheater-management": "Movie Theater Management",
             "room-management": "Room Management",
             "films-management": "Films Management",
@@ -12,10 +13,14 @@
             "ticket-management": "Ticket Management",
             "news-management": "News Management",
             "voucher-management": "Voucher Management",
-            "banner-management": "Banner Management"
+            "banner-management": "Banner Management",
+            "bill-management": "Bill Management"
         },
         "user-management": {
             "list-users": "User Management"
+        },
+        "staff-management": {
+            "list-staff": "Staff Management"
         },
         "movieTheater-management": {
             "list-movieTheater": "Movie Theater Management"
@@ -46,6 +51,9 @@
         },
         "banner-management": {
             "list-banner": "Banner Management"
+        },
+        "bill-management": {
+            "payment-confirmation": "Payment Confirmation"
         }
     }
 }

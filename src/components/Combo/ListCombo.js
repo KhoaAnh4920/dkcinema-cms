@@ -63,7 +63,9 @@ function ListCombo() {
 
 
     const columns = [
-        { title: 'ID', field: 'id', key: 'FoodId' },
+        // { title: 'ID', field: 'id', key: 'FoodId' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
+        { title: 'Image', field: 'image', render: rowData => <img src={rowData.image} style={{ width: 100, height: 67 }} /> },
         { title: 'Tên combo', field: 'name', key: 'nameCombo' },
         { title: 'Đơn giá', field: 'price', key: 'priceCombo', render: rowData => <span>{rowData.price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</span> },
     ]
@@ -183,7 +185,7 @@ function ListCombo() {
 
                                             let item = await getItemCombo(rowData.id);
 
-                                            console.log("Check item: ", item);
+                                            // console.log("Check item: ", item);
 
                                             let res = []
                                             if (item && item.data && item.data.length > 0) {

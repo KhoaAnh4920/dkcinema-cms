@@ -76,6 +76,15 @@ export const adminMenu = [
 
 export const merchantMenu = [
     {
+        name: 'menu.admin.staff-management',
+        id: 'tableStaff',
+        menus: [
+            {
+                name: 'menu.staff-management.list-staff', link: '/staff-management',
+            },
+        ]
+    },
+    {
         name: 'menu.admin.movieTheater-management',
         id: 'tableMovieTheater',
         menus: [
@@ -108,6 +117,50 @@ export const merchantMenu = [
         menus: [
             {
                 name: 'menu.ticket-management.list-ticket', link: '/ticket-management',
+            },
+        ]
+    },
+];
+
+
+export const staffMenu = [
+    {
+        name: 'menu.admin.ticket-management',
+        id: 'tableTicket',
+        menus: [
+            {
+                name: 'menu.ticket-management.list-ticket', link: '/ticket-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.bill-management',
+        id: 'tablePayment',
+        menus: [
+            {
+                name: 'menu.bill-management.payment-confirmation', link: '/payment-confirmation',
+            },
+        ]
+    },
+];
+
+
+export const staffScheduleMenu = [
+    {
+        name: 'menu.admin.showTime-management',
+        id: 'tableshowTime',
+        menus: [
+            {
+                name: 'menu.showTime-management.list-showTime', link: '/showTime-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.films-management',
+        id: 'tablefilms',
+        menus: [
+            {
+                name: 'menu.films-management.list-films', link: '/films-management',
             },
         ]
     },

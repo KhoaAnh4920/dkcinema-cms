@@ -11,6 +11,11 @@ const getAllUser = () => {
     return axios.get(`/get-list-users`, { headers: authHeader() })
 }
 
+
+const getAllStaff = (data) => {
+    return axios.get(`/get-list-staff`, { params: { movieTheaterId: data.movieTheaterId } })
+}
+
 const getAllRoles = () => {
     return axios.get(`/get-roles`) // truyen API method GET 
 }
@@ -45,5 +50,6 @@ export {
     getEditUser,
     updateUserService,
     deleteUserService,
-    getUserByRole
+    getUserByRole,
+    getAllStaff
 };

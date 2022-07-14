@@ -93,55 +93,6 @@ function ListMovieTheater() {
 
 
 
-    // const handleOnDeleteUser = async (id) => {
-    //     try {
-    //         // this.setState({
-    //         //     isShowLoading: true
-    //         // })
-
-    //         let res = await deleteUserService(id);
-    //         if (res && res.errCode === 0) {
-    //             await fetchDataMovieTheater();
-    //         } else {
-    //             alert(res.errMessage)
-    //         }
-    //         // this.setState({
-    //         //     isShowLoading: false
-    //         // })
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
-
-
-    //DATA EXAMPLE
-
-    // const dataChair = [
-    //     { id: "1" },
-    //     { id: "2" },
-    //     { id: "3" },
-    //     { id: "4" },
-    //     { id: "5" },
-    //     { id: "6" },
-    //     { id: "7" },
-    //     { id: "8" },
-    //     { id: "9" },
-    //     { id: "10" }
-    // ];
-    // const dataChair2 = [
-    //     { id: "1" },
-    //     { id: "2" },
-    //     { id: "3" },
-    //     { id: "4" },
-    //     { id: "5" },
-    //     { id: "6" },
-    //     { id: "7" },
-    //     { id: "8" },
-    // ];
-
-
-
-
     return (
 
         <>

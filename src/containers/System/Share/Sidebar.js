@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navigator from './Navigator';
 import { userState, processLogoutUser } from "../../../redux/userSlice";
-import { adminMenu, merchantMenu } from './menuApp';
+import { adminMenu, merchantMenu, staffMenu, staffScheduleMenu } from './menuApp';
 import { useSelector } from "react-redux";
 import _ from 'lodash';
 
@@ -25,11 +25,13 @@ function Sidebar() {
             if (role === 2) {
                 menuApp = merchantMenu;
             }
+            if (role === 3)
+                menuApp = staffMenu;
+            if (role === 5)
+                menuApp = staffScheduleMenu;
         }
 
         setMenuApp(menuApp);
-
-        console.log(menuApp);
     }, [selectUser]);
 
     // Lấy role để set menu động //

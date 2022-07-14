@@ -32,6 +32,13 @@ import EditBanner from '../components/Banner/EditBanner';
 import AddNews from '../components/News/AddNews';
 import ListNews from '../components/News/ListNews';
 import EditNews from '../components/News/EditNews';
+import DetailTicket from '../components/Ticket/DetailTicket';
+import ListTicket from '../components/Ticket/ListTicket';
+import ListVoucher from '../components/Voucher/ListVoucher';
+import ConfirmBill from '../components/PaymentConfirm/ConfirmBill';
+import PrintTicket from '../components/PaymentConfirm/PrintTicket';
+import AccountProfile from '../components/Users/AccountProfile';
+import ListStaff from '../components/Users/ListStaff';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -51,6 +58,7 @@ function App() {
             <Route path="/" exact component={Home} />
             <Route path="/admin-login" component={Login} />
             <Route path="/users-management" component={Users} />
+            <Route path="/staff-management" component={ListStaff} />
             <Route path="/add-users" component={AddUser} />
             <Route path="/edit-user/:id" component={EditUser} />
             <Route path="/test-modal" component={TestModal} />
@@ -76,6 +84,12 @@ function App() {
             <Route path="/add-new-post" component={AddNews} />
             <Route path="/news-management" component={ListNews} />
             <Route path="/edit-post/:id" component={EditNews} />
+            <Route path="/detail-ticket/:id" component={DetailTicket} />
+            <Route path="/ticket-management" component={ListTicket} />
+            <Route path="/voucher-management" component={ListVoucher} />
+            <Route path="/payment-confirmation" component={ConfirmBill} />
+            <Route path="/print-ticket/:id" component={PrintTicket} />
+            <Route path="/update-profile" component={AccountProfile} />
           </Switch>
         </span>
       </div>

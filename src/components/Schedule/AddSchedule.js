@@ -231,11 +231,11 @@ export default function AddSchedule() {
 
     useEffect(() => {
 
-        fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
+        fetchAllData(selectUser.adminInfo.movietheaterid, 1)
 
         setAllValues((prevState) => ({
             ...prevState,
-            movieTheaterId: selectUser.adminInfo.movieTheaterId
+            movieTheaterId: selectUser.adminInfo.movietheaterid
         }));
 
 

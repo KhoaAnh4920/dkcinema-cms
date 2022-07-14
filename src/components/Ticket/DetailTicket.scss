@@ -1,0 +1,90 @@
+.detail-ticket {
+    .info-ticket-main {
+        // height: 800px;
+        width: 100%;
+
+        .content-ticket-one {
+            height: auto;
+            width: 100%;
+            display: flex;
+
+            .info-cus {
+                width: 100%;
+                height: auto;
+            }
+
+            .info-films {
+
+                width: 100%;
+                height: auto;
+
+                .wrap-nameMovie,
+                .wrap-nameRoom,
+                .wrap-showTime {
+                    display: flex;
+                    gap: 20px;
+
+                    .nameFilms {
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            .info-booking {
+
+                width: 100%;
+                height: auto;
+
+                .wrap-idBooking,
+                .wrap-statusBooking,
+                .wrap-createdBooking {
+                    display: flex;
+                    gap: 20px;
+
+
+                }
+            }
+        }
+
+        .content-ticket-two {
+
+            height: auto;
+            width: 100%;
+            margin-top: 40px;
+
+            #customers {
+                font-family: Arial, Helvetica, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            #customers td,
+            #customers th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #customers tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            #customers tr:hover {
+                background-color: #ddd;
+            }
+
+            #customers th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #04AA6D;
+                color: white;
+            }
+        }
+
+        .content-ticket-three {
+            height: auto;
+            width: 100%;
+            margin-top: 40px;
+        }
+    }
+}

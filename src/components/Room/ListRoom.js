@@ -43,19 +43,19 @@ function ListRoom() {
 
     useEffect(() => {
         // if (movieTheaterId) {
-        //     fetchDataRoom(selectUser.adminInfo.movieTheaterId);
+        //     fetchDataRoom(selectUser.adminInfo.movietheaterid);
         // }
     }, []);
 
 
     useEffect(() => {
 
-        console.log('movieTheaterId: ', selectUser.adminInfo.movieTheaterId)
+        console.log('movieTheaterId: ', selectUser.adminInfo.movietheaterid)
 
-        fetchDataRoom(selectUser.adminInfo.movieTheaterId);
+        fetchDataRoom(selectUser.adminInfo.movietheaterid);
 
         setMovieTheaterId({
-            movieTheaterId: selectUser.adminInfo.movieTheaterId
+            movieTheaterId: selectUser.adminInfo.movietheaterid
         });
 
 

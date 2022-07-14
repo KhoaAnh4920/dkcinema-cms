@@ -2,19 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
-import './ModalAddUsers.scss';
 import { CommonUtils } from '../../utils';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import { getAllRoles, createNewUserService } from '../../services/UserService';
-import { getAllMovieTheater, checkMerchantMovieTheater } from '../../services/MovieTheater';
 import Select from 'react-select';
 import DatePicker from '../../containers/System/Share/DatePicker';
 import useLocationForm from "./useLocationForm";
+import { testFunction } from './useLocationForm';
+import { getAllMovieTheater } from '../../services/MovieTheater';
+import './ModalEditStaff.scss';
 
 
 
-export default function ModalAddUsers(props) {
+
+
+export default function ModalEditStaff(props) {
 
     // const [isOpen, setOpenModal] = useState(false);
     // const [show, setShow] = useState(false);
@@ -24,24 +27,26 @@ export default function ModalAddUsers(props) {
         userName: '',
         email: '',
         password: '',
-        userName: '',
-        address: '',
         listGender: [],
         listRoles: [],
+        testCity: { value: 278, label: 'An Giang' },
         selectedGender: '',
         selectedRoles: '',
         selectedMovieTheater: '',
+        districtCode: {},
+        cityCode: {},
+        wardCode: {},
+        address: '',
+        isShowLoading: false,
         isShowMovieTheater: true,
         errors: {},
-        isShowLoading: false,
-        imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png',
-        copyListMovieTheater: []
+        imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png'
     });
 
-    const { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } =
-        useLocationForm(true);
+    let { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } =
+        useLocationForm(false);
 
-    const {
+    let {
         cityOptions,
         districtOptions,
         wardOptions,
@@ -49,6 +54,7 @@ export default function ModalAddUsers(props) {
         selectedDistrict,
         selectedWard,
     } = state;
+
 
     // const handleClose = () => setShow(false);
     // const handleShow = () => setShow(true);
@@ -87,54 +93,107 @@ export default function ModalAddUsers(props) {
 
 
     useEffect(() => {
-        async function fetchDataRoles() {
-            // You can await here
-            const userRoles = await getAllRoles();
+        async function fetchEditUser() {
+            if (props.dataUser) {
+                let dataUser = props.dataUser;
+                const location = await testFunctionParent(dataUser.cityCode, dataUser.districtCode, dataUser.wardCode);
+                let listGender = buildDataInputSelect([], 'GENDERS');
+                let listRoles = [];
+                let listMovieTheater = [];
+                let dataRoles = await getAllRoles();
+                let dataMovieTheater = await getAllMovieTheater();
+                let dateToday = moment().format('dddd, MMMM Do, YYYY');
+                if (dataRoles)
+                    listRoles = buildDataInputSelect(dataRoles.dataRoles, 'ROLES');
+                if (dataMovieTheater)
+                    listMovieTheater = buildDataInputSelect(dataMovieTheater.movie);
 
-            if (userRoles && userRoles.dataRoles) {
+                let selectedGender = setDefaultValue(listGender, (dataUser.gender) ? 1 : 0);
+                let selectedRoles = setDefaultValue(listRoles, dataUser.UserRoles.id);
 
-                let filterRole = userRoles.dataRoles.filter(item => item.id !== 1);
-                let listRoles = buildDataInputSelect(filterRole, 'ROLES');
+                let selectedMovieTheater = '';
+                let isShowMovieTheater = true;
+                if (((dataUser.UserMovieTheater && dataUser.UserMovieTheater.id) || dataUser.UserRoles.id === 2 || dataUser.UserRoles.id === 3)) {
+                    selectedMovieTheater = setDefaultValue(listMovieTheater, dataUser.UserMovieTheater.id);
+                    isShowMovieTheater = false;
+                }
 
-                setAllValues((prevState) => ({
-                    ...prevState,
-                    listRoles: listRoles
-                }));
+
+
+                setAllValues({
+                    listRoles,
+                    listGender,
+                    listMovieTheater,
+                    selectedGender,
+                    selectedRoles,
+                    selectedMovieTheater,
+                    phone: dataUser.phone,
+                    email: dataUser.email,
+                    userName: dataUser.userName,
+                    fullName: dataUser.fullName,
+                    birthday: dataUser.birthday,
+                    imagePreviewUrl: dataUser.avatar,
+                    address: dataUser.address,
+                    location: location,
+                    dateToday: dateToday,
+                    isShowMovieTheater
+                })
             }
         }
-        async function fetchDataMovieTheater() {
-            // You can await here
-            const userMovieTheater = await getAllMovieTheater();
+        async function testFunctionParent(cityCode, districtCode, wardCode) {
+            const location = await testFunction(cityCode, districtCode, wardCode);
 
-            if (userMovieTheater && userMovieTheater.movie) {
-                let listMovieTheater = buildDataInputSelect(userMovieTheater.movie);
+            if (location)
+                return location;
+            return null;
 
-                setAllValues((prevState) => ({
-                    ...prevState,
-                    listMovieTheater: listMovieTheater,
-                    copyListMovieTheater: listMovieTheater
-                }));
-            }
         }
-        fetchDataRoles();
-        fetchDataMovieTheater()
-
-        let dateToday = moment().format('dddd, MMMM Do, YYYY');
-        let listGender = buildDataInputSelect([], 'GENDERS');
-
-        setAllValues((prevState) => ({
-            ...prevState,
-            listGender: listGender,
-            dateToday: dateToday
-        }));
+        fetchEditUser();
 
 
     }, []);
 
 
+    useEffect(() => {
+
+
+        if (allValues.location && allValues.location.cityOptions) {
+            //     cityOptions,
+            // districtOptions,
+            // wardOptions,
+            // selectedCity,
+            // selectedDistrict,
+            // selectedWard,
+
+            state.cityOptions = allValues.location.cityOptions;
+            state.districtOptions = allValues.location.districtOptions;
+            state.wardOptions = allValues.location.wardOptions;
+            state.selectedCity = allValues.location.selectedCity;
+            state.selectedDistrict = allValues.location.selectedDistrict;
+            state.selectedWard = allValues.location.selectedWard;
+
+
+
+            console.log('selectedCity: ', state.selectedCity);
+
+            setAllValues((prevState) => ({
+                ...prevState
+            }));
+        }
+    }, [allValues.location])
+
+
+    const setDefaultValue = (inputData, value) => {
+        let result = inputData.filter(item => item.value === value);
+        if (result) {
+            return result;
+        }
+    }
+
+
 
     const toggle = () => {
-        props.toggleFromParent();
+        props.toggleFromParentEditUser();
     }
 
     const handleOpenUploadFile = () => {
@@ -175,42 +234,16 @@ export default function ModalAddUsers(props) {
     const handleChangeSelect = async (selectedOption, name) => {
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
+
+
         stateCopy[stateName] = selectedOption;
 
-
-
-
-        if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3 || selectedOption.value === 5)) {
-            if (selectedOption.value === 2) {
-                // check if movie theater has merchant //
-
-                let result = [];
-                await Promise.all(allValues.copyListMovieTheater.map(async (item, index) => {
-                    let data = await checkMerchantMovieTheater({
-                        movieTheaterId: item.id,
-                        roleId: 2
-                    })
-                    if (!data) {
-                        result.push(data);
-                    }
-                }))
-
-                let listMovieTheater = buildDataInputSelect(result);
-
-                stateCopy['listMovieTheater'] = listMovieTheater
-
-            } else
-                stateCopy['listMovieTheater'] = allValues.copyListMovieTheater;
-
-            stateCopy['isShowMovieTheater'] = false;
-        }
-
-        else if (stateName !== 'selectedMovieTheater') {
-            stateCopy['isShowMovieTheater'] = true;
-            stateCopy['selectedMovieTheater'] = null;
-        }
-
-
+        // if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3))
+        //     stateCopy['isShowMovieTheater'] = false;
+        // else if (stateName !== 'selectedMovieTheater') {
+        //     stateCopy['isShowMovieTheater'] = true;
+        //     stateCopy['selectedMovieTheater'] = null;
+        // }
 
         setAllValues({ ...stateCopy })
 
@@ -224,21 +257,28 @@ export default function ModalAddUsers(props) {
         setAllValues({ ...allValues, [e.target.name]: e.target.value })
     }
 
-    const handleSaveUser = async () => {
+    const handleSaveEditUser = async () => {
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
         }));
 
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
-        props.saveNewUser(allValuesInput);
+        props.saveEditUser(allValuesInput);
+
+        // let isValid = this.checkValidateInput();
+        // if (isValid) {
+
+        //     this.props.saveEditPlaylist(this.state);
+
+        // }
 
     }
 
 
     return (
         <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
-            <ModalHeader toggle={() => toggle()} className='editdetail'>Add news user</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='editdetail'>Edit user</ModalHeader>
             <ModalBody className='modal-body-container'>
                 <div className='modal-playlist-body'>
                     <div className='image-edit-playlist'>
@@ -253,13 +293,12 @@ export default function ModalAddUsers(props) {
                     </div>
                     <div className='input-container'>
                         <div className='input-flex'>
-                            <input type="text" className="form-control input-small" name='email' onChange={changeHandler} placeholder="Enter Email address" />
-                            <input type="text" className="form-control input-small" name='userName' onChange={changeHandler} placeholder="Enter Username" />
+                            <input type="text" className="form-control input-small" name='email' readOnly value={allValues.email} onChange={changeHandler} placeholder="Enter Email address" />
+                            <input type="text" className="form-control input-small" name='userName' readOnly value={allValues.userName} onChange={changeHandler} placeholder="Enter Username" />
                         </div>
                         <div className='input-row'>
-                            <input type="password" className="form-control input-small" name='password' onChange={changeHandler} placeholder="Enter Password" />
-                            <input type="text" className="form-control input-small" name='fullName' onChange={changeHandler} placeholder="Enter FullName" />
-                            <input type="text" className="form-control input-small" name='phone' onChange={changeHandler} placeholder="Enter Phone" />
+                            <input type="text" className="form-control input-small" name='fullName' value={allValues.fullName} onChange={changeHandler} placeholder="Enter FullName" />
+                            <input type="text" className="form-control input-small" name='phone' value={allValues.phone} onChange={changeHandler} placeholder="Enter Phone" />
                             <DatePicker
                                 onChange={handleOnChangeDatePicker}
                                 className="form-control"
@@ -281,8 +320,8 @@ export default function ModalAddUsers(props) {
                                     value={allValues.selectedRoles}
                                     onChange={handleChangeSelect}
                                     options={allValues.listRoles}
+                                    isDisabled={true}
                                     placeholder='Select roles'
-
                                     name='selectedRoles'
                                 // styles={this.props.colourStyles}
                                 />
@@ -296,38 +335,38 @@ export default function ModalAddUsers(props) {
                                     options={cityOptions}
                                     onChange={(option) => onCitySelect(option)}
                                     placeholder="City"
-                                    defaultValue={selectedCity}
+                                    defaultValue={state.selectedCity}
                                 />
                                 <Select
                                     className='district-select'
                                     name="districtId"
-                                    key={`districtId_${selectedDistrict?.value}`}
-                                    isDisabled={districtOptions.length === 0}
-                                    options={districtOptions}
+                                    key={`districtId_${state.selectedDistrict?.value}`}
+                                    isDisabled={state.districtOptions.length === 0}
+                                    options={state.districtOptions}
                                     onChange={(option) => onDistrictSelect(option)}
                                     placeholder="District"
-                                    defaultValue={selectedDistrict}
+                                    defaultValue={state.selectedDistrict}
                                 />
                                 <Select
                                     className='ward-select'
                                     name="wardId"
-                                    key={`wardId_${selectedWard?.value}`}
-                                    isDisabled={wardOptions.length === 0}
-                                    options={wardOptions}
+                                    key={`wardId_${state.selectedWard?.value}`}
+                                    isDisabled={state.wardOptions.length === 0}
+                                    options={state.wardOptions}
                                     placeholder="Phường/Xã"
                                     onChange={(option) => onWardSelect(option)}
-                                    defaultValue={selectedWard}
+                                    defaultValue={state.selectedWard}
                                 />
                             </div>
-                            <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
+                            <input type="text" className="form-control input-small" name='address' value={allValues.address} onChange={changeHandler} placeholder="Enter Address" />
                             <Select
                                 className='movieTheater-select'
                                 value={allValues.selectedMovieTheater}
                                 onChange={handleChangeSelect}
                                 options={allValues.listMovieTheater}
+                                isDisabled={true}
                                 placeholder='Select movie theater'
                                 name='selectedMovieTheater'
-
                             // styles={this.props.colourStyles}
                             />
                         </div>
@@ -338,7 +377,7 @@ export default function ModalAddUsers(props) {
             <ModalFooter className='modal-footer-container'>
                 {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveUser()}>Save</Button> */}
 
-                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveUser()}>
+                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveEditUser()}>
                     {allValues.isShowLoading &&
                         <>
                             <Spinner
@@ -350,7 +389,6 @@ export default function ModalAddUsers(props) {
                             />
                             <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
                         </>
-
                     }
                     {!allValues.isShowLoading &&
                         <>

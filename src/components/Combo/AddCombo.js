@@ -15,7 +15,12 @@ import moment from 'moment';
 import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
+//Image upload modules
+import { Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
+// import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css';
 
 
 
@@ -31,12 +36,14 @@ function AddCombo() {
         listFood: [],
         listItem: [],
     });
+    const [valImg, setValImg] = useState({
+        previewVisible: false,
+        previewImage: '',
+        previewTitle: '',
+        fileList: [],
+    })
 
     let history = useHistory();
-
-
-
-
 
 
 
@@ -82,8 +89,12 @@ function AddCombo() {
 
 
     const handleSaveCombo = async () => {
-        allValues.isLoadingButton = true;
-        console.log("Check all value: ", allValues);
+        setAllValues((prevState) => ({
+            ...prevState,
+            isLoadingButton: true
+        }))
+
+
         let quantity = document.getElementsByClassName("quantity");
         let items = [];
         for (let a = 0; a < quantity.length; a++) {
@@ -94,13 +105,30 @@ function AddCombo() {
                 items.push(obj);
             }
         }
-        console.log('item: ', items);
+
+        let result = [];
+
+        await Promise.all(valImg.fileList.map(async (item, index) => {
+            let obj = {};
+            obj.image = await getBase64(item.originFileObj);
+            obj.fileName = item.name;
+            result.push(obj);
+        }))
+
+        console.log('result: ', result)
 
         let res = await createNewComboService({
             name: allValues.name,
             price: +allValues.price,
+            image: result[0].image,
+            fileName: result[0].fileName,
             items: items
         })
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            isLoadingButton: false
+        }))
 
         if (res && res.errCode == 0) {
             history.push("/combo-management")
@@ -111,6 +139,66 @@ function AddCombo() {
     }
 
 
+    //Image Preview
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        }));
+
+    };
+
+    const handleChangeImage = ({ fileList }) => {
+
+        console.log(fileList);
+        if (fileList.length > 1) {
+            toast.error("Maximum 1 image");
+            return;
+        }
+        if (fileList.length > 0) {
+            const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
+
+            if (!isJpgOrPng) {
+                toast.error("Please choose image");
+                setValImg((prevState) => ({
+                    previewVisible: false,
+                    previewImage: '',
+                    previewTitle: '',
+                    fileList: [],
+                }));
+                return;
+            }
+        }
+        console.log(fileList);
+        setValImg((prevState) => ({
+            ...prevState,
+            fileList
+        }));
+    }
+
+    //Uploaded url
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    const handleCancel = () => {
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewVisible: false
+        }));
+    }
 
 
 
@@ -211,6 +299,36 @@ function AddCombo() {
                                     <div className='form-add-combo'>
                                         <h5>New Combo</h5>
                                         <div className='vertical-input'>
+                                            <Upload
+                                                action={""}
+                                                listType="picture-card"
+                                                fileList={valImg.fileList}
+                                                onPreview={handlePreview}
+                                                beforeUpload={() => {
+                                                    /* update state here */
+                                                    return false;
+                                                }}
+                                                onChange={handleChangeImage}
+                                            >
+                                                {
+                                                    valImg.fileList.length >= 8 ? null :
+                                                        <>
+                                                            <div>
+                                                                <PlusOutlined />
+                                                                <div style={{ marginTop: 8 }}>Upload</div>
+                                                            </div>
+                                                        </>}
+                                            </Upload>
+                                            <Modal
+                                                visible={valImg.previewVisible}
+                                                title={valImg.previewTitle}
+                                                footer={null}
+                                                onCancel={handleCancel}
+                                            >
+                                                <img alt="example" style={{ width: '100%' }} src={valImg.previewImage} />
+                                            </Modal>
+                                        </div>
+                                        <div className='vertical-input'>
                                             <label htmlFor="exampleInputEmail1">Tên combo</label>
                                             <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên combo" />
                                         </div>
@@ -222,7 +340,7 @@ function AddCombo() {
                                                 }
                                             }} placeholder="Nhập giá" />
                                         </div>
-                                        <div className='horizon-button' style={{ marginTop: '30px' }} onClick={handleSaveCombo}>
+                                        <div className='horizon-button' style={{ marginTop: '30px' }}>
                                             {/* <Button variant="primary" className="submit-schedule-data">
                                                 <span className="visually">Submit</span>
                                             </Button> */}

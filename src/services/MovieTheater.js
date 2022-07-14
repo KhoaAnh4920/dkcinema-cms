@@ -24,11 +24,16 @@ const removeImageMovieTheater = (id) => {
     return axios.delete(`/image-movie-theater/${id}`)
 }
 
+const checkMerchantMovieTheater = (data) => {
+    return axios.get(`/check-merchant-movieTheater`, { params: { movieTheaterId: data.movieTheaterId, roleId: data.roleId } });
+}
+
 
 export {
     getAllMovieTheater,
     createNewMovieTheater,
     getEditMovieTheater,
     editMovieTheater,
-    removeImageMovieTheater
+    removeImageMovieTheater,
+    checkMerchantMovieTheater
 };

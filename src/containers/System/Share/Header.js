@@ -4,7 +4,7 @@ import { userState, processLogoutUser } from "../../../redux/userSlice";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { Link } from "react-router-dom";
 
 
 export default function Header() {
@@ -190,6 +190,12 @@ export default function Header() {
                         <span className="ml-2 d-none d-lg-inline text-white small">{(adminInfo !== null && adminInfo.fullName !== '') ? adminInfo.fullName : ''}</span>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                        <Link className="dropdown-item" to={`/update-profile`}>
+
+                            <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Profile
+                        </Link>
+
                         <div className="dropdown-divider" />
                         <a className="dropdown-item" onClick={handleLogout} data-toggle="modal" data-target="#logoutModal">
                             <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />

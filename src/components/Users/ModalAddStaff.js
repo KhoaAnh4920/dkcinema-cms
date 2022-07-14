@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
-import './ModalAddUsers.scss';
+import './ModalAddStaff.scss';
 import { CommonUtils } from '../../utils';
 import Swal from 'sweetalert2';
 import moment from 'moment';
@@ -14,7 +14,7 @@ import useLocationForm from "./useLocationForm";
 
 
 
-export default function ModalAddUsers(props) {
+export default function ModalAddStaff(props) {
 
     // const [isOpen, setOpenModal] = useState(false);
     // const [show, setShow] = useState(false);
@@ -93,7 +93,7 @@ export default function ModalAddUsers(props) {
 
             if (userRoles && userRoles.dataRoles) {
 
-                let filterRole = userRoles.dataRoles.filter(item => item.id !== 1);
+                let filterRole = userRoles.dataRoles.filter(item => item.id !== 1 && item.id !== 2 && item.id !== 4);
                 let listRoles = buildDataInputSelect(filterRole, 'ROLES');
 
                 setAllValues((prevState) => ({
@@ -109,10 +109,13 @@ export default function ModalAddUsers(props) {
             if (userMovieTheater && userMovieTheater.movie) {
                 let listMovieTheater = buildDataInputSelect(userMovieTheater.movie);
 
+                let selectedMovieTheater = setDefaultValue(listMovieTheater, props.movieTheaterId);
+
                 setAllValues((prevState) => ({
                     ...prevState,
                     listMovieTheater: listMovieTheater,
-                    copyListMovieTheater: listMovieTheater
+                    copyListMovieTheater: listMovieTheater,
+                    selectedMovieTheater: selectedMovieTheater
                 }));
             }
         }
@@ -132,6 +135,12 @@ export default function ModalAddUsers(props) {
     }, []);
 
 
+    const setDefaultValue = (inputData, value) => {
+        let result = inputData.filter(item => item.value === value);
+        if (result) {
+            return result;
+        }
+    }
 
     const toggle = () => {
         props.toggleFromParent();
@@ -177,38 +186,42 @@ export default function ModalAddUsers(props) {
         let stateCopy = { ...allValues };
         stateCopy[stateName] = selectedOption;
 
+        // if (selectedOption && (selectedOption.value === 2 || selectedOption.value === 1))
+        //     stateCopy['isShowMovieTheater'] = false;
+        // else {
+        //     stateCopy['isShowMovieTheater'] = true;
+        //     stateCopy['selectedMovieTheater'] = null;
+        // }
 
+        // if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3 || selectedOption.value === 5)) {
+        //     if (selectedOption.value === 2) {
+        //         // check if movie theater has merchant //
 
+        //         let result = [];
+        //         await Promise.all(allValues.copyListMovieTheater.map(async (item, index) => {
+        //             let data = await checkMerchantMovieTheater({
+        //                 movieTheaterId: item.id,
+        //                 roleId: 2
+        //             })
+        //             if (!data) {
+        //                 result.push(data);
+        //             }
+        //         }))
 
-        if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3 || selectedOption.value === 5)) {
-            if (selectedOption.value === 2) {
-                // check if movie theater has merchant //
+        //         let listMovieTheater = buildDataInputSelect(result);
 
-                let result = [];
-                await Promise.all(allValues.copyListMovieTheater.map(async (item, index) => {
-                    let data = await checkMerchantMovieTheater({
-                        movieTheaterId: item.id,
-                        roleId: 2
-                    })
-                    if (!data) {
-                        result.push(data);
-                    }
-                }))
+        //         stateCopy['listMovieTheater'] = listMovieTheater
 
-                let listMovieTheater = buildDataInputSelect(result);
+        //     } else
+        //         stateCopy['listMovieTheater'] = allValues.copyListMovieTheater;
 
-                stateCopy['listMovieTheater'] = listMovieTheater
+        //     stateCopy['isShowMovieTheater'] = false;
+        // }
 
-            } else
-                stateCopy['listMovieTheater'] = allValues.copyListMovieTheater;
-
-            stateCopy['isShowMovieTheater'] = false;
-        }
-
-        else if (stateName !== 'selectedMovieTheater') {
-            stateCopy['isShowMovieTheater'] = true;
-            stateCopy['selectedMovieTheater'] = null;
-        }
+        // else if (stateName !== 'selectedMovieTheater') {
+        //     stateCopy['isShowMovieTheater'] = true;
+        //     stateCopy['selectedMovieTheater'] = null;
+        // }
 
 
 
@@ -237,8 +250,8 @@ export default function ModalAddUsers(props) {
 
 
     return (
-        <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
-            <ModalHeader toggle={() => toggle()} className='editdetail'>Add news user</ModalHeader>
+        <Modal className={'modal-Add-Staff'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
+            <ModalHeader toggle={() => toggle()} className='editdetail'>Add news staff</ModalHeader>
             <ModalBody className='modal-body-container'>
                 <div className='modal-playlist-body'>
                     <div className='image-edit-playlist'>
@@ -282,7 +295,6 @@ export default function ModalAddUsers(props) {
                                     onChange={handleChangeSelect}
                                     options={allValues.listRoles}
                                     placeholder='Select roles'
-
                                     name='selectedRoles'
                                 // styles={this.props.colourStyles}
                                 />
@@ -325,6 +337,7 @@ export default function ModalAddUsers(props) {
                                 value={allValues.selectedMovieTheater}
                                 onChange={handleChangeSelect}
                                 options={allValues.listMovieTheater}
+                                isDisabled={true}
                                 placeholder='Select movie theater'
                                 name='selectedMovieTheater'
 

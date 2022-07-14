@@ -3,6 +3,7 @@
         "admin": {
             "header": "Hệ thống",
             "user-management": "Quản lý người dùng",
+            "staff-management": "Quản lý nhân viên",
             "movieTheater-management": "Quản lý rạp",
             "room-management": "Quản lý phòng chiếu",
             "films-management": "Quản lý phim",
@@ -12,10 +13,14 @@
             "ticket-management": "Quản lý vé",
             "news-management": "Quản lý bài viết",
             "voucher-management": "Quản lý khuyến mãi",
-            "banner-management": "Quản lý banner"
+            "banner-management": "Quản lý banner",
+            "bill-management": "Quản lý hóa đơn"
         },
         "user-management": {
             "list-users": "Quản lý người dùng"
+        },
+        "staff-management": {
+            "list-staff": "Quản lý nhân viên"
         },
         "movieTheater-management": {
             "list-movieTheater": "Quản lý rạp"
@@ -46,6 +51,9 @@
         },
         "banner-management": {
             "list-banner": "Quản lý banner"
+        },
+        "bill-management": {
+            "payment-confirmation": "Xác nhận thanh toán"
         }
     }
 }

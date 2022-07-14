@@ -15,7 +15,12 @@ import moment from 'moment';
 import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import { useParams } from 'react-router-dom';
+//Image upload modules
+import { Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
+// import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css';
 
 
 
@@ -30,6 +35,13 @@ function EditCombo() {
         listFood: [],
         listItem: [],
     });
+
+    const [valImg, setValImg] = useState({
+        previewVisible: false,
+        previewImage: '',
+        previewTitle: '',
+        fileList: [],
+    })
 
     let history = useHistory();
     const { id } = useParams();
@@ -61,6 +73,31 @@ function EditCombo() {
                 return item;
             })
         }
+
+
+        let result = [];
+
+        console.log('dataDetailCombo.data[0]: ', dataDetailCombo.data[0])
+
+        if (dataDetailCombo.data[0].image && dataDetailCombo.data[0].public_id_image) {
+
+            let obj = {};
+            obj.uid = dataDetailCombo.data[0].id;
+            obj.name = dataDetailCombo.data[0].public_id_image;
+            obj.public_id = dataDetailCombo.data[0].public_id_image;
+            obj.status = 'done';
+            obj.url = dataDetailCombo.data[0].image;
+            result.push(obj);
+        }
+
+
+        console.log('result: ', result)
+
+
+        setValImg((prevState) => ({
+            ...prevState,
+            fileList: result
+        }));
 
 
         setAllValues((prevState) => ({
@@ -95,7 +132,10 @@ function EditCombo() {
 
 
     const handleEditCombo = async () => {
-        allValues.isLoadingButton = true;
+        setAllValues((prevState) => ({
+            ...prevState,
+            isLoadingButton: true
+        }))
         console.log("Check all value: ", allValues);
         let quantity = document.getElementsByClassName("quantity");
         let items = [];
@@ -117,12 +157,35 @@ function EditCombo() {
             }
         }
 
-        let res = await editCombo({
-            name: allValues.name,
-            price: +allValues.price,
-            items: items,
-            id: id
-        })
+        let res = '';
+        if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
+            let result = [];
+            await Promise.all(valImg.fileList.map(async (item, index) => {
+
+                let obj = {};
+                obj.image = await getBase64(item.originFileObj);
+                obj.fileName = item.name;
+                result.push(obj);
+
+            }))
+
+            res = await editCombo({
+                name: allValues.name,
+                price: +allValues.price,
+                items: items,
+                id: id,
+                image: result[0].image,
+                fileName: result[0].fileName
+            })
+
+        } else {
+            res = await editCombo({
+                name: allValues.name,
+                price: +allValues.price,
+                items: items,
+                id: id
+            })
+        }
 
         if (res && res.errCode == 0) {
             history.push("/combo-management")
@@ -130,6 +193,68 @@ function EditCombo() {
         } else {
             toast.error(res.errMessage);
         }
+    }
+
+
+    //Image Preview
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
+        }
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewImage: file.url || file.preview,
+            previewVisible: true,
+            previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+        }));
+
+    };
+
+    const handleChangeImage = ({ fileList }) => {
+
+        console.log(fileList);
+        if (fileList.length > 1) {
+            toast.error("Maximum 1 image");
+            return;
+        }
+        if (fileList.length > 0) {
+            const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
+
+            if (!isJpgOrPng) {
+                toast.error("Please choose image");
+                setValImg((prevState) => ({
+                    previewVisible: false,
+                    previewImage: '',
+                    previewTitle: '',
+                    fileList: [],
+                }));
+                return;
+            }
+        }
+        console.log(fileList);
+        setValImg((prevState) => ({
+            ...prevState,
+            fileList
+        }));
+    }
+
+    //Uploaded url
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    const handleCancel = () => {
+
+        setValImg((prevState) => ({
+            ...prevState,
+            previewVisible: false
+        }));
     }
 
 
@@ -262,6 +387,36 @@ function EditCombo() {
                                 <div className="col-lg-6 mb-4 card">
                                     <div className='form-edit-combo'>
                                         <h5>Update Combo</h5>
+                                        <div className='vertical-input'>
+                                            <Upload
+                                                action={""}
+                                                listType="picture-card"
+                                                fileList={valImg.fileList}
+                                                onPreview={handlePreview}
+                                                beforeUpload={() => {
+                                                    /* update state here */
+                                                    return false;
+                                                }}
+                                                onChange={handleChangeImage}
+                                            >
+                                                {
+                                                    valImg.fileList.length >= 8 ? null :
+                                                        <>
+                                                            <div>
+                                                                <PlusOutlined />
+                                                                <div style={{ marginTop: 8 }}>Upload</div>
+                                                            </div>
+                                                        </>}
+                                            </Upload>
+                                            <Modal
+                                                visible={valImg.previewVisible}
+                                                title={valImg.previewTitle}
+                                                footer={null}
+                                                onCancel={handleCancel}
+                                            >
+                                                <img alt="example" style={{ width: '100%' }} src={valImg.previewImage} />
+                                            </Modal>
+                                        </div>
                                         <div className='vertical-input'>
                                             <label htmlFor="exampleInputEmail1">Tên combo</label>
                                             <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên combo" />

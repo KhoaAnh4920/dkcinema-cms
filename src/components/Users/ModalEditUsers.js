@@ -236,16 +236,15 @@ export default function ModalEditUsers(props) {
 
         stateCopy[stateName] = selectedOption;
 
-        if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3))
-            stateCopy['isShowMovieTheater'] = false;
-        else if (stateName !== 'selectedMovieTheater') {
-            stateCopy['isShowMovieTheater'] = true;
-            stateCopy['selectedMovieTheater'] = null;
-        }
+        // if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3 ))
+        //     stateCopy['isShowMovieTheater'] = false;
+        // else if (stateName !== 'selectedMovieTheater') {
+        //     stateCopy['isShowMovieTheater'] = true;
+        //     stateCopy['selectedMovieTheater'] = null;
+        // }
 
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
     }
 
     const handleOnChangeDatePicker = (date) => {
@@ -319,6 +318,7 @@ export default function ModalEditUsers(props) {
                                     value={allValues.selectedRoles}
                                     onChange={handleChangeSelect}
                                     options={allValues.listRoles}
+                                    isDisabled={true}
                                     placeholder='Select roles'
                                     name='selectedRoles'
                                 // styles={this.props.colourStyles}
@@ -362,7 +362,8 @@ export default function ModalEditUsers(props) {
                                 value={allValues.selectedMovieTheater}
                                 onChange={handleChangeSelect}
                                 options={allValues.listMovieTheater}
-                                isDisabled={allValues.isShowMovieTheater}
+                                isDisabled={true}
+
                                 placeholder='Select movie theater'
                                 name='selectedMovieTheater'
                             // styles={this.props.colourStyles}

@@ -56,10 +56,12 @@ export default function Login() {
         } catch (e) {
             // Lấy mã lỗi // 
             console.log(e);
+            setLoadingButton(false);
+            toast.error("Something error. Please try again");
             if (e.response) {
                 if (e.response.data) {
                     setErrMessage(e.response.data);
-                    setLoadingButton(false);
+
                 }
             }
         }

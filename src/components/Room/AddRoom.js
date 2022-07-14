@@ -73,7 +73,7 @@ export default function AddRoom() {
 
         setAllValues((prevState) => ({
             ...prevState,
-            movieTheaterId: selectUser.adminInfo.movieTheaterId
+            movieTheaterId: selectUser.adminInfo.movietheaterid
         }));
 
 
