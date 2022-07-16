@@ -16,8 +16,8 @@ import { toast } from 'react-toastify';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import { getEditUser } from '../../services/UserService';
 import { Link } from "react-router-dom";
-
-
+import { adminLoginSuccess } from '../../redux/userSlice';
+import { updateUserService } from '../../services/UserService';
 
 
 
@@ -35,6 +35,7 @@ function AccountProfile() {
         phone: '',
         userName: '',
         email: '',
+        fullNameOriginal: '',
         fullName: '',
         address: '',
         listGender: [],
@@ -156,7 +157,6 @@ function AccountProfile() {
 
     useEffect(() => {
 
-
     }, []);
 
     const setDefaultValue = (inputData, value) => {
@@ -166,20 +166,6 @@ function AccountProfile() {
         }
     }
 
-
-    // const handleSetTab = (data) => {
-
-    //     setTabDefault((prevState) => ({
-    //         isShowTab1: !prevState.isShowTab1,
-    //         isShowTab2: !prevState.isShowTab2,
-    //     }));
-
-
-    //     setAllValues((prevState) => ({
-    //         ...prevState,
-    //         activeTab: data,
-    //     }));
-    // }
 
 
 
@@ -199,7 +185,6 @@ function AccountProfile() {
                 dataUser = res.data
             }
 
-            console.log('dataUser: ', dataUser)
 
             let selectedGender = setDefaultValue(listGender, (dataUser.gender) ? 1 : 0);
 
@@ -211,6 +196,7 @@ function AccountProfile() {
                 ...prevState,
                 id: dataUser.id,
                 fullName: dataUser.fullName,
+                fullNameOriginal: dataUser.fullName,
                 location: location,
                 phone: dataUser.phone,
                 email: dataUser.email,
@@ -218,8 +204,10 @@ function AccountProfile() {
                 imagePreviewUrl: dataUser.avatar,
                 address: dataUser.address,
                 birthday: dataUser.birthday,
+                roleId: dataUser.roleId,
                 listGender: listGender,
-                selectedGender
+                selectedGender,
+                movietheaterid: selectUser.adminInfo.movietheaterid
             }));
 
             console.log(allValues);
@@ -265,60 +253,56 @@ function AccountProfile() {
         setAllValues({ ...stateCopy })
     }
 
-    // const hanldeUpdateProfile = async () => {
-    //     let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
-
-    //     setAllValues({
-    //         ...allValues,
-    //         isShowLoading: true
-    //     })
-    //     console.log('allValuesInput: ', allValuesInput)
-
-    //     let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
-
-    //     let res = await updateUserService({
-    //         fullName: allValues.fullName,
-    //         birthday: formatedDate,
-    //         phone: allValues.phone,
-    //         gender: allValues.selectedGender.value,
-    //         address: allValues.address,
-    //         avatar: allValues.avatar,
-    //         fileName: allValues.fileName,
-    //         cityCode: selectedCity.value,
-    //         districtCode: selectedDistrict.value,
-    //         wardCode: selectedWard.value,
-    //         externalid: selectUser.userInfo.externalid,
-    //         roleId: 4,
-    //     })
-
-    //     if (res && res.errCode == 0) {
-    //         // history.push("/users-management")
-    //         toast.success("Cập nhật thành công");
-    //         dispatch(userLoginSuccess({
-    //             email: allValues.email,
-    //             roleId: 4,
-    //             fullName: allValues.fullName,
-    //             avatar: allValues.imagePreviewUrl,
-    //             externalid: selectUser.userInfo.externalid,
-    //             phone: allValues.phone,
-    //             isActive: true,
-    //             id: allValues.id,
-    //             accessToken: selectUser.userInfo.accessToken,
-
-    //         }));
-    //     } else {
-    //         // history.push("/users-management")
-    //         toast.error("Cập nhật thất bại");
-    //     }
-
-    //     setAllValues({
-    //         ...allValues,
-    //         isShowLoading: false
-    //     })
-    // }
-
     const changeHandler = e => {
         setAllValues({ ...allValues, [e.target.name]: e.target.value })
+    }
+
+
+    const handleClickSubmit = async () => {
+        let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
+
+        // setAllValues({
+        //     ...allValues,
+        //     isShowLoading: true
+        // })
+        console.log('allValuesInput: ', allValuesInput)
+
+        let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
+
+        let res = await updateUserService({
+            fullName: allValues.fullName,
+            birthday: formatedDate,
+            phone: allValues.phone,
+            gender: allValues.selectedGender.value,
+            address: allValues.address,
+            avatar: allValues.avatar,
+            fileName: allValues.fileName,
+            cityCode: selectedCity.value,
+            districtCode: selectedDistrict.value,
+            wardCode: selectedWard.value,
+            roleId: allValues.roleId,
+            id: allValues.id
+        })
+
+        if (res && res.errCode == 0) {
+            // history.push("/users-management")
+            toast.success("Cập nhật thành công");
+            dispatch(adminLoginSuccess({
+                email: allValues.email,
+                roleId: allValues.roleId,
+                fullName: allValues.fullName,
+                avatar: allValues.imagePreviewUrl,
+                // externalid: selectUser.adminInfo.externalid,
+                phone: allValues.phone,
+                // isActive: true,
+                id: allValues.id,
+                accessToken: selectUser.adminInfo.accessToken,
+
+            }));
+        } else {
+            // history.push("/users-management")
+            toast.error(res.errMessage);
+        }
     }
 
 
@@ -364,7 +348,7 @@ function AccountProfile() {
                                             <button className="btn btn-update-avatar" onClick={handleOpenUploadFile}><i class="fas fa-camera"></i></button>
                                             <div className='name-user'>
                                                 <div className='text'>
-                                                    <span className='fullname'>{allValues.fullName}</span>
+                                                    <span className='fullname'>{allValues.fullNameOriginal}</span>
                                                     <span className='address-user'>{allValues.email}</span>
                                                     <span className='role-user'>
                                                         {selectUser.adminInfo.roleId === 1 && 'Admin'}
@@ -476,7 +460,7 @@ function AccountProfile() {
                                                 <input type="text" className="form-control input-small" value={allValues.address} onChange={changeHandler} name='address' placeholder="Địa chỉ" />
                                             </div>
                                             <div className='submit-container'>
-                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="btn-update-profile"  >
+                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="btn-update-profile" onClick={handleClickSubmit}  >
                                                     {allValues.isShowLoading &&
                                                         <>
                                                             <Spinner

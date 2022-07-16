@@ -38,7 +38,6 @@ export default function Login() {
             console.log("Check data: ", data);
             if (data && data.errorCode === 0) {
                 console.log('---login ok---');
-                console.log("Check data: ".data);
 
                 //this.props.testRedux();
 

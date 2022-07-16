@@ -30,6 +30,13 @@ const deleteNews = (id) => {
     return axios.delete(`/news/${id}`)
 }
 
+const getDetailComment = (data) => {
+    return axios.get('/detail/comment', { params: { newsId: data.newsId } })
+}
+
+const deleteCommentService = (id) => {
+    return axios.delete(`/comment/${id}`);
+}
 
 
 
@@ -39,5 +46,7 @@ export {
     getDetailPost,
     editPost,
     updateStatusNews,
-    deleteNews
+    deleteNews,
+    getDetailComment,
+    deleteCommentService
 };

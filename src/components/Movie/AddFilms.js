@@ -43,6 +43,7 @@ export default function AddFilms() {
         duration: '',
         description: '',
         brand: '',
+        director: '',
         cast: '',
         status: 0,
         typeMovie: [],
@@ -94,7 +95,7 @@ export default function AddFilms() {
             toast.error("Maximum 2 poster");
             return;
         }
-        if (fileList.length > 0) {
+        if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
             const reader = new FileReader();
             reader.readAsDataURL(fileList[fileList.length - 1].originFileObj);
             reader.addEventListener('load', event => {
@@ -256,6 +257,7 @@ export default function AddFilms() {
             duration: allValues.duration,
             description: allValues.description,
             brand: allValues.brand,
+            director: allValues.director,
             cast: allValues.cast,
             status: 0,
             typeMovie: typeCheck.typeMovie,
@@ -406,6 +408,10 @@ export default function AddFilms() {
                                             </div>
 
                                             <div className="form-group horizon-2-input">
+                                                <div className='horizon-input'>
+                                                    <label htmlFor="exampleInputEmail1">Đạo diễn</label>
+                                                    <input type="text" className="form-control input-sm" value={allValues.director} name='director' onChange={changeHandler} placeholder="Nhập đạo diễn phim" />
+                                                </div>
                                                 <div className='horizon-input'>
                                                     <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
                                                     <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />

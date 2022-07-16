@@ -7,7 +7,7 @@ import MaterialTable from 'material-table';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import Footer from '../../containers/System/Share/Footer';
-import './ListNews.scss';
+import './TotalComment.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import LoadingOverlay from 'react-loading-overlay';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 
 
-function ListNews() {
+function TotalComment() {
 
     const [listPost, setPostData] = useState([]);
     const [isShowLoading, setShowLoading] = useState(false);
@@ -41,7 +41,7 @@ function ListNews() {
     }
 
     useEffect(() => {
-        setShowLoading(true);
+        // setShowLoading(true);
         fetchDataPost();
     }, []);
 
@@ -69,25 +69,8 @@ function ListNews() {
         { title: 'ID', field: 'id' },
         { title: 'Title', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
         { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
-        {
-            title: 'Type', field: 'type', render: rowData =>
+        { title: 'Total Comment', field: 'CommentNews', render: rowData => <span>{rowData.CommentNews.length}</span> },
 
-                <>
-                    {rowData.type == 1 && <span className="badge badge-success">Review phim</span>}
-                    {rowData.type == 2 && <span className="badge badge-success">Giới thiệu phim</span>}
-                    {rowData.type == 3 && <span className="badge badge-success">Khuyến mãi</span>}
-                </>
-        },
-        { title: 'Created at', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD/MM/YYYY')}</span> },
-        { title: 'Author', field: 'fullName', render: rowData => <span>{(rowData.UserNews && rowData.UserNews.fullName) ? rowData.UserNews.fullName : ''}</span> },
-        {
-            title: 'Show', field: 'status', render: rowData => <>
-                <div className="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
-                    <label class="custom-control-label" for={rowData.id}></label>
-                </div>
-            </>
-        },
     ]
 
     const handleOnDeletePost = async (id) => {
@@ -135,44 +118,20 @@ function ListNews() {
                             {/* Topbar */}
                             <div className="col-lg-12 mb-4">
                                 <MaterialTable
-                                    title="List Post"
+                                    title="List comment"
                                     columns={columns}
                                     data={listPost}
 
                                     actions={[
+
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" >Add post</button>,
+
+                                            icon: () => <i class="fas fa-info-circle" style={{ 'fontSize': '16px' }}></i>,
                                             onClick: async (event, rowData) => {
-                                                history.push('/add-new-post')
+                                                history.push(`/detail-comment/${rowData.id}`);
                                             },
-                                            isFreeAction: true,
-                                        },
-                                        {
-                                            icon: 'edit',
-                                            tooltip: 'Edit Post',
-                                            onClick: async (event, rowData) => {
-                                                history.push(`/edit-post/${rowData.id}`);
-                                            }
-
 
                                         },
-                                        {
-                                            icon: 'delete',
-                                            tooltip: 'Delete Post',
-                                            onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    handleOnDeletePost(rowData.id)
-                                                }
-                                            })
-                                        }
                                     ]}
                                     options={{
                                         actionsColumnIndex: -1,
@@ -199,4 +158,4 @@ function ListNews() {
     );
 }
 
-export default ListNews;
+export default TotalComment;
