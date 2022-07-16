@@ -1,0 +1,44 @@
+.modal-add-voucher {
+
+    .modal-body-container {
+        padding: 25px;
+
+        .input-small {
+            height: 32px;
+        }
+
+        .form-code-voucher {
+            margin-top: 10px;
+
+
+            .input-code-voucher {
+                display: flex;
+                gap: 40px;
+            }
+
+            button {
+                height: 32px;
+                font-size: 12px;
+                width: 140px;
+            }
+        }
+
+        .form-horizontal-voucher {
+            margin-top: 10px;
+            display: flex;
+            gap: 30px;
+
+            .form-timeStart-voucher,
+            .form-timeEnd-voucher {
+                .flatpickr-input {
+                    height: 32px;
+                }
+            }
+
+
+
+        }
+
+
+    }
+}

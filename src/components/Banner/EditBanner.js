@@ -134,7 +134,6 @@ export default function EditBanner() {
 
         let dataDetailBanner = await getDetailBanner(id);
 
-        console.log('dataDetailBanner: ', dataDetailBanner);
 
         if (dataDetailBanner && dataDetailBanner.data) {
 

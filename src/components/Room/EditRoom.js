@@ -134,9 +134,10 @@ export default function EditRoom() {
     }, []);
 
     useEffect(() => {
+
         setAllValues((prevState) => ({
             ...prevState,
-            movieTheaterId: selectUser.adminInfo.movieTheaterId
+            movieTheaterId: selectUser.adminInfo.movietheaterid
         }));
 
         console.log(allValues);

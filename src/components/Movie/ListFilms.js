@@ -13,6 +13,9 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { toast } from 'react-toastify';
 import Switch from "react-switch";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { userState } from "../../redux/userSlice";
+
 
 
 
@@ -22,8 +25,12 @@ function ListFilms() {
     const [listFilms, setFilmsData] = useState([]);
     const [isShowLoading, setShowLoading] = useState(false);
     const [checked, setChecked] = useState(false);
-
+    let selectUser = useSelector(userState);
     let history = useHistory();
+    const [allValues, setAllValues] = useState({
+        movieTheaterId: '',
+        roleId: 2
+    });
 
     // const handleChange = async (data) => {
 
@@ -60,6 +67,21 @@ function ListFilms() {
     useEffect(() => {
         fetchDataMovie();
     }, []);
+
+    useEffect(() => {
+
+        if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
+
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                movieTheaterId: selectUser.adminInfo.movietheaterid,
+                roleId: selectUser.adminInfo.roleId
+            }));
+        }
+
+
+    }, [selectUser]);
 
 
     const columns = [
@@ -152,42 +174,46 @@ function ListFilms() {
                                     columns={columns}
                                     data={listFilms}
 
-                                    actions={[
-                                        {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm phim</button>,
-                                            onClick: async (event, rowData) => {
-                                                history.push('/add-new-films');
-                                            },
-                                            isFreeAction: true,
-                                        },
-                                        {
-                                            icon: 'edit',
-                                            // tooltip: 'Edit Film',
-                                            onClick: async (event, rowData) => {
-                                                history.push(`/edit-film/${rowData.id}`);
-                                            }
-                                        },
-                                        {
-                                            icon: 'delete',
-                                            tooltip: 'Delete Movie',
-                                            onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    handleOnDeleteMovie(rowData.id)
+
+                                    actions={
+                                        (allValues.roleId === 2) ?
+                                            [
+                                                {
+                                                    icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm phim</button>,
+                                                    onClick: async (event, rowData) => {
+                                                        history.push('/add-new-films');
+                                                    },
+                                                    isFreeAction: true,
+                                                },
+                                                {
+                                                    icon: 'edit',
+                                                    // tooltip: 'Edit Film',
+                                                    onClick: async (event, rowData) => {
+                                                        history.push(`/edit-film/${rowData.id}`);
+                                                    }
+                                                },
+                                                {
+                                                    icon: 'delete',
+                                                    tooltip: 'Delete Movie',
+                                                    onClick: (event, rowData) => Swal.fire({
+                                                        title: 'Are you sure?',
+                                                        text: "You won't be able to revert this!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Yes, delete it!'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            handleOnDeleteMovie(rowData.id)
+                                                        }
+                                                    })
                                                 }
-                                            })
-                                        }
-                                    ]}
+
+                                            ] : []}
                                     options={{
                                         actionsColumnIndex: -1,
-                                        headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
+                                        headerStyle: { zIndex: 1, color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
                                         paginationType: "stepped"
 
                                     }}

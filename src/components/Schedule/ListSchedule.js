@@ -183,6 +183,8 @@ function ListSchedule() {
 
 
     const fetchAllData = async (movieTheaterId, status) => {
+
+        console.log('movieTheaterId: ', movieTheaterId)
         let roomData = await getAllRoom(movieTheaterId);
         const dataMovie = await getAllFilmsByStatus(status);
 
@@ -306,14 +308,15 @@ function ListSchedule() {
 
     useEffect(() => {
 
-        if (selectUser.adminInfo && selectUser.adminInfo.movieTheaterId) {
-            fetchAllData(selectUser.adminInfo.movieTheaterId, 1)
+        if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
+            fetchAllData(selectUser.adminInfo.movietheaterid, 1)
 
             setAllValues((prevState) => ({
                 ...prevState,
-                movieTheaterId: selectUser.adminInfo.movieTheaterId
+                movieTheaterId: selectUser.adminInfo.movietheaterid
             }));
         }
+
 
     }, [selectUser]);
 
