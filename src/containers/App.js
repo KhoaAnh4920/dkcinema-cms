@@ -39,6 +39,10 @@ import ConfirmBill from '../components/PaymentConfirm/ConfirmBill';
 import PrintTicket from '../components/PaymentConfirm/PrintTicket';
 import AccountProfile from '../components/Users/AccountProfile';
 import ListStaff from '../components/Users/ListStaff';
+import TotalComment from '../components/Comment/TotalComment';
+import DetailComment from '../components/Comment/DetailComment';
+import ListFeedback from '../components/Feedback/ListFeedback';
+import DetailFeedback from '../components/Feedback/DetailFeedback';
 // import { ConnectedRouter as Router } from 'connected-react-router';
 
 
@@ -87,9 +91,13 @@ function App() {
             <Route path="/detail-ticket/:id" component={DetailTicket} />
             <Route path="/ticket-management" component={ListTicket} />
             <Route path="/voucher-management" component={ListVoucher} />
+            <Route path="/feedback-management" component={ListFeedback} />
+            <Route path="/feedback-detail/:id" component={DetailFeedback} />
             <Route path="/payment-confirmation" component={ConfirmBill} />
             <Route path="/print-ticket/:id" component={PrintTicket} />
             <Route path="/update-profile" component={AccountProfile} />
+            <Route path="/comment-management" component={TotalComment} />
+            <Route path="/detail-comment/:id" component={DetailComment} />
           </Switch>
         </span>
       </div>

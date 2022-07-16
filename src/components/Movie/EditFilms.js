@@ -40,6 +40,7 @@ export default function EditFilms() {
         duration: '',
         description: '',
         brand: '',
+        director: '',
         cast: '',
         status: 0,
         typeMovie: [],
@@ -100,8 +101,9 @@ export default function EditFilms() {
             toast.error("Maximum 2 poster");
             return;
         }
-        if (fileList.length > 0) {
+        if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
             const reader = new FileReader();
+
             reader.readAsDataURL(fileList[fileList.length - 1].originFileObj);
             reader.addEventListener('load', event => {
                 const _loadedImageUrl = event.target.result;
@@ -126,7 +128,7 @@ export default function EditFilms() {
         }
 
 
-        console.log(fileList);
+        console.log('fileList: ', fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -154,15 +156,25 @@ export default function EditFilms() {
 
     const handleRemove = async (e) => {
 
-        console.log('item remove: ', typeof (e.uid));
-
         if (e.public_id && typeof (e.uid) !== 'string') {
             let res = await removeImageFilm(e.uid);
 
-            if (res && res.errCode === 0)
+            if (res && res.errCode === 0) {
                 toast.success("Delete image succeed !!!");
+                let fileList = valImg.fileList.filter(item => item.uid !== e.uid)
+
+                setValImg((prevState) => ({
+                    ...prevState,
+                    fileList
+                }));
+            }
+
             else
                 toast.error(res.errMessage);
+        } else {
+            setValImg((prevState) => ({
+                ...prevState,
+            }));
         }
 
     }
@@ -234,6 +246,7 @@ export default function EditFilms() {
                     language: dataMovie.data.language,
                     releaseTime: dataMovie.data.releaseTime,
                     brand: dataMovie.data.brand,
+                    director: dataMovie.data.director,
                     cast: dataMovie.data.cast,
                     listStatus: listStatus,
                     status: dataMovie.data.status,
@@ -349,6 +362,7 @@ export default function EditFilms() {
             if (item.originFileObj) {
                 obj.image = await getBase64(item.originFileObj);
                 obj.fileName = item.name;
+                obj.typeImage = item.typeImage
             } else {
                 obj.url = item.url;
                 obj.public_id = item.public_id;
@@ -356,6 +370,8 @@ export default function EditFilms() {
 
             result.push(obj);
         }))
+
+        console.log('result: ', result)
 
         let res = await updateFilmsService({
             name: allValues.name,
@@ -365,6 +381,7 @@ export default function EditFilms() {
             duration: allValues.duration,
             description: allValues.description,
             brand: allValues.brand,
+            director: allValues.director,
             cast: allValues.cast,
             status: allValues.selectedStatus.value,
             typeMovie: arrType,
@@ -485,7 +502,7 @@ export default function EditFilms() {
                                                             return false;
                                                         }}
                                                         action={""}
-                                                        listType="picture-card" handleChangeImage
+                                                        listType="picture-card"
                                                         fileList={valImg.fileList}
                                                         onPreview={handlePreview}
                                                         onChange={handleChangeImage}
@@ -547,6 +564,10 @@ export default function EditFilms() {
                                             </div>
 
                                             <div className="form-group horizon-2-input">
+                                                <div className='horizon-input'>
+                                                    <label htmlFor="exampleInputEmail1">Đạo diễn</label>
+                                                    <input type="text" className="form-control input-sm" value={allValues.director} name='director' onChange={changeHandler} placeholder="Nhập đạo diễn phim" />
+                                                </div>
                                                 <div className='horizon-input'>
                                                     <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
                                                     <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />

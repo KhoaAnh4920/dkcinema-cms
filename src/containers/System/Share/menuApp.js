@@ -63,11 +63,29 @@ export const adminMenu = [
         ]
     },
     {
+        name: 'menu.admin.comment-management',
+        id: 'tableComment',
+        menus: [
+            {
+                name: 'menu.comment-management.total-comment', link: '/comment-management',
+            },
+        ]
+    },
+    {
         name: 'menu.admin.voucher-management',
         id: 'tableVoucher',
         menus: [
             {
                 name: 'menu.voucher-management.list-voucher', link: '/voucher-management',
+            },
+        ]
+    },
+    {
+        name: 'menu.admin.feedback-management',
+        id: 'tableFeedback',
+        menus: [
+            {
+                name: 'menu.feedback-management.list-feedback', link: '/feedback-management',
             },
         ]
     },

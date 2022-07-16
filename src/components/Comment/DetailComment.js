@@ -2,47 +2,54 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
 import { updateStatusNews, deleteNews } from "../../services/NewsServices";
-import { getAllPost } from "../../services/NewsServices";
+import { getDetailComment, deleteCommentService } from "../../services/NewsServices";
 import MaterialTable from 'material-table';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import Footer from '../../containers/System/Share/Footer';
-import './ListNews.scss';
+import './DetailComment.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
 import LoadingOverlay from 'react-loading-overlay';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
 
 
-function ListNews() {
 
-    const [listPost, setPostData] = useState([]);
+function DetailComment() {
+
+    const [listComment, setCommentData] = useState([]);
     const [isShowLoading, setShowLoading] = useState(false);
 
     let history = useHistory();
+    const { id } = useParams();
 
 
-    async function fetchDataPost() {
+
+
+    async function fetchDetailComment() {
 
         // You can await here
-        const postData = await getAllPost();
-        console.log("postData: ", postData);
-        if (postData && postData.data) {
+        const commentData = await getDetailComment({
+            newsId: id
+        });
+        console.log("commentData: ", commentData);
+        if (commentData && commentData.data) {
 
 
-            setPostData(postData.data);
+            setCommentData(commentData.data);
             setShowLoading(false);
 
         } else {
-            setPostData([]);
+            setCommentData([]);
             setShowLoading(false);
         }
     }
 
     useEffect(() => {
-        setShowLoading(true);
-        fetchDataPost();
+        // setShowLoading(true);
+        fetchDetailComment();
     }, []);
 
 
@@ -59,7 +66,7 @@ function ListNews() {
 
         if (res && res.errCode === 0) {
             toast.success("Update status success")
-            await fetchDataPost();
+            await fetchDetailComment();
         }
 
     };
@@ -67,45 +74,28 @@ function ListNews() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Title', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
-        { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
-        {
-            title: 'Type', field: 'type', render: rowData =>
+        { title: 'Comment', field: 'comment' },
+        { title: 'Rating', field: 'rating' },
+        { title: 'FullName', field: 'FullName', render: rowData => <span>{rowData.CustomerComment.fullName}</span> },
 
-                <>
-                    {rowData.type == 1 && <span className="badge badge-success">Review phim</span>}
-                    {rowData.type == 2 && <span className="badge badge-success">Giới thiệu phim</span>}
-                    {rowData.type == 3 && <span className="badge badge-success">Khuyến mãi</span>}
-                </>
-        },
-        { title: 'Created at', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD/MM/YYYY')}</span> },
-        { title: 'Author', field: 'fullName', render: rowData => <span>{(rowData.UserNews && rowData.UserNews.fullName) ? rowData.UserNews.fullName : ''}</span> },
-        {
-            title: 'Show', field: 'status', render: rowData => <>
-                <div className="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
-                    <label class="custom-control-label" for={rowData.id}></label>
-                </div>
-            </>
-        },
     ]
 
-    const handleOnDeletePost = async (id) => {
+
+    const handleOnDeleteComment = async (id) => {
         try {
-            setShowLoading(true);
-            let res = await deleteNews(id);
+
+
+            let res = await deleteCommentService(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete post success")
-                await fetchDataPost();
+                await fetchDetailComment();
             } else {
-                toast.error(res.errMessage)
+                alert(res.errMessage)
             }
 
         } catch (e) {
             console.log(e);
         }
     }
-
 
 
 
@@ -122,7 +112,7 @@ function ListNews() {
                     })
                 }}
             >
-                <div id="wrapper" className='listPost-main'>
+                <div id="wrapper" className='listComment-main'>
                     {/* Sidebar */}
 
                     <Sidebar />
@@ -135,30 +125,15 @@ function ListNews() {
                             {/* Topbar */}
                             <div className="col-lg-12 mb-4">
                                 <MaterialTable
-                                    title="List Post"
+                                    title="Comment"
                                     columns={columns}
-                                    data={listPost}
+                                    data={listComment}
 
                                     actions={[
-                                        {
-                                            icon: () => <button type="button" className="btn btn-info" >Add post</button>,
-                                            onClick: async (event, rowData) => {
-                                                history.push('/add-new-post')
-                                            },
-                                            isFreeAction: true,
-                                        },
-                                        {
-                                            icon: 'edit',
-                                            tooltip: 'Edit Post',
-                                            onClick: async (event, rowData) => {
-                                                history.push(`/edit-post/${rowData.id}`);
-                                            }
 
-
-                                        },
                                         {
                                             icon: 'delete',
-                                            tooltip: 'Delete Post',
+                                            tooltip: 'Delete Comment',
                                             onClick: (event, rowData) => Swal.fire({
                                                 title: 'Are you sure?',
                                                 text: "You won't be able to revert this!",
@@ -169,7 +144,7 @@ function ListNews() {
                                                 confirmButtonText: 'Yes, delete it!'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
-                                                    handleOnDeletePost(rowData.id)
+                                                    handleOnDeleteComment(rowData.id)
                                                 }
                                             })
                                         }
@@ -199,4 +174,4 @@ function ListNews() {
     );
 }
 
-export default ListNews;
+export default DetailComment;

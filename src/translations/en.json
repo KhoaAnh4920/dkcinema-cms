@@ -14,7 +14,9 @@
             "news-management": "News Management",
             "voucher-management": "Voucher Management",
             "banner-management": "Banner Management",
-            "bill-management": "Bill Management"
+            "bill-management": "Bill Management",
+            "comment-management": "Comment Management",
+            "feedback-management": "Feedback Management"
         },
         "user-management": {
             "list-users": "User Management"
@@ -54,6 +56,12 @@
         },
         "bill-management": {
             "payment-confirmation": "Payment Confirmation"
+        },
+        "comment-management": {
+            "total-comment": "List Comment"
+        },
+        "feedback-management": {
+            "list-feedback": "List Feedback"
         }
     }
 }

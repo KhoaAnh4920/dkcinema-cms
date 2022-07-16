@@ -15,7 +15,8 @@ import { userState } from "../../redux/userSlice";
 import { getAllBooking, getTicketBooking } from '../../services/BookingServices'
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
-import "antd/dist/antd.css";
+// import "antd/dist/antd.css";
+import 'antd/dist/antd.min.css'
 import { Pagination } from 'antd';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
@@ -245,9 +246,6 @@ function PrintTicket() {
                             <div className="col-lg-12 mb-4">
 
                                 <div className="card mb-4">
-                                    {/* <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu</h6>
-                                    </div> */}
                                     <div className="card-body">
                                         <div className='row ticket-main'>
                                             <div className='col-5 ticket-one'>

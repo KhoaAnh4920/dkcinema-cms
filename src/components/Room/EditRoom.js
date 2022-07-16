@@ -116,6 +116,7 @@ export default function EditRoom() {
                 setAllValues((prevState) => ({
                     ...prevState,
                     name: dataRoom.data.name,
+                    preName: dataRoom.data.name,
                     errors: {},
                     listAlpha: listAlpha,
                     listSeet: result,
@@ -244,7 +245,7 @@ export default function EditRoom() {
             id: +id,
             numberOfColumn: +allValues.numberOfColumn,
             numberOfRow: +allValues.numberOfRow,
-            name: allValues.name,
+            name: (allValues.name !== allValues.preName) ? allValues.name : null,
             movieTheaterId: allValues.movieTheaterId,
             seets: allValues.newListSeetUpdate,
             listSeetChangeType: allValues.listSeetChangeType

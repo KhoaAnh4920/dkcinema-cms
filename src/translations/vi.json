@@ -14,7 +14,9 @@
             "news-management": "Quản lý bài viết",
             "voucher-management": "Quản lý khuyến mãi",
             "banner-management": "Quản lý banner",
-            "bill-management": "Quản lý hóa đơn"
+            "bill-management": "Quản lý hóa đơn",
+            "comment-management": "Quản lý comment",
+            "feedback-management": "Quản lý phản hồi"
         },
         "user-management": {
             "list-users": "Quản lý người dùng"
@@ -54,6 +56,12 @@
         },
         "bill-management": {
             "payment-confirmation": "Xác nhận thanh toán"
+        },
+        "comment-management": {
+            "total-comment": "Quản lý comment"
+        },
+        "feedback-management": {
+            "list-feedback": "Quản lý phản hồi"
         }
     }
 }
