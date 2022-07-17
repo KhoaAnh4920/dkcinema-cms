@@ -1,0 +1,26 @@
+.dk-dashboard {
+
+    .list-theater {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+
+        .item-theater {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #eee;
+            }
+        }
+
+
+    }
+
+    .title-chart {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+    }
+}

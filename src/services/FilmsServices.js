@@ -38,6 +38,10 @@ const deleteMovieService = (data) => {
     return axios.put(`/delete/movie`, data)
 }
 
+const countTicket = () => {
+    return axios.get(`/count-ticket-of-movie`);
+}
+
 
 export {
     getAllFilms,
@@ -48,5 +52,6 @@ export {
     removeImageFilm,
     updateStatusFilms,
     deleteMovieService,
-    getAllFilmsByStatus
+    getAllFilmsByStatus,
+    countTicket
 };
