@@ -28,6 +28,10 @@ const checkMerchantMovieTheater = (data) => {
     return axios.get(`/check-merchant-movieTheater`, { params: { movieTheaterId: data.movieTheaterId, roleId: data.roleId } });
 }
 
+const getTheaterSales = (data) => {
+    return axios.get(`/count-turnover-of-movieTheater`, { params: { movieTheaterId: data.movieTheaterId } });
+}
+
 
 export {
     getAllMovieTheater,
@@ -35,5 +39,6 @@ export {
     getEditMovieTheater,
     editMovieTheater,
     removeImageMovieTheater,
-    checkMerchantMovieTheater
+    checkMerchantMovieTheater,
+    getTheaterSales
 };

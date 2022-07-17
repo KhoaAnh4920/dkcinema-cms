@@ -47,7 +47,6 @@ import DetailFeedback from '../components/Feedback/DetailFeedback';
 
 
 
-
 function App() {
   return (
 

@@ -1,30 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminMenu from '../containers/System/Share/AdminMenu';
 import Sidebar from '../containers/System/Share/Sidebar';
-
+import './Home.scss';
 import Header from '../containers/System/Share/Header';
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import faker from 'faker';
+import LoadingOverlay from 'react-loading-overlay';
+import BeatLoader from 'react-spinners/BeatLoader';
 import Footer from '../containers/System/Share/Footer';
+import LineChart from '../containers/System/Share/LineChart';
+import { UserData } from "../containers/System/Share/Data";
+import { userState } from "../redux/userSlice";
+import { useSelector } from "react-redux";
+import { getAllMovieTheater, getTheaterSales } from '../services/MovieTheater';
+import BarChart from "../containers/System/Share/BarChart";
+import { countTicket, getAllFilmsByStatus } from '../services/FilmsServices';
 
+// ChartJS.register(
+//     CategoryScale,
+//     LinearScale,
+//     BarElement,
+//     Title,
+//     Tooltip,
+//     Legend
+// );
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    Title,
-    Tooltip,
-    Legend
-);
+// export const options = {
+//     responsive: true,
+//     plugins: {
+//         legend: {
+//             position: 'top',
+//         },
+//         title: {
+//             display: true,
+//             text: 'Chart.js Bar Chart',
+//         },
+//     },
+// };
+
+// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+// export const data = {
+//     labels,
+//     datasets: [
+//         {
+//             label: 'Dataset 1',
+//             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//             backgroundColor: 'rgba(255, 99, 132, 0.5)',
+//         },
+//         {
+//             label: 'Dataset 2',
+//             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+//             backgroundColor: 'rgba(53, 162, 235, 0.5)',
+//         },
+//     ],
+// };
 
 export const options = {
     responsive: true,
@@ -39,27 +67,139 @@ export const options = {
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-    labels,
-    datasets: [
-        {
-            label: 'Dataset 1',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-            label: 'Dataset 2',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
-    ],
-};
 
 
 function Home() {
+    let selectUser = useSelector(userState);
+    // const [userData, setUserData] = useState({
+    //     labels: UserData.map((data) => data.year),
+    //     datasets: [
+    //         {
+    //             label: "Users Gained",
+    //             data: UserData.map((data) => data.userGain),
+    //             backgroundColor: [
+    //                 "#3e95cd",
+    //                 "#8e5ea2",
+    //                 "#3cba9f",
+    //                 "#e8c3b9",
+    //                 "#c45850"
+    //             ],
 
+    //             // borderColor: "black",
+    //             // borderWidth: 2,
+    //         },
+    //     ],
+    // });
+
+    const [userData, setUserData] = useState({});
+
+
+    const [allValues, setAllValues] = useState({
+        roleId: null,
+        isShowLoading: true,
+        movieTheaterId: null
+    });
+
+
+
+
+
+
+    useEffect(() => {
+        async function fetchAllData() {
+
+            // Admin //
+            if (selectUser.adminInfo.roleId === 1) {
+                // Fecth all movieTheater // 
+                let dataMovieTheater = await getAllMovieTheater();
+
+                let amountTicket = await countTicket();
+                let dataMovie = await getAllFilmsByStatus(1);
+
+
+                if (amountTicket && amountTicket.dataMovie && dataMovieTheater && dataMovieTheater.movie) {
+
+
+                    setAllValues({
+                        ...allValues,
+                        roleId: selectUser.adminInfo.roleId,
+                        listTheater: dataMovieTheater.movie,
+                        dataTicket: amountTicket.data,
+                        isShowLoading: false,
+                        totalFilms: (dataMovie && dataMovie.totalData) ? dataMovie.totalData : 0
+                    })
+                    setUserData({
+                        labels: amountTicket.dataMovie.map((data) => data.nameMovie),
+                        datasets: [
+                            {
+                                label: "Số lượng vé",
+                                data: amountTicket.dataMovie.map((data) => data.count),
+                                backgroundColor: [
+                                    "#3e95cd",
+                                    "#8e5ea2",
+                                    "#3cba9f",
+                                    "#e8c3b9",
+                                    "#c45850"
+                                ],
+
+                            },
+                        ],
+                    })
+
+                }
+
+
+            }
+
+        }
+
+        fetchAllData();
+
+    }, [selectUser]);
+
+
+
+    const handleClickTheater = async (id) => {
+        setAllValues({
+            ...allValues,
+            isShowLoading: true
+        })
+        // Fetch doanh thu //
+        let dataSales = await getTheaterSales({
+            movieTheaterId: id
+        })
+
+        if (dataSales && dataSales.data) {
+            console.log('dataSales: ', dataSales)
+            setAllValues({
+                ...allValues,
+                isShowLoading: false,
+                movieTheaterId: id
+            })
+
+            setUserData({
+                labels: dataSales.data.map((data) => data.monthyear),
+                datasets: [
+                    {
+                        label: "Doanh thu",
+                        data: dataSales.data.map((data) => data.price),
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderColor: 'linear-gradient(to right, red, purple)',
+                        pointBorderColor: '#111',
+                        pointBackgroundColor: '#ff4000',
+                        pointBorderWidth: 2,
+                        backgroundColor: 'rgba(52, 152, 219, 0.75)',
+
+                    },
+                ],
+            })
+        }
+
+
+
+    }
 
 
     return (
@@ -70,7 +210,7 @@ function Home() {
                 <Sidebar />
 
                 {/* Sidebar */}
-                <div id="content-wrapper" className="d-flex flex-column">
+                <div id="content-wrapper" className="d-flex flex-column dk-dashboard">
                     <div id="content">
                         {/* TopBar */}
                         <Header />
@@ -91,8 +231,8 @@ function Home() {
                                         <div className="card-body">
                                             <div className="row align-items-center">
                                                 <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số Lượng Bài Hát</div>
-                                                    <div className="h5 mb-0 font-weight-bold text-gray-800" >50 Bài Hát</div>
+                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Phim đang chiếu</div>
+                                                    <div className="h5 mb-0 font-weight-bold text-gray-800" >{allValues.totalFilms} phim</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-music fa-2x text-primary" />
@@ -107,8 +247,8 @@ function Home() {
                                         <div className="card-body">
                                             <div className="row no-gutters align-items-center">
                                                 <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số Lượng Playlist</div>
-                                                    <div className="h5 mb-0 font-weight-bold text-gray-800"> 50 Playlist</div>
+                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số Lượng Khách hàng</div>
+                                                    <div className="h5 mb-0 font-weight-bold text-gray-800"> 20 khách hàng</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-guitar fa-2x text-success" />
@@ -123,8 +263,8 @@ function Home() {
                                         <div className="card-body">
                                             <div className="row no-gutters align-items-center">
                                                 <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng thể loại</div>
-                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">50 Thể Loại</div>
+                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng rạp</div>
+                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">2 rạp</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-play fa-2x text-info" />
@@ -139,8 +279,8 @@ function Home() {
                                         <div className="card-body">
                                             <div className="row no-gutters align-items-center">
                                                 <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">số lượng nghệ sĩ</div>
-                                                    <div className="h5 mb-0 font-weight-bold text-gray-800">50 Nghệ Sĩ</div>
+                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Tổng doanh thu</div>
+                                                    <div className="h5 mb-0 font-weight-bold text-gray-800">3.000.000 VNĐ</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-users fa-2x text-info" />
@@ -154,8 +294,8 @@ function Home() {
                                 <div className="col-xl-4 col-lg-5">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">Products Sold</h6>
-                                            <div className="dropdown no-arrow">
+                                            <h6 className="m-0 font-weight-bold text-primary">Doanh thu theo rạp</h6>
+                                            {/* <div className="dropdown no-arrow">
                                                 <a className="dropdown-toggle btn btn-primary btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Month <i className="fas fa-chevron-down" />
                                                 </a>
@@ -166,114 +306,61 @@ function Home() {
                                                     <a className="dropdown-item active" href="#">Month</a>
                                                     <a className="dropdown-item" href="#">This Year</a>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
-                                        <div className="card-body">
-                                            <div className="mb-3">
-                                                <div className="small text-gray-500">Oblong T-Shirt
-                                                    <div className="small float-right"><b>600 of 800 Items</b></div>
-                                                </div>
-                                                <div className="progress" style={{ height: '12px' }}>
-                                                    <div className="progress-bar bg-warning" role="progressbar" style={{ width: '80%' }} aria-valuenow={80} aria-valuemin={0} aria-valuemax={100} />
-                                                </div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <div className="small text-gray-500">Gundam 90'Editions
-                                                    <div className="small float-right"><b>500 of 800 Items</b></div>
-                                                </div>
-                                                <div className="progress" style={{ height: '12px' }}>
-                                                    <div className="progress-bar bg-success" role="progressbar" style={{ width: '70%' }} aria-valuenow={70} aria-valuemin={0} aria-valuemax={100} />
-                                                </div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <div className="small text-gray-500">Rounded Hat
-                                                    <div className="small float-right"><b>455 of 800 Items</b></div>
-                                                </div>
-                                                <div className="progress" style={{ height: '12px' }}>
-                                                    <div className="progress-bar bg-danger" role="progressbar" style={{ width: '55%' }} aria-valuenow={55} aria-valuemin={0} aria-valuemax={100} />
-                                                </div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <div className="small text-gray-500">Indomie Goreng
-                                                    <div className="small float-right"><b>400 of 800 Items</b></div>
-                                                </div>
-                                                <div className="progress" style={{ height: '12px' }}>
-                                                    <div className="progress-bar bg-info" role="progressbar" style={{ width: '50%' }} aria-valuenow={50} aria-valuemin={0} aria-valuemax={100} />
-                                                </div>
-                                            </div>
-                                            <div className="mb-3">
-                                                <div className="small text-gray-500">Remote Control Car Racing
-                                                    <div className="small float-right"><b>200 of 800 Items</b></div>
-                                                </div>
-                                                <div className="progress" style={{ height: '12px' }}>
-                                                    <div className="progress-bar bg-success" role="progressbar" style={{ width: '30%' }} aria-valuenow={30} aria-valuemin={0} aria-valuemax={100} />
-                                                </div>
-                                            </div>
+                                        <div className="card-body list-theater">
+                                            {allValues.listTheater && allValues.listTheater.length > 0 && allValues.listTheater.map((item, index) => {
+                                                return (
+                                                    <div className="card h-100 item-theater" key={index} onClick={() => handleClickTheater(item.id)}>
+                                                        <div className="card-body">
+                                                            <div className="row align-items-center">
+                                                                <div className="col mr-2">
+                                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">{item.tenRap}</div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+
+
+
                                         </div>
-                                        <div className="card-footer text-center">
-                                            <a className="m-0 small text-primary card-link" href="#">View More <i className="fas fa-chevron-right" /></a>
-                                        </div>
+
                                     </div>
                                 </div>
                                 {/* Invoice Example */}
                                 <div className="col-xl-8 col-lg-7 mb-4">
-                                    <div className="card">
-                                        <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">Invoice</h6>
-                                            <a className="m-0 float-right btn btn-danger btn-sm" href="#">View More <i className="fas fa-chevron-right" /></a>
+
+                                    <LoadingOverlay
+                                        active={allValues.isShowLoading}
+                                        spinner={<BeatLoader color='#6777ef' size={20} />}
+                                        styles={{
+                                            overlay: (base) => ({
+                                                ...base,
+                                                background: '#fff'
+                                            })
+                                        }}
+                                    >
+
+                                        <div className='col-12 title-chart'>
+                                            <p>Số lượng vé của từng phim</p>
+
                                         </div>
-                                        <div className="table-responsive">
-                                            <table className="table align-items-center table-flush">
-                                                <thead className="thead-light">
-                                                    <tr>
-                                                        <th>Order ID</th>
-                                                        <th>Customer</th>
-                                                        <th>Item</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><a href="#">RA0449</a></td>
-                                                        <td>Udin Wayang</td>
-                                                        <td>Nasi Padang</td>
-                                                        <td><span className="badge badge-success">Delivered</span></td>
-                                                        <td><a href="#" className="btn btn-sm btn-primary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="#">RA5324</a></td>
-                                                        <td>Jaenab Bajigur</td>
-                                                        <td>Gundam 90' Edition</td>
-                                                        <td><span className="badge badge-warning">Shipping</span></td>
-                                                        <td><a href="#" className="btn btn-sm btn-primary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="#">RA8568</a></td>
-                                                        <td>Rivat Mahesa</td>
-                                                        <td>Oblong T-Shirt</td>
-                                                        <td><span className="badge badge-danger">Pending</span></td>
-                                                        <td><a href="#" className="btn btn-sm btn-primary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="#">RA1453</a></td>
-                                                        <td>Indri Junanda</td>
-                                                        <td>Hat Rounded</td>
-                                                        <td><span className="badge badge-info">Processing</span></td>
-                                                        <td><a href="#" className="btn btn-sm btn-primary">Detail</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="#">RA1998</a></td>
-                                                        <td>Udin Cilok</td>
-                                                        <td>Baby Powder</td>
-                                                        <td><span className="badge badge-success">Delivered</span></td>
-                                                        <td><a href="#" className="btn btn-sm btn-primary">Detail</a></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div className="card-footer" />
-                                    </div>
+                                        {(allValues.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
+                                            <BarChart options={options} chartData={userData} />
+                                        }
+
+
+                                        {(allValues.roleId !== 1 || allValues.movieTheaterId !== null) && Object.keys(userData).length !== 0 &&
+                                            <LineChart chartData={userData} />
+                                        }
+                                    </LoadingOverlay>
+
+
+
+
+
                                 </div>
                                 {/* Message From Customer*/}
 

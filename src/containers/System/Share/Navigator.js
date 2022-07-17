@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-
+import logo from '../../../assets/DKCinema.png';
 import './Navigator.scss';
 
 class MenuGroup extends Component {
@@ -217,9 +217,9 @@ class Navigator extends Component {
                 <ul className="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
                     <a className="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                         <div className="sidebar-brand-icon">
-                            <img src="/img/logo/logo2.png" />
+                            <img src={logo} />
                         </div>
-                        <div className="sidebar-brand-text mx-3">RuangAdmin</div>
+                        {/* <div className="sidebar-brand-text mx-3">RuangAdmin</div> */}
                     </a>
                     <hr className="sidebar-divider my-0" />
                     <li className="nav-item active">
