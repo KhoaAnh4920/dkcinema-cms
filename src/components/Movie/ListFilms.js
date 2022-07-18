@@ -123,6 +123,7 @@ function ListFilms() {
                 isDelete: true
             });
             if (res && res.errCode === 0) {
+                toast.success("Xóa thành công")
                 await fetchDataMovie();
             } else {
                 alert(res.errMessage)

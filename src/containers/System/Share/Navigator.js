@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import logo from '../../../assets/DKCinema.png';
+import logo from '../../../assets/DKCinema-White.png';
 import './Navigator.scss';
 
 class MenuGroup extends Component {

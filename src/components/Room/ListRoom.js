@@ -80,7 +80,9 @@ function ListRoom() {
 
             let res = await deleteRoomService(id);
             if (res && res.errCode === 0) {
-                await fetchDataRoom(movieTheaterId);
+                toast.success("Xóa thành công")
+                console.log('movieTheaterId: ', selectUser.adminInfo.movietheaterid)
+                await fetchDataRoom(selectUser.adminInfo.movietheaterid);
             } else {
                 alert(res.errMessage)
             }

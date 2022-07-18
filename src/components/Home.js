@@ -101,7 +101,21 @@ function Home() {
     });
 
 
+    async function fetchAllFilms() {
+        let dataMovie = await getAllFilmsByStatus(1);
+        setAllValues((prevState) => ({
+            ...prevState,
+            totalFilms: (dataMovie && dataMovie.totalData) ? dataMovie.totalData : 0,
+            isShowLoading: false
+        }));
 
+    }
+
+
+
+    useEffect(() => {
+        fetchAllFilms()
+    }, []);
 
 
 
@@ -114,20 +128,18 @@ function Home() {
                 let dataMovieTheater = await getAllMovieTheater();
 
                 let amountTicket = await countTicket();
-                let dataMovie = await getAllFilmsByStatus(1);
-
 
                 if (amountTicket && amountTicket.dataMovie && dataMovieTheater && dataMovieTheater.movie) {
 
 
-                    setAllValues({
-                        ...allValues,
+                    setAllValues((prevState) => ({
+                        ...prevState,
                         roleId: selectUser.adminInfo.roleId,
                         listTheater: dataMovieTheater.movie,
                         dataTicket: amountTicket.data,
                         isShowLoading: false,
-                        totalFilms: (dataMovie && dataMovie.totalData) ? dataMovie.totalData : 0
-                    })
+                    }));
+
                     setUserData({
                         labels: amountTicket.dataMovie.map((data) => data.nameMovie),
                         datasets: [
@@ -149,6 +161,10 @@ function Home() {
                 }
 
 
+            } else {
+                console.log('selectUser.adminInfo.movietheaterid: ', selectUser.adminInfo.movietheaterid);
+                // let dataMovie = await getAllFilmsByStatus(1);
+                handleClickTheater(selectUser.adminInfo.movietheaterid)
             }
 
         }
@@ -160,10 +176,11 @@ function Home() {
 
 
     const handleClickTheater = async (id) => {
-        setAllValues({
-            ...allValues,
+        setAllValues((prevState) => ({
+            ...prevState,
             isShowLoading: true
-        })
+        }));
+
         // Fetch doanh thu //
         let dataSales = await getTheaterSales({
             movieTheaterId: id
@@ -171,11 +188,14 @@ function Home() {
 
         if (dataSales && dataSales.data) {
             console.log('dataSales: ', dataSales)
-            setAllValues({
-                ...allValues,
+            setAllValues((prevState) => ({
+                ...prevState,
                 isShowLoading: false,
                 movieTheaterId: id
-            })
+            }));
+
+
+            console.log(allValues);
 
             setUserData({
                 labels: dataSales.data.map((data) => data.monthyear),
@@ -290,79 +310,114 @@ function Home() {
                                     </div>
                                 </div>
 
-                                {/* Pie Chart */}
-                                <div className="col-xl-4 col-lg-5">
-                                    <div className="card mb-4">
-                                        <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 className="m-0 font-weight-bold text-primary">Doanh thu theo rạp</h6>
-                                            {/* <div className="dropdown no-arrow">
-                                                <a className="dropdown-toggle btn btn-primary btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Month <i className="fas fa-chevron-down" />
-                                                </a>
-                                                <div className="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                                    <div className="dropdown-header">Select Periode</div>
-                                                    <a className="dropdown-item" href="#">Today</a>
-                                                    <a className="dropdown-item" href="#">Week</a>
-                                                    <a className="dropdown-item active" href="#">Month</a>
-                                                    <a className="dropdown-item" href="#">This Year</a>
+                                {selectUser.adminInfo && selectUser.adminInfo.roleId === 1 &&
+                                    <>
+
+                                        <div className="col-xl-4 col-lg-5">
+                                            <div className="card mb-4">
+                                                <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                    <h6 className="m-0 font-weight-bold text-primary">Doanh thu theo rạp</h6>
                                                 </div>
-                                            </div> */}
-                                        </div>
-                                        <div className="card-body list-theater">
-                                            {allValues.listTheater && allValues.listTheater.length > 0 && allValues.listTheater.map((item, index) => {
-                                                return (
-                                                    <div className="card h-100 item-theater" key={index} onClick={() => handleClickTheater(item.id)}>
-                                                        <div className="card-body">
-                                                            <div className="row align-items-center">
-                                                                <div className="col mr-2">
-                                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">{item.tenRap}</div>
+                                                <div className="card-body list-theater">
+                                                    {allValues.listTheater && allValues.listTheater.length > 0 && allValues.listTheater.map((item, index) => {
+                                                        return (
+                                                            <div className="card h-100 item-theater" key={index} onClick={() => handleClickTheater(item.id)}>
+                                                                <div className="card-body">
+                                                                    <div className="row align-items-center">
+                                                                        <div className="col mr-2">
+                                                                            <div className="text-xs font-weight-bold text-uppercase mb-1">{item.tenRap}</div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                        )
+                                                    })}
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div className="col-xl-8 col-lg-7 mb-4">
+
+                                            <LoadingOverlay
+                                                active={allValues.isShowLoading}
+                                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                                styles={{
+                                                    overlay: (base) => ({
+                                                        ...base,
+                                                        background: '#fff'
+                                                    })
+                                                }}
+                                            >
+
+
+                                                {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
+                                                    <>
+                                                        <div className='col-12 title-chart'>
+                                                            <p>Số lượng vé của từng phim</p>
+                                                            <BarChart options={options} chartData={userData} />
                                                         </div>
-                                                    </div>
-                                                )
-                                            })}
+                                                    </>
+
+                                                }
+
+
+                                                {(allValues.movieTheaterId !== null) && Object.keys(userData).length !== 0 &&
+                                                    <>
+                                                        <div className='col-12 title-chart'>
+                                                            <p>Doanh thu của rạp</p>
+                                                            <LineChart chartData={userData} />
+                                                        </div>
+
+                                                    </>
+
+                                                }
+                                            </LoadingOverlay>
+
+
 
 
 
                                         </div>
+                                    </>
+                                }
 
-                                    </div>
-                                </div>
-                                {/* Invoice Example */}
-                                <div className="col-xl-8 col-lg-7 mb-4">
+                                {selectUser.adminInfo && selectUser.adminInfo.roleId !== 1 &&
+                                    <>
+                                        <div className="col-xl-12 col-lg-12">
 
-                                    <LoadingOverlay
-                                        active={allValues.isShowLoading}
-                                        spinner={<BeatLoader color='#6777ef' size={20} />}
-                                        styles={{
-                                            overlay: (base) => ({
-                                                ...base,
-                                                background: '#fff'
-                                            })
-                                        }}
-                                    >
+                                            <LoadingOverlay
+                                                active={allValues.isShowLoading}
+                                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                                styles={{
+                                                    overlay: (base) => ({
+                                                        ...base,
+                                                        background: '#fff'
+                                                    })
+                                                }}
+                                            >
 
-                                        <div className='col-12 title-chart'>
-                                            <p>Số lượng vé của từng phim</p>
+                                                <div className='col-12 title-chart'>
+                                                    <p>Số lượng vé của từng phim</p>
+
+                                                </div>
+                                                {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
+                                                    <BarChart options={options} chartData={userData} />
+                                                }
+
+
+                                                {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 || allValues.movieTheaterId !== null) && Object.keys(userData).length !== 0 &&
+                                                    <LineChart chartData={userData} />
+                                                }
+                                            </LoadingOverlay>
+
 
                                         </div>
-                                        {(allValues.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
-                                            <BarChart options={options} chartData={userData} />
-                                        }
-
-
-                                        {(allValues.roleId !== 1 || allValues.movieTheaterId !== null) && Object.keys(userData).length !== 0 &&
-                                            <LineChart chartData={userData} />
-                                        }
-                                    </LoadingOverlay>
-
-
-
-
-
-                                </div>
-                                {/* Message From Customer*/}
+                                    </>
+                                }
 
                             </div>
                             {/*Row*/}
