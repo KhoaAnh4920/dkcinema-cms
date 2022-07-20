@@ -11,12 +11,38 @@ import Sidebar from '../../containers/System/Share/Sidebar';
 import { CommonUtils } from '../../utils';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
+//validate import
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 //Image upload modules
 import Select from 'react-select';
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
 import { Link } from "react-router-dom";
 
+
+
+const schema = yup.object().shape({
+    name: yup
+        .string()
+        .required("Vui lòng nhập name")
+        .max(10, "name tối đa 50 ký tự").typeError("string"),
+
+    numberOfColumn: yup
+        .string()
+        .required("Vui lòng nhập số hàng")
+        .max(16, "Số hàng tối đa 16"),
+
+    numberOfRow: yup
+        .string()
+        .required("Vui lòng nhập số cột")
+        .max(20, "Số hàng tối đa 20"),
+
+    numberSeet: yup
+        .string()
+        .required("Vui lòng nhập số ghế của hàng"),
+});
 
 
 
@@ -62,6 +88,12 @@ export default function AddRoom() {
 
         console.log("Check state: ", allValues);
     }
+    //validate
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({ resolver: yupResolver(schema) });
 
 
     useEffect(() => {
@@ -110,7 +142,18 @@ export default function AddRoom() {
 
 
     const changeHandler = (e, type) => {
+
+
+        console.log(e.target.value)
+        console.log(type)
         if (type) {
+
+            // if (e.target.value > 10) {
+            //     toast.error("Maximum");
+            //     return;
+            // }
+            // console.log(e.target.value)
+
             let listAlpha = buildDataInputSelect(e.target.value);
             console.log("Check listAlpha: ", listAlpha);
 
@@ -122,6 +165,7 @@ export default function AddRoom() {
 
 
     const handleAddSeet = () => {
+        console.log('bbb');
         if (+allValues.numberSeet > +allValues.numberOfRow) {
             toast.error("The number of seats exceeds the limit");
             return;
@@ -129,7 +173,7 @@ export default function AddRoom() {
 
         console.log('allValue: ', allValues);
 
-        if (allValues.listSeet.length > +allValues.numberOfRow - 1) {
+        if (allValues.listSeet.length > +allValues.numberOfColumn - 1) {
             toast.error("Maximum number of columns exceeded");
             return;
         }
@@ -169,26 +213,46 @@ export default function AddRoom() {
     }
 
     const handleSaveRoom = async () => {
-        // console.log("allValues: ", allValues);
+
+        console.log('aaa');
+
+
+        console.log("allValues: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
         }));
-        let res = await createNewRoom({
-            numberOfColumn: +allValues.numberOfColumn,
-            numberOfRow: +allValues.numberOfRow,
-            name: allValues.name,
-            movieTheaterId: allValues.movieTheaterId,
-            seets: allValues.listSeet
-        })
+        if (allValues.numberOfColumn === '' || allValues.numberOfRow === '' || allValues.numberSeet === '') {
+            toast.error("Empty !!!!");
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: false
+            }));
+            return;
 
-        if (res && res.errCode == 0) {
-            history.push("/room-management")
-            toast.success("Add new room succeed");
         } else {
-            history.push("/room-management")
-            toast.error("Add new room fail");
+            let res = await createNewRoom({
+                numberOfColumn: +allValues.numberOfColumn,
+                numberOfRow: +allValues.numberOfRow,
+                name: allValues.name,
+                movieTheaterId: allValues.movieTheaterId,
+                seets: allValues.listSeet
+            })
+            if (res && res.errCode == 0) {
+                history.push("/room-management")
+                toast.success("Add new room succeed");
+
+
+            } else {
+                history.push("/room-management")
+                toast.error("Add new room fail");
+            }
+
         }
+
+
+
+
 
     }
 
@@ -267,146 +331,209 @@ export default function AddRoom() {
                             </div>
                             <div className="row">
                                 <div className='col-1'></div>
+
                                 <div className="col-10">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h5 className="m-0 font-weight-bold text-primary">Add new Room</h5>
                                         </div>
                                         <div className="card-body">
+                                            <form onSubmit={handleSubmit(handleSaveRoom)}>
+                                                <div className='room-container'>
 
-                                            <div className='room-container'>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Tên phòng chiếu</label>
-                                                    <input type="text" className="form-control input-sm" name='name' onChange={(e) => changeHandler(e)} placeholder="Enter name" />
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputEmail1">Tên phòng chiếu</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='name'
+                                                            // onChange={(e) => changeHandler(e)}
+                                                            placeholder="Enter name"
+                                                            {...register("name", {
+                                                                required: true,
+                                                                onChange: (e) => changeHandler(e),
+                                                            })}
+                                                        />
+                                                        {errors.name && errors.name.message &&
+                                                            <span>{errors.name.message}</span>
+                                                        }
+                                                        {/* <span className='error-code-input'>{allValues.errors["name"]}</span> */}
 
-                                                    {/* <span className='error-code-input'>{allValues.errors["name"]}</span> */}
-
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.numberOfColumn} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfColumn' onChange={(e) => changeHandler(e, 'column')} placeholder="Enter column" />
-
-                                                    {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputPassword1">Số lượng cột</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfRow' onChange={(e) => changeHandler(e)} placeholder="Enter phone" />
-                                                    {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
-                                                </div>
-                                            </div>
-
-                                            <div className='seet-container'>
-                                                <div className='title-main'>Thiết kế sơ đồ phòng chiếu</div>
-                                                <div className='row'>
-                                                    <div className='room-seet col-9'>
-                                                        { /* EXAMPLE MAP INTERGRATE*/}
-
-                                                        <div className='row_chair col-lg-12'>
-                                                            <div className='chair'>
-                                                                {allValues.listSeet && allValues.listSeet.length > 0 &&
-                                                                    allValues.listSeet.map((item, index) => {
-                                                                        return (
-                                                                            <div className='one_row' key={index}>
-                                                                                <p className='name-column'>{alphabet[item.posOfColumn]}</p>
-                                                                                {
-                                                                                    item.posOfRow.map((item2, index2) => {
-                                                                                        if (item2.typeId === 2)
-                                                                                            return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
-                                                                                        else
-                                                                                            return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
-                                                                                    })
-                                                                                }
-                                                                                <p className='name-column'>{alphabet[item.posOfColumn]}</p>
-                                                                            </div>
-                                                                        )
-                                                                    })
-
-                                                                }
-
-
-                                                            </div>
-
-                                                        </div>
-                                                        <div className='sreen-room'>
-                                                            <div className='text'>
-                                                                <p>Màn hình</p>
-                                                                <p className='line'></p>
-                                                            </div>
-                                                        </div>
                                                     </div>
-                                                    <div className='room-info col-3'>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Tên hàng ghế</label>
-                                                            {/* <input type="text" className="form-control input-sm" name='nameSeet' placeholder="Enter name" /> */}
-                                                            <Select
-                                                                className='gender-select'
-                                                                value={allValues.selectedColumn}
-                                                                isDisabled={true}
-                                                                // value={allValues.selectedAlpha}
-                                                                onChange={handleChangeSelect}
-                                                                options={allValues.listAlpha}
-                                                                placeholder='Select name column'
-                                                                name='selectedColumn'
-                                                            // styles={this.props.colourStyles}
-                                                            />
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            value={allValues.numberOfColumn}
+                                                            readOnly={(allValues.listSeet.length > 0) ? true : false}
+                                                            name='numberOfColumn'
+                                                            // onChange={(e) => changeHandler(e, 'column')}
 
+                                                            placeholder="Enter Row"
+                                                            {...register("numberOfColumn", {
+                                                                required: true,
+                                                                onChange: (e) => changeHandler(e, 'column')
+                                                            })}
+                                                        />
+                                                        {errors.numberOfRow && errors.numberOfRow.message &&
+                                                            <span>{errors.numberOfRow.message}</span>
+                                                        }
+                                                        {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputPassword1">Số lượng cột</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false}
+                                                            name='numberOfRow'
+                                                            // onChange={(e) => changeHandler(e)}
+                                                            placeholder="Enter Column"
+                                                            {...register("numberOfRow", {
+                                                                required: true,
+                                                                onChange: (e) => changeHandler(e)
+                                                            })}
+                                                        />
+                                                        {errors.numberOfColumn && errors.numberOfColumn.message &&
+                                                            <span>{errors.numberOfColumn.message}</span>
+                                                        }
+                                                        {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
+                                                    </div>
+                                                </div>
+                                                <div className='seet-container'>
+                                                    <div className='title-main'>Thiết kế sơ đồ phòng chiếu</div>
+                                                    <div className='row'>
+                                                        <div className='room-seet col-9'>
+                                                            { /* EXAMPLE MAP INTERGRATE*/}
+
+                                                            <div className='row_chair col-lg-12'>
+                                                                <div className='chair'>
+                                                                    {allValues.listSeet && allValues.listSeet.length > 0 &&
+                                                                        allValues.listSeet.map((item, index) => {
+                                                                            return (
+                                                                                <div className='one_row' key={index}>
+                                                                                    <p className='name-column'>{alphabet[item.posOfColumn]}</p>
+                                                                                    {
+                                                                                        item.posOfRow.map((item2, index2) => {
+                                                                                            if (item2.typeId === 2)
+                                                                                                return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                            else
+                                                                                                return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                        })
+                                                                                    }
+                                                                                    <p className='name-column'>{alphabet[item.posOfColumn]}</p>
+                                                                                </div>
+                                                                            )
+                                                                        })
+
+                                                                    }
+
+
+                                                                </div>
+
+                                                            </div>
+                                                            <div className='sreen-room'>
+                                                                <div className='text'>
+                                                                    <p>Màn hình</p>
+                                                                    <p className='line'></p>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Số lượng ghế</label>
-                                                            <input type="number" max={allValues.numberOfRow} value={allValues.numberSeet} min={1} className="form-control input-sm" onChange={(e) => changeHandler(e)} name='numberSeet' placeholder="Enter number" />
+                                                        <div className='room-info col-3'>
+                                                            <div className="form-group">
+                                                                <label htmlFor="exampleInputEmail1">Tên hàng ghế</label>
+                                                                {/* <input type="text" className="form-control input-sm" name='nameSeet' placeholder="Enter name" /> */}
+                                                                <Select
+                                                                    className='gender-select'
+                                                                    value={allValues.selectedColumn}
+                                                                    isDisabled={true}
+                                                                    // value={allValues.selectedAlpha}
+                                                                    onChange={handleChangeSelect}
+                                                                    options={allValues.listAlpha}
+                                                                    placeholder='Select name column'
+                                                                    name='selectedColumn'
+                                                                // styles={this.props.colourStyles}
+                                                                />
 
-                                                        </div>
-                                                        <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleAddSeet}>
-                                                            <span className="visually">Thêm hàng ghế</span>
-                                                        </Button>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="exampleInputEmail1">Số lượng ghế</label>
+                                                                <input
+                                                                    type="number"
+                                                                    max={allValues.numberOfColumn}
+                                                                    value={allValues.numberSeet}
+                                                                    min={1}
+                                                                    className="form-control input-sm"
+                                                                    // onChange={(e) => changeHandler(e)}
+                                                                    name='numberSeet'
+                                                                    placeholder="Enter number"
+                                                                    {...register("numberSeet", {
+                                                                        required: true,
+                                                                        onChange: (e) => changeHandler(e)
+                                                                    })}
+                                                                />
+                                                                {errors.numberSeet && errors.numberSeet.message &&
+                                                                    <span>{errors.numberSeet.message}</span>
+                                                                }
 
-                                                        <div className='info-seet-container'>
-                                                            <div className='seet-default'>
-                                                                <p className='color-default'></p>
-                                                                <p className='name-seet'>Ghế thường</p>
+                                                            </div>
+                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleAddSeet}>
+                                                                <span className="visually">Thêm hàng ghế</span>
+                                                            </Button>
+
+
+                                                            <div className='info-seet-container'>
+                                                                <div className='seet-default'>
+                                                                    <p className='color-default'></p>
+                                                                    <p className='name-seet'>Ghế thường</p>
+                                                                </div>
+
+                                                                <div className='seet-vip'>
+                                                                    <p className='color-vip'></p>
+                                                                    <p className='name-seet'>Ghế Vip</p>
+                                                                </div>
+
                                                             </div>
 
-                                                            <div className='seet-vip'>
-                                                                <p className='color-vip'></p>
-                                                                <p className='name-seet'>Ghế Vip</p>
+                                                            <div className='button-sumit-seet-container'>
+                                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} type="submit">
+                                                                    {allValues.isShowLoading &&
+                                                                        <>
+                                                                            <Spinner
+                                                                                as="span"
+                                                                                animation="border"
+                                                                                size="sm"
+                                                                                role="status"
+                                                                                aria-hidden="true"
+                                                                            />
+                                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                                        </>
+
+                                                                    }
+                                                                    {!allValues.isShowLoading &&
+                                                                        <>
+                                                                            <span className="visually">Lưu sơ đồ</span>
+                                                                        </>
+                                                                    }
+                                                                </Button>
+                                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="delete-diagram-seet" onClick={handleDeleteDiagam}>
+                                                                    <span className="visually">Xóa sơ đồ</span>
+                                                                </Button>
                                                             </div>
 
-                                                        </div>
-
-                                                        <div className='button-sumit-seet-container'>
-                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveRoom}>
-                                                                {allValues.isShowLoading &&
-                                                                    <>
-                                                                        <Spinner
-                                                                            as="span"
-                                                                            animation="border"
-                                                                            size="sm"
-                                                                            role="status"
-                                                                            aria-hidden="true"
-                                                                        />
-                                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                    </>
-
-                                                                }
-                                                                {!allValues.isShowLoading &&
-                                                                    <>
-                                                                        <span className="visually">Lưu sơ đồ</span>
-                                                                    </>
-                                                                }
-                                                            </Button>
-                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} className="delete-diagram-seet" onClick={handleDeleteDiagam}>
-                                                                <span className="visually">Xóa sơ đồ</span>
-                                                            </Button>
-                                                        </div>
-
-                                                        {/* <div className="form-group">
+                                                            {/* <div className="form-group">
                                                     <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
                                                     <input type="text" className="form-control input-sm" name='soDienThoai' onChange={changeHandler} placeholder="Enter phone" />
                                                     
                                                 </div> */}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
+
+
+
 
 
 

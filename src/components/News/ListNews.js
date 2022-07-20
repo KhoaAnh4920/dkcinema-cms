@@ -68,7 +68,7 @@ function ListNews() {
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
         { title: 'Title', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
-        { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
+        { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 150, height: 100 }} /> },
         {
             title: 'Type', field: 'type', render: rowData =>
 
@@ -112,28 +112,29 @@ function ListNews() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='listPost-main'>
-                    {/* Sidebar */}
+            <div id="wrapper" className='listPost-main'>
+                {/* Sidebar */}
 
-                    <Sidebar />
+                <Sidebar />
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <LoadingOverlay
+                            active={isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
                             <div className="col-lg-12 mb-4">
+
                                 <MaterialTable
                                     title="List Post"
                                     columns={columns}
@@ -181,19 +182,22 @@ function ListNews() {
 
                                     }}
                                 />
+
+
                             </div>
+                        </LoadingOverlay>
 
 
-                        </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

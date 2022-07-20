@@ -1,4 +1,4 @@
-.modal-edit-playlist-user {
+.modal-edit-food {
 
     .modal-content {
         border: none !important;
@@ -24,11 +24,22 @@
         .modal-body-container {
             border: none;
             background-color: #fafafa !important;
-            padding: 25px 70px;
 
-            .modal-add-food-body {
+            .modal-edit-food-body {
                 display: flex;
                 width: 100%;
+
+                .error-container {
+                    margin-top: 10px;
+                    border: 1px dashed lightgray;
+                    padding: 1rem;
+                    width: 100%;
+                }
+
+                ul {
+                    list-style-position: inside;
+                    color: lightcoral;
+                }
 
                 .input-container {
                     width: 100%;
@@ -43,7 +54,7 @@
                     .input-row {
                         margin-top: 20px;
                         display: flex;
-                        gap: 20px;
+                        // gap: 20px;
                         flex-direction: column;
                         margin-left: auto;
                     }
@@ -69,7 +80,7 @@
         .modal-footer-container {
             border: none;
             background-color: #fafafa !important;
-            padding: 25px 70px;
+            // padding: 25px 70px;
 
             .btn-save-edit {
                 background-color: #6777ef;

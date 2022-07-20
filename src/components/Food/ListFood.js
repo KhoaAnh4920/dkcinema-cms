@@ -254,71 +254,72 @@ function ListFood() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='list-food-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='list-food-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
 
-                                <div className="card mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu thực phẩm</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group horizon-form">
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
 
-                                            <div className='horizon-input'>
-                                                <label htmlFor="exampleInputEmail1" style={{ marginRight: '5px' }}>Loại thực phẩm</label>
-                                                <Select
-                                                    className='food-select'
-                                                    value={allValues.selectedTypeFood || {}}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listTypeFood}
-                                                    placeholder='Select type food'
-                                                    name='selectedTypeFood'
-                                                    styles={customStyles}
-                                                // styles={this.props.colourStyles}
-                                                />
-                                            </div>
+                            <div className="card mb-4">
+                                <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 className="m-0 font-weight-bold text-primary">Tra cứu thực phẩm</h6>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-group horizon-form">
 
-
-                                            <div className='horizon-input' style={{ marginLeft: '50px' }}>
-                                                <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="filter-food-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
-                                                </Button>
-                                            </div>
-
-
-
-
+                                        <div className='horizon-input'>
+                                            <label htmlFor="exampleInputEmail1" style={{ marginRight: '5px' }}>Loại thực phẩm</label>
+                                            <Select
+                                                className='food-select'
+                                                value={allValues.selectedTypeFood || {}}
+                                                onChange={handleChangeSelect}
+                                                options={allValues.listTypeFood}
+                                                placeholder='Select type food'
+                                                name='selectedTypeFood'
+                                                styles={customStyles}
+                                            // styles={this.props.colourStyles}
+                                            />
                                         </div>
+
+
+                                        <div className='horizon-input' style={{ marginLeft: '20px' }}>
+                                            <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
+                                                <span className="visually">Submit</span>
+                                            </Button>
+                                            <Button variant="primary" className="filter-food-data" onClick={handleClearFilter}>
+                                                <span className="visually">Clear</span>
+                                            </Button>
+                                        </div>
+
+
+
+
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            <div className="col-lg-12 mb-4">
+                        <div className="col-lg-12 mb-4">
 
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Danh sách thực phẩm"
                                     columns={columns}
@@ -370,36 +371,37 @@ function ListFood() {
                                     }}
 
                                 />
-                            </div>
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
-                {isOpenModalFood &&
-                    <ModalAddFood
-                        isOpen={isOpenModalFood}
-                        toggleFromParent={toggleFoodModal}
-                        saveNewFood={saveNewFoodFromModal}
-                    />
-                }
-
-
-                {modalEditFood.isShow &&
-                    <ModalEditFood
-                        isOpen={modalEditFood.isShow}
-                        toggleFromParentEditUser={toggleModalEditFood}
-                        saveEditFood={saveEditFoodFromModal}
-                        dataFood={modalEditFood.dataFood}
-                    />
-
-                }
+            {isOpenModalFood &&
+                <ModalAddFood
+                    isOpen={isOpenModalFood}
+                    toggleFromParent={toggleFoodModal}
+                    saveNewFood={saveNewFoodFromModal}
+                />
+            }
 
 
-            </LoadingOverlay>
+            {modalEditFood.isShow &&
+                <ModalEditFood
+                    isOpen={modalEditFood.isShow}
+                    toggleFromParentEditUser={toggleModalEditFood}
+                    saveEditFood={saveEditFoodFromModal}
+                    dataFood={modalEditFood.dataFood}
+                />
+
+            }
+
+
+
 
         </>
     );

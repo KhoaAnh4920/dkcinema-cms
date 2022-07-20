@@ -10,7 +10,7 @@ body {
         .login-container {
             background: #fff;
             width: 400px;
-            height: 400px;
+            max-height: 400px;
             position: absolute;
             left: 0;
             right: 0;
@@ -22,6 +22,12 @@ body {
 
             .login-admin-content {
                 padding: 30px 50px;
+
+                .error-content {
+                    color: lightcoral;
+                    font-size: 11px;
+                    margin-top: 2px;
+                }
 
                 .img-logo {
                     width: 250px;

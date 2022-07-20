@@ -26,13 +26,19 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
 
 
 
 
 
 export default function AddFilms() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
     const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
@@ -230,49 +236,50 @@ export default function AddFilms() {
 
     const handleSaveFilms = async () => {
 
-        setAllValues((prevState) => ({
-            ...prevState,
-            isShowLoading: true
-        }));
+        console.log('OK')
+        // setAllValues((prevState) => ({
+        //     ...prevState,
+        //     isShowLoading: true
+        // }));
 
 
-        let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
+        // let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
 
-        let result = [];
+        // let result = [];
 
-        await Promise.all(valImg.fileList.map(async (item, index) => {
-            console.log("Check item: ", item.originFileObj);
-            let obj = {};
-            obj.image = await getBase64(item.originFileObj);
-            obj.fileName = item.name;
-            obj.typeImage = item.typeImage
-            result.push(obj);
-        }))
+        // await Promise.all(valImg.fileList.map(async (item, index) => {
+        //     console.log("Check item: ", item.originFileObj);
+        //     let obj = {};
+        //     obj.image = await getBase64(item.originFileObj);
+        //     obj.fileName = item.name;
+        //     obj.typeImage = item.typeImage
+        //     result.push(obj);
+        // }))
 
-        let res = await createNewFilmsService({
-            name: allValues.name,
-            transName: allValues.transName,
-            country: allValues.country,
-            language: allValues.language,
-            duration: allValues.duration,
-            description: allValues.description,
-            brand: allValues.brand,
-            director: allValues.director,
-            cast: allValues.cast,
-            status: 0,
-            typeMovie: typeCheck.typeMovie,
-            poster: result,
-            url: allValues.url,
-            releaseTime: formatedDate,
-        })
+        // let res = await createNewFilmsService({
+        //     name: allValues.name,
+        //     transName: allValues.transName,
+        //     country: allValues.country,
+        //     language: allValues.language,
+        //     duration: allValues.duration,
+        //     description: allValues.description,
+        //     brand: allValues.brand,
+        //     director: allValues.director,
+        //     cast: allValues.cast,
+        //     status: 0,
+        //     typeMovie: typeCheck.typeMovie,
+        //     poster: result,
+        //     url: allValues.url,
+        //     releaseTime: formatedDate,
+        // })
 
-        if (res && res.errCode == 0) {
-            history.push("/films-management")
-            toast.success("Add new films succeed");
-        } else {
-            history.push("/films-management")
-            toast.error("Add new films fail");
-        }
+        // if (res && res.errCode == 0) {
+        //     history.push("/films-management")
+        //     toast.success("Add new films succeed");
+        // } else {
+        //     history.push("/films-management")
+        //     toast.error("Add new films fail");
+        // }
 
     }
 
@@ -373,108 +380,222 @@ export default function AddFilms() {
                                                 </div>
                                             </div>
 
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phim</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên phim" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phiên dịch</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.transName} name='transName' placeholder="Nhập tên phiên dịch" />
-                                                </div>
-
-                                            </div>
-
-                                            <div className="form-group horizon-form">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Quốc gia</label>
-                                                    <input type="text" className="form-control input-sm" name='country' onChange={changeHandler} value={allValues.country} placeholder="Nhập quốc gia" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Thời lượng / phút</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.duration} name='duration' onChange={changeHandler} placeholder="Nhập thời lượng" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngôn ngữ</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.language} name='language' onChange={changeHandler} placeholder="Nhập ngôn ngữ" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngày công chiếu</label>
-                                                    <DatePicker
-                                                        onChange={handleOnChangeDatePicker}
-                                                        className="form-control"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Đạo diễn</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.director} name='director' onChange={changeHandler} placeholder="Nhập đạo diễn phim" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Diễn viên</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.cast} name='cast' onChange={changeHandler} placeholder="Nhập diễn viên" />
-                                                </div>
+                                            <form onSubmit={handleSubmit(handleSaveFilms)}>
 
 
-                                            </div>
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-checkbox'>
-                                                    <label htmlFor="exampleInputEmail1">Thể loại</label>
-                                                    <div className='row' style={{ marginLeft: '0px' }}>
-                                                        {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 &&
-                                                            allValues.listTypeMovie.map((item, index) => {
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Tên phim</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
 
-                                                                return (
-                                                                    <div className="custom-control custom-checkbox col-4" key={index} >
-                                                                        <input type="checkbox" className="custom-control-input" name="typeMovie" onChange={((e) => handleClickCheckbox(e))} value={item.id} id={index} />
-                                                                        <label className="custom-control-label" for={index}>{item.name}</label>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        }
+                                                            name='name'
+                                                            placeholder="Nhập tên phim"
+                                                            {...register("name", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Tên phiên dịch</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='transName'
+                                                            placeholder="Nhập tên phiên dịch"
+                                                            {...register("transName", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
                                                     </div>
 
                                                 </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Trailer</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.url} name='url' onChange={changeHandler} placeholder="Nhập url trailer" />
+
+                                                <div className="form-group horizon-form">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Quốc gia</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='country'
+                                                            placeholder="Nhập quốc gia"
+                                                            {...register("country", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Thời lượng / phút</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='duration'
+                                                            placeholder="Nhập thời lượng"
+                                                            {...register("duration", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Ngôn ngữ</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='language'
+                                                            placeholder="Nhập ngôn ngữ"
+                                                            {...register("language", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Ngày công chiếu</label>
+                                                        <DatePicker
+                                                            onChange={handleOnChangeDatePicker}
+                                                            className="form-control"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Đạo diễn</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='director'
+                                                            placeholder="Nhập đạo diễn phim"
+                                                            {...register("director", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='brand'
+                                                            placeholder="Nhập nhà sản xuất"
+                                                            {...register("brand", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Diễn viên</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='cast'
+                                                            placeholder="Nhập diễn viên"
+                                                            {...register("cast", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+
+
+                                                </div>
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-checkbox'>
+                                                        <label htmlFor="exampleInputEmail1">Thể loại</label>
+                                                        <div className='row' style={{ marginLeft: '0px' }}>
+                                                            {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 &&
+                                                                allValues.listTypeMovie.map((item, index) => {
+
+                                                                    return (
+                                                                        <div className="custom-control custom-checkbox col-4" key={index} >
+                                                                            <input type="checkbox" className="custom-control-input" name="typeMovie" onChange={((e) => handleClickCheckbox(e))} value={item.id} id={index} />
+                                                                            <label className="custom-control-label" for={index}>{item.name}</label>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Trailer</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='url'
+                                                            placeholder="Nhập url trailer"
+                                                            {...register("url", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleFormControlTextarea1">Mô tả phim</label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="exampleFormControlTextarea1"
+                                                        name="description"
+                                                        {...register("description", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                        rows="5"></textarea>
                                                 </div>
 
 
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleFormControlTextarea1">Mô tả phim</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
-                                            </div>
 
 
-                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveFilms()} >
-                                                {allValues.isShowLoading &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
+                                                {Object.keys(errors).length !== 0 && (
+                                                    <ul className="error-container">
+                                                        {errors.name?.type === "required" && <li>Name Theater is required</li>}
+                                                        {errors.transName?.type === "required" && <li>TransName is required</li>}
+                                                        {errors.country?.type === "required" && <li>Country is required</li>}
+                                                        {errors.duration?.type === "required" && <li>Duration is required</li>}
+                                                        {errors.language?.type === "required" && <li>Language is required</li>}
+                                                        {errors.director?.type === "required" && <li>Director is required</li>}
+                                                        {errors.brand?.type === "required" && <li>Brand is required</li>}
+                                                        {errors.cast?.type === "required" && <li>Cast is required</li>}
+                                                        {errors.url?.type === "required" && <li>Url is required</li>}
+                                                        {errors.description?.type === "required" && <li>Description is required</li>}
+                                                    </ul>
+                                                )}
 
-                                                }
-                                                {!allValues.isShowLoading &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+
+                                                <Button variant="primary" type='submit' {...allValues.isShowLoading && 'disabled'} >
+                                                    {allValues.isShowLoading &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isShowLoading &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+
+                                            </form>
 
                                         </div>
                                     </div>

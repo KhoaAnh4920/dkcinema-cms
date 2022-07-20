@@ -12,6 +12,9 @@ import DatePicker from '../../containers/System/Share/DatePicker';
 import useLocationForm from "./useLocationForm";
 import { testFunction } from './useLocationForm';
 import { getAllMovieTheater } from '../../services/MovieTheater';
+import { useForm } from "react-hook-form";
+
+
 
 
 export default function ModalEditUsers(props) {
@@ -51,6 +54,12 @@ export default function ModalEditUsers(props) {
         selectedDistrict,
         selectedWard,
     } = state;
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
 
     // const handleClose = () => setShow(false);
@@ -277,127 +286,169 @@ export default function ModalEditUsers(props) {
     return (
         <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
             <ModalHeader toggle={() => toggle()} className='editdetail'>Edit user</ModalHeader>
-            <ModalBody className='modal-body-container'>
-                <div className='modal-playlist-body'>
-                    <div className='image-edit-playlist'>
-                        <img className='image-playlist' onClick={handleOpenUploadFile} src={allValues.imagePreviewUrl} />
-                        <input
-                            id='uploadFile'
-                            ref={fileUploader}
-                            accept="image/*"
-                            hidden type='file'
-                            onChange={(e) => _handleImageChange(e)}
-                        />
-                    </div>
-                    <div className='input-container'>
-                        <div className='input-flex'>
-                            <input type="text" className="form-control input-small" name='email' readOnly value={allValues.email} onChange={changeHandler} placeholder="Enter Email address" />
-                            <input type="text" className="form-control input-small" name='userName' readOnly value={allValues.userName} onChange={changeHandler} placeholder="Enter Username" />
-                        </div>
-                        <div className='input-row'>
-                            <input type="text" className="form-control input-small" name='fullName' value={allValues.fullName} onChange={changeHandler} placeholder="Enter FullName" />
-                            <input type="text" className="form-control input-small" name='phone' value={allValues.phone} onChange={changeHandler} placeholder="Enter Phone" />
-                            <DatePicker
-                                onChange={handleOnChangeDatePicker}
-                                className="form-control"
-                                value={allValues.birthday}
-                                placeholder="Enter dob"
+            <form onSubmit={handleSubmit(handleSaveEditUser)}>
+                <ModalBody className='modal-body-container'>
+                    <div className='modal-playlist-body'>
+                        <div className='image-edit-playlist'>
+                            <img className='image-playlist' onClick={handleOpenUploadFile} src={allValues.imagePreviewUrl} />
+                            <input
+                                id='uploadFile'
+                                ref={fileUploader}
+                                accept="image/*"
+                                hidden type='file'
+                                onChange={(e) => _handleImageChange(e)}
                             />
+                        </div>
+                        <div className='input-container'>
                             <div className='input-flex'>
-                                <Select
-                                    className='gender-select'
-                                    value={allValues.selectedGender}
-                                    onChange={handleChangeSelect}
-                                    options={allValues.listGender}
-                                    placeholder='Select gender'
-                                    name='selectedGender'
-                                // styles={this.props.colourStyles}
+                                <input
+                                    type="email"
+                                    className="form-control input-small"
+                                    name='email' readOnly value={allValues.email}
+
+                                    placeholder="Enter Email address" />
+                                <input type="text" className="form-control input-small" name='userName' readOnly value={allValues.userName} placeholder="Enter Username" />
+                            </div>
+                            <div className='input-row'>
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='fullName'
+                                    value={allValues.fullName}
+                                    placeholder="Enter FullName"
+                                    {...register("fullName", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
                                 />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='phone'
+                                    value={allValues.phone}
+                                    placeholder="Enter Phone"
+                                    {...register("phone", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                                <DatePicker
+                                    onChange={handleOnChangeDatePicker}
+                                    className="form-control"
+                                    value={allValues.birthday}
+                                    placeholder="Enter dob"
+                                />
+                                <div className='input-flex'>
+                                    <Select
+                                        className='gender-select'
+                                        value={allValues.selectedGender}
+                                        onChange={handleChangeSelect}
+                                        options={allValues.listGender}
+                                        placeholder='Select gender'
+                                        name='selectedGender'
+                                    // styles={this.props.colourStyles}
+                                    />
+                                    <Select
+                                        className='role-select'
+                                        value={allValues.selectedRoles}
+                                        onChange={handleChangeSelect}
+                                        options={allValues.listRoles}
+                                        isDisabled={true}
+                                        placeholder='Select roles'
+                                        name='selectedRoles'
+                                    // styles={this.props.colourStyles}
+                                    />
+                                </div>
+                                <div className='input-flex'>
+                                    <Select
+                                        className='city-select'
+                                        name="cityId"
+                                        key={`cityId_${selectedCity?.value}`}
+                                        isDisabled={cityOptions.length === 0}
+                                        options={cityOptions}
+                                        onChange={(option) => onCitySelect(option)}
+                                        placeholder="City"
+                                        defaultValue={state.selectedCity}
+                                    />
+                                    <Select
+                                        className='district-select'
+                                        name="districtId"
+                                        key={`districtId_${state.selectedDistrict?.value}`}
+                                        isDisabled={state.districtOptions.length === 0}
+                                        options={state.districtOptions}
+                                        onChange={(option) => onDistrictSelect(option)}
+                                        placeholder="District"
+                                        defaultValue={state.selectedDistrict}
+                                    />
+                                    <Select
+                                        className='ward-select'
+                                        name="wardId"
+                                        key={`wardId_${state.selectedWard?.value}`}
+                                        isDisabled={state.wardOptions.length === 0}
+                                        options={state.wardOptions}
+                                        placeholder="Phường/Xã"
+                                        onChange={(option) => onWardSelect(option)}
+                                        defaultValue={state.selectedWard}
+                                    />
+                                </div>
+                                <input type="text" className="form-control input-small" name='address' value={allValues.address} onChange={changeHandler} placeholder="Enter Address" />
                                 <Select
-                                    className='role-select'
-                                    value={allValues.selectedRoles}
+                                    className='movieTheater-select'
+                                    value={allValues.selectedMovieTheater}
                                     onChange={handleChangeSelect}
-                                    options={allValues.listRoles}
+                                    options={allValues.listMovieTheater}
                                     isDisabled={true}
-                                    placeholder='Select roles'
-                                    name='selectedRoles'
+
+                                    placeholder='Select movie theater'
+                                    name='selectedMovieTheater'
                                 // styles={this.props.colourStyles}
                                 />
                             </div>
-                            <div className='input-flex'>
-                                <Select
-                                    className='city-select'
-                                    name="cityId"
-                                    key={`cityId_${selectedCity?.value}`}
-                                    isDisabled={cityOptions.length === 0}
-                                    options={cityOptions}
-                                    onChange={(option) => onCitySelect(option)}
-                                    placeholder="City"
-                                    defaultValue={state.selectedCity}
-                                />
-                                <Select
-                                    className='district-select'
-                                    name="districtId"
-                                    key={`districtId_${state.selectedDistrict?.value}`}
-                                    isDisabled={state.districtOptions.length === 0}
-                                    options={state.districtOptions}
-                                    onChange={(option) => onDistrictSelect(option)}
-                                    placeholder="District"
-                                    defaultValue={state.selectedDistrict}
-                                />
-                                <Select
-                                    className='ward-select'
-                                    name="wardId"
-                                    key={`wardId_${state.selectedWard?.value}`}
-                                    isDisabled={state.wardOptions.length === 0}
-                                    options={state.wardOptions}
-                                    placeholder="Phường/Xã"
-                                    onChange={(option) => onWardSelect(option)}
-                                    defaultValue={state.selectedWard}
-                                />
-                            </div>
-                            <input type="text" className="form-control input-small" name='address' value={allValues.address} onChange={changeHandler} placeholder="Enter Address" />
-                            <Select
-                                className='movieTheater-select'
-                                value={allValues.selectedMovieTheater}
-                                onChange={handleChangeSelect}
-                                options={allValues.listMovieTheater}
-                                isDisabled={true}
 
-                                placeholder='Select movie theater'
-                                name='selectedMovieTheater'
-                            // styles={this.props.colourStyles}
-                            />
+                            {Object.keys(errors).length !== 0 && (
+                                <ul className="error-container">
+                                    {errors.userName?.type === "required" && <li>User Name is required</li>}
+                                    {errors.password?.type === "required" && (
+                                        <li>Password is required</li>
+                                    )}
+                                    {errors.password?.type === "minLength" && (
+                                        <li>Password must be 6 characters long</li>
+                                    )}
+                                    {errors.email?.type === "required" && <li>Email is required</li>}
+                                    {errors.email?.type === "pattern" && <li>Invalid Email Address</li>}
+                                    {errors.fullName?.type === "required" && <li>Full Name is required</li>}
+                                    {errors.phone?.type === "required" && <li>Phone is required</li>}
+                                </ul>
+                            )}
                         </div>
-
                     </div>
-                </div>
-            </ModalBody>
-            <ModalFooter className='modal-footer-container'>
-                {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveUser()}>Save</Button> */}
+                </ModalBody>
+                <ModalFooter className='modal-footer-container'>
+                    {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveEditUser()}>Save</Button> */}
 
-                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveEditUser()}>
-                    {allValues.isShowLoading &&
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                        </>
-                    }
-                    {!allValues.isShowLoading &&
-                        <>
-                            <span className="visually">Submit</span>
-                        </>
-                    }
-                </Button>
+                    <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveEditUser()}>
+                        {allValues.isShowLoading &&
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                                <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                            </>
+                        }
+                        {!allValues.isShowLoading &&
+                            <>
+                                <span className="visually">Submit</span>
+                            </>
+                        }
+                    </Button>
 
 
-            </ModalFooter>
+                </ModalFooter>
+            </form>
         </Modal>
     )
 }

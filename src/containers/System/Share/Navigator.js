@@ -9,12 +9,59 @@ class MenuGroup extends Component {
 
     render() {
         const { name, children, id } = this.props;
+        // console.log('name: ', name)
+        // console.log('id: ', id)
         return (
             // render title menu //
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target={'#' + id} aria-expanded="true"
                     aria-controls="collapseTableUser">
-                    <i className="fas fa-fw fa-table"></i>
+                    {id === 'tableUser' &&
+                        <i className="fas fa-user"></i>
+                    }
+                    {id === 'tableMovieTheater' &&
+                        <i className="fas fa-camera-retro"></i>
+                    }
+                    {id === 'tablefilms' &&
+                        <i className="fas fa-film"></i>
+                    }
+                    {id === 'tableFood' &&
+                        <i class='fas fa-hamburger'></i>
+                    }
+                    {id === 'tableCombo' &&
+                        <i className='fas fa-recycle'></i>
+                    }
+                    {id === 'tableBanner' &&
+                        <i className='fas fa-images'></i>
+                    }
+                    {id === 'tableNews' &&
+                        <i className='fas fa-edit'></i>
+                    }
+                    {id === 'tableComment' &&
+                        <i className='fas fa-comments'></i>
+                    }
+                    {id === 'tableVoucher' &&
+                        <i className='fas fa-ad'></i>
+                    }
+                    {id === 'tableFeedback' &&
+                        <i className='fas fa-reply-all'></i>
+                    }
+                    {id === 'tableStaff' &&
+                        <i className='fas fa-user-friends'></i>
+                    }
+                    {id === 'tableRoom' &&
+                        <i className='fas fa-couch'></i>
+                    }
+                    {id === 'tableshowTime' &&
+                        <i className='fas fa-calendar-check'></i>
+                    }
+                    {id === 'tableTicket' &&
+                        <i className='fas fa-ticket-alt'></i>
+                    }
+
+
+
+
                     <FormattedMessage id={name} />
                 </a>
                 <div id={id} className="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">

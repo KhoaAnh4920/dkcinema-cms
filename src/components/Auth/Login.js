@@ -10,17 +10,26 @@ import { useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 import { Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
+import { useForm } from "react-hook-form";
+
+
 
 
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errMessage, setErrMessage] = useState('');
     const [isLoadingButton, setLoadingButton] = useState(false);
     const dispatch = useDispatch();
     let history = useHistory();
     let selectUser = useSelector(userState);
+    // sử dụng schema đã tạo ở trên vào RHF
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
 
 
     useEffect(() => {
@@ -30,8 +39,9 @@ export default function Login() {
 
 
     const handleLogin = async () => {
-        // Clear mã lỗi //
-        // setErrMessage('');
+
+        console.log('OK');
+
         setLoadingButton(true);
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
@@ -49,7 +59,7 @@ export default function Login() {
                 setLoadingButton(false);
             } else {
                 console.log("Lỗi: ", data.message);
-                setErrMessage(data.message);
+
                 setLoadingButton(false);
             }
         } catch (e) {
@@ -57,94 +67,111 @@ export default function Login() {
             console.log(e);
             setLoadingButton(false);
             toast.error("Something error. Please try again");
-            if (e.response) {
-                if (e.response.data) {
-                    setErrMessage(e.response.data);
 
-                }
-            }
         }
 
     }
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            handleLogin();
+            handleSubmit(handleLogin)
         }
     }
 
+    const checkKeyDown = (e) => {
+        if (e.code === 'Enter') handleSubmit(handleLogin)();
+    };
 
     return (
-        <div className='login-background'>
-            <div className='login-container'>
-                <div className='login-admin-content row'>
-                    <div className='col-12 text-center text-login'>
-                        <img className='img-logo' src={logo} />
-                    </div>
-                    <div className='col-12 form-group email-input'>
-                        <label>Email: </label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={email}
-                            placeholder='Enter your username'
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        {errMessage && errMessage !== '' &&
-                            <><span style={{ color: 'red', fontSize: '12px' }}>{errMessage}</span></>
-                        }
-                    </div>
-                    <div className='col-12 form-group password-input'>
-                        <label>Password: </label>
-                        <div className='custom-input-password'>
+        <form onSubmit={handleSubmit(handleLogin)} onKeyDown={(e) => checkKeyDown(e)}>
+            <div className='login-background'>
+                <div className='login-container'>
+                    <div className='login-admin-content row'>
+                        <div className='col-12 text-center text-login'>
+                            <img className='img-logo' src={logo} />
+                        </div>
+                        <div className='col-12 form-group email-input'>
+                            <label>Email: </label>
                             <input
-                                type='password'
+                                type="text"
+                                name="email"
+                                id="email"
                                 className="form-control"
-                                value={password}
-                                placeholder='Enter your password'
-                                onChange={e => setPassword(e.target.value)}
-                                onKeyDown={event => handleKeyDown(event)}
-
+                                value={email}
+                                placeholder='Enter your email'
+                                {...register("email", {
+                                    required: true,
+                                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                })}
+                                onChange={e => setEmail(e.target.value)}
                             />
-                            {errMessage && errMessage !== '' &&
-                                <><span style={{ color: 'red', fontSize: '12px' }}>{errMessage}</span></>
-                            }
-                            <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Forgot password ?</span>
+                            {Object.keys(errors).length !== 0 && (
+                                (errors.email?.type === "required" && <span className='error-content'>Email is required</span>) ||
+                                (errors.email?.type === "pattern" && <span className='error-content'>Invalid Email Address</span>)
+                            )}
+                        </div>
+                        <div className='col-12 form-group password-input'>
+                            <label>Password: </label>
+                            <div className='custom-input-password'>
+                                <input
+                                    type='password'
+                                    name="password"
+                                    id="password"
+                                    className="form-control"
+                                    value={password}
+                                    {...register("password", {
+                                        required: true,
+                                        minLength: 6,
+                                    })}
+                                    placeholder='Enter your password'
+                                    onChange={e => setPassword(e.target.value)}
+
+
+                                />
+                                {Object.keys(errors).length !== 0 && (
+                                    (errors.password?.type === "required" && <span className='error-content'>Password is required</span>) ||
+                                    (errors.password?.type === "minLength" && <span className='error-content'>Password must be 6 characters long</span>)
+                                )}
+                                <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Forgot password ?</span>
+
+                            </div>
 
                         </div>
-
-                    </div>
-                    <div className='col-12'>
-                        {/* <button
+                        <div className='col-12'>
+                            {/* <button
                             className='btn-login'
                             onClick={handleLogin}
                         >Đăng nhập
                         </button> */}
 
-                        <Button variant="primary" className='btn-login' {...isLoadingButton && 'disabled'} onClick={handleLogin} >
-                            {isLoadingButton &&
-                                <>
-                                    <Spinner
-                                        as="span"
-                                        animation="border"
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />
-                                    <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                </>
+                            {/* <button type="submit">Đăng nhập</button> */}
 
-                            }
-                            {!isLoadingButton &&
-                                <>
-                                    <span className="visually">Login</span>
-                                </>
-                            }
-                        </Button>
 
+                            <Button variant="primary" type="submit" className='btn-login' {...isLoadingButton && 'disabled'} >
+                                {isLoadingButton &&
+                                    <>
+                                        <Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                        />
+                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                    </>
+
+                                }
+                                {!isLoadingButton &&
+                                    <>
+                                        <span className="visually">Login</span>
+                                    </>
+                                }
+                            </Button>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     )
 }

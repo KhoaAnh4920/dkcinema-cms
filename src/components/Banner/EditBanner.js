@@ -23,12 +23,28 @@ import { PlusOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
 
+const schema = yup.object().shape({
+    name: yup
+        .string()
+        .required("Vui lòng nhập tên banner")
+
+});
 
 export default function EditBanner() {
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm({ resolver: yupResolver(schema) });
     const { id } = useParams();
 
     const [allValues, setAllValues] = useState({
@@ -152,11 +168,16 @@ export default function EditBanner() {
                 fileList: result
             }));
 
+            let defaultValues = {};
+            defaultValues.name = dataBanner.name;
+
             setAllValues((prevState) => ({
                 ...prevState,
                 name: dataBanner.name,
                 description: dataBanner.description
             }));
+
+            reset({ ...defaultValues });
 
         }
 
@@ -169,33 +190,6 @@ export default function EditBanner() {
 
     }, []);
 
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
-
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -215,7 +209,6 @@ export default function EditBanner() {
 
 
     const handleEditBanner = async () => {
-
 
 
         if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
@@ -292,7 +285,7 @@ export default function EditBanner() {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý banner</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm banner</li>
+                                    <li className="breadcrumb-item active" aria-current="page">Edit banner</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
@@ -302,7 +295,7 @@ export default function EditBanner() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new Banner</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Edit Banner</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -338,47 +331,61 @@ export default function EditBanner() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tên Banner</label>
-                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} value={allValues.name} placeholder="Enter name" />
+                                            <form onSubmit={handleSubmit(handleEditBanner)}>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tên Banner</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        name='name'
+                                                        placeholder="Enter name"
+                                                        {...register("name", {
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                    {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
-                                            </div>
+                                                </div>
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Mô tả</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Mô tả</label>
+                                                    <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
+                                                    {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
 
-                                            </div>
+                                                </div>
 
 
-                                            {/* <button
-                                                type="submit"
-                                                onClick={() => handleSaveMovieTheater()}
-                                                className="btn btn-primary btn-submit">Submit</button> */}
-
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleEditBanner()}>
-                                                {allValues.isLoadingButton &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
-
+                                                {Object.keys(errors).length !== 0 &&
+                                                    <ul className="error-container">
+                                                        {errors.name && errors.name.message &&
+                                                            <li>{errors.name.message}</li>
+                                                        }
+                                                    </ul>
                                                 }
-                                                {!allValues.isLoadingButton &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+
+                                                <Button variant="primary" type='submit' {...allValues.isLoadingButton && 'disabled'}>
+                                                    {allValues.isLoadingButton &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isLoadingButton &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+                                            </form>
 
                                         </div>
                                     </div>

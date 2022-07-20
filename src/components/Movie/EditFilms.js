@@ -26,10 +26,20 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+
+
 
 
 
 export default function EditFilms() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm();
     const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
@@ -96,7 +106,7 @@ export default function EditFilms() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+
         if (fileList.length > 2) {
             toast.error("Maximum 2 poster");
             return;
@@ -112,7 +122,7 @@ export default function EditFilms() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else
@@ -120,7 +130,7 @@ export default function EditFilms() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+
             if (!isJpgOrPng) {
                 toast.error("Please choose image");
                 return;
@@ -128,7 +138,7 @@ export default function EditFilms() {
         }
 
 
-        console.log('fileList: ', fileList);
+
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -198,7 +208,6 @@ export default function EditFilms() {
             let dataMovie = await getDetailFilm(id);
             const typeData = await getAllTypeFilms();
 
-            console.log(dataMovie);
 
             if (dataMovie && dataMovie.data) {
 
@@ -236,6 +245,24 @@ export default function EditFilms() {
 
                 let selectedStatus = setDefaultValue(listStatus, dataMovie.data.status);
 
+                let defaultValues = {};
+                defaultValues.name = dataMovie.data.name;
+                defaultValues.soDienThoai = dataMovie.data.tenRap;
+                defaultValues.address = dataMovie.data.address;
+                defaultValues.transName = dataMovie.data.transName;
+                defaultValues.country = dataMovie.data.country;
+                defaultValues.duration = dataMovie.data.duration;
+                defaultValues.language = dataMovie.data.language;
+                defaultValues.releaseTime = dataMovie.data.releaseTime;
+                defaultValues.brand = dataMovie.data.brand;
+                defaultValues.director = dataMovie.data.director;
+                defaultValues.cast = dataMovie.data.cast;
+                defaultValues.status = dataMovie.data.status;
+                defaultValues.description = dataMovie.data.description;
+                defaultValues.listTypeMovie = typeData.dataTypeMovie;
+                defaultValues.url = dataMovie.data.url;
+
+
                 setAllValues({
                     MovieOfType: dataMovie.data.MovieOfType,
                     id: id,
@@ -267,6 +294,8 @@ export default function EditFilms() {
                     response: test,
                 });
 
+                reset({ ...defaultValues });
+
             }
         }
         fetchDetailMovie();
@@ -290,33 +319,6 @@ export default function EditFilms() {
 
     }
 
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedStatus', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
-
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -339,65 +341,66 @@ export default function EditFilms() {
 
     const handleSaveEditFilms = async () => {
 
+        console.log(allValues);
         // Lọc check type //
-        let arrType = [];
+        // let arrType = [];
 
-        for (let i = 0; i < allValues.listTypeMovie.length; i++) {
-            if (allValues.checked[i]) {
-                arrType.push({ id: allValues.listTypeMovie[i].id })
-            }
-        }
+        // for (let i = 0; i < allValues.listTypeMovie.length; i++) {
+        //     if (allValues.checked[i]) {
+        //         arrType.push({ id: allValues.listTypeMovie[i].id })
+        //     }
+        // }
 
-        setAllValues((prevState) => ({
-            ...prevState,
-            isShowLoading: true
-        }));
+        // setAllValues((prevState) => ({
+        //     ...prevState,
+        //     isShowLoading: true
+        // }));
 
-        let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
+        // let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
 
-        let result = [];
+        // let result = [];
 
-        await Promise.all(valImg.fileList.map(async (item, index) => {
-            let obj = {};
-            if (item.originFileObj) {
-                obj.image = await getBase64(item.originFileObj);
-                obj.fileName = item.name;
-                obj.typeImage = item.typeImage
-            } else {
-                obj.url = item.url;
-                obj.public_id = item.public_id;
-            }
+        // await Promise.all(valImg.fileList.map(async (item, index) => {
+        //     let obj = {};
+        //     if (item.originFileObj) {
+        //         obj.image = await getBase64(item.originFileObj);
+        //         obj.fileName = item.name;
+        //         obj.typeImage = item.typeImage
+        //     } else {
+        //         obj.url = item.url;
+        //         obj.public_id = item.public_id;
+        //     }
 
-            result.push(obj);
-        }))
+        //     result.push(obj);
+        // }))
 
-        console.log('result: ', result)
+        // // console.log('result: ', result)
 
-        let res = await updateFilmsService({
-            name: allValues.name,
-            transName: allValues.transName,
-            country: allValues.country,
-            language: allValues.language,
-            duration: allValues.duration,
-            description: allValues.description,
-            brand: allValues.brand,
-            director: allValues.director,
-            cast: allValues.cast,
-            status: allValues.selectedStatus.value,
-            typeMovie: arrType,
-            poster: result,
-            url: allValues.url,
-            releaseTime: formatedDate,
-            id: allValues.id
-        })
+        // let res = await updateFilmsService({
+        //     name: allValues.name,
+        //     transName: allValues.transName,
+        //     country: allValues.country,
+        //     language: allValues.language,
+        //     duration: allValues.duration,
+        //     description: allValues.description,
+        //     brand: allValues.brand,
+        //     director: allValues.director,
+        //     cast: allValues.cast,
+        //     status: allValues.selectedStatus.value,
+        //     typeMovie: arrType,
+        //     poster: result,
+        //     url: allValues.url,
+        //     releaseTime: formatedDate,
+        //     id: allValues.id
+        // })
 
-        if (res && res.errCode == 0) {
-            history.push("/films-management")
-            toast.success("Edit films succeed");
-        } else {
-            history.push("/films-management")
-            toast.error(res.errMessage);
-        }
+        // if (res && res.errCode == 0) {
+        //     history.push("/films-management")
+        //     toast.success("Edit films succeed");
+        // } else {
+        //     history.push("/films-management")
+        //     toast.error(res.errMessage);
+        // }
 
     }
 
@@ -453,7 +456,7 @@ export default function EditFilms() {
             }));
         }
 
-        console.log("Check type: ", typeCheck);
+        // console.log("Check type: ", typeCheck);
 
     }
 
@@ -528,127 +531,167 @@ export default function EditFilms() {
                                                 </div>
                                             </div>
 
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phim</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên phim" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Tên phiên dịch</label>
-                                                    <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.transName} name='transName' placeholder="Nhập tên phiên dịch" />
-                                                </div>
+                                            <form onSubmit={handleSubmit(handleSaveEditFilms)}>
 
-                                            </div>
 
-                                            <div className="form-group horizon-form">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Quốc gia</label>
-                                                    <input type="text" className="form-control input-sm" name='country' onChange={changeHandler} value={allValues.country} placeholder="Nhập quốc gia" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Thời lượng / phút</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.duration} name='duration' onChange={changeHandler} placeholder="Nhập thời lượng" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngôn ngữ</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.language} name='language' onChange={changeHandler} placeholder="Nhập ngôn ngữ" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Ngày công chiếu</label>
-                                                    <DatePicker
-                                                        onChange={handleOnChangeDatePicker}
-                                                        className="form-control"
-                                                        value={allValues.releaseTime}
-                                                    />
-                                                </div>
-                                            </div>
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Tên phim</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
 
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Đạo diễn</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.director} name='director' onChange={changeHandler} placeholder="Nhập đạo diễn phim" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />
-                                                </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Diễn viên</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.cast} name='cast' onChange={changeHandler} placeholder="Nhập diễn viên" />
-                                                </div>
-
-                                            </div>
-                                            <div className="form-group horizon-2-input">
-                                                <div className='horizon-checkbox'>
-                                                    <label htmlFor="exampleInputEmail1">Thể loại</label>
-
-                                                    <div className='row' style={{ marginLeft: '0px' }}>
-                                                        {/* <input type="checkbox" class="custom-control-input" checked id="customCheck3" /> */}
-
-                                                        {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 && allValues.MovieOfType &&
-                                                            allValues.listTypeMovie.map((item, index) => {
-                                                                console.log(allValues.checked[index])
-                                                                return (
-                                                                    <div className="custom-control custom-checkbox col-4" key={index}>
-                                                                        <input type="checkbox" className="custom-control-input" checked={allValues.checked[index]} onChange={((e) => handleClickCheckbox(e))} name="typeMovie" value={item.id} id={index} />
-                                                                        <label className="custom-control-label" for={index}>{item.name}</label>
-                                                                    </div>
-                                                                )
-                                                            })
-                                                        }
+                                                            name='name'
+                                                            placeholder="Nhập tên phim"
+                                                            {...register("name", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Tên phiên dịch</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='transName'
+                                                            placeholder="Nhập tên phiên dịch"
+                                                            {...register("transName", {
+                                                                required: true,
+                                                                onChange: changeHandler
+                                                            })}
+                                                        />
                                                     </div>
 
                                                 </div>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleInputEmail1">Trailer</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.url} name='url' onChange={changeHandler} placeholder="Nhập url trailer" />
-                                                </div>
 
-
-                                            </div>
-                                            <div className='form-group horizon-2-input'>
-                                                <div className='horizon-input'>
-                                                    <label htmlFor="exampleFormControlTextarea1">Trạng thái</label>
-                                                    <Select
-                                                        className='status-movie-select'
-                                                        value={allValues.selectedStatus}
-                                                        onChange={handleChangeSelect}
-                                                        options={allValues.listStatus}
-                                                        placeholder='Select status'
-                                                        name='selectedStatus'
-                                                        isOptionDisabled={(option) => option.isdisabled} // disable an option
-                                                    // styles={this.props.colourStyles}
-                                                    />
-                                                </div>
-                                                <div className='horizon-input'></div>
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleFormControlTextarea1">Mô tả phim</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
-                                            </div>
-
-
-                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveEditFilms()} >
-                                                {allValues.isShowLoading &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
+                                                <div className="form-group horizon-form">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Quốc gia</label>
+                                                        <input type="text" className="form-control input-sm" name='country' onChange={changeHandler} value={allValues.country} placeholder="Nhập quốc gia" />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Thời lượng / phút</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.duration} name='duration' onChange={changeHandler} placeholder="Nhập thời lượng" />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Ngôn ngữ</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.language} name='language' onChange={changeHandler} placeholder="Nhập ngôn ngữ" />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Ngày công chiếu</label>
+                                                        <DatePicker
+                                                            onChange={handleOnChangeDatePicker}
+                                                            className="form-control"
+                                                            value={allValues.releaseTime}
                                                         />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
+                                                    </div>
+                                                </div>
 
-                                                }
-                                                {!allValues.isShowLoading &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Đạo diễn</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.director} name='director' onChange={changeHandler} placeholder="Nhập đạo diễn phim" />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Nhà sản xuất</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.brand} name='brand' onChange={changeHandler} placeholder="Nhập nhà sản xuất" />
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Diễn viên</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.cast} name='cast' onChange={changeHandler} placeholder="Nhập diễn viên" />
+                                                    </div>
+
+                                                </div>
+                                                <div className="form-group horizon-2-input">
+                                                    <div className='horizon-checkbox'>
+                                                        <label htmlFor="exampleInputEmail1">Thể loại</label>
+
+                                                        <div className='row' style={{ marginLeft: '0px' }}>
+                                                            {/* <input type="checkbox" class="custom-control-input" checked id="customCheck3" /> */}
+
+                                                            {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 && allValues.MovieOfType &&
+                                                                allValues.listTypeMovie.map((item, index) => {
+
+                                                                    return (
+                                                                        <div className="custom-control custom-checkbox col-4" key={index}>
+                                                                            <input type="checkbox" className="custom-control-input" checked={allValues.checked[index]} onChange={((e) => handleClickCheckbox(e))} name="typeMovie" value={item.id} id={index} />
+                                                                            <label className="custom-control-label" for={index}>{item.name}</label>
+                                                                        </div>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleInputEmail1">Trailer</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.url} name='url' onChange={changeHandler} placeholder="Nhập url trailer" />
+                                                    </div>
+
+
+                                                </div>
+                                                <div className='form-group horizon-2-input'>
+                                                    <div className='horizon-input'>
+                                                        <label htmlFor="exampleFormControlTextarea1">Trạng thái</label>
+                                                        <Select
+                                                            className='status-movie-select'
+                                                            value={allValues.selectedStatus}
+                                                            onChange={handleChangeSelect}
+                                                            options={allValues.listStatus}
+                                                            placeholder='Select status'
+                                                            name='selectedStatus'
+                                                            isOptionDisabled={(option) => option.isdisabled} // disable an option
+                                                        // styles={this.props.colourStyles}
+                                                        />
+                                                    </div>
+                                                    <div className='horizon-input'></div>
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleFormControlTextarea1">Mô tả phim</label>
+                                                    <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
+                                                </div>
+
+
+                                                {Object.keys(errors).length !== 0 && (
+                                                    <ul className="error-container">
+                                                        {errors.name?.type === "required" && <li>Name Theater is required</li>}
+                                                        {errors.transName?.type === "required" && <li>TransName is required</li>}
+                                                        {errors.country?.type === "required" && <li>Country is required</li>}
+                                                        {errors.duration?.type === "required" && <li>Duration is required</li>}
+                                                        {errors.language?.type === "required" && <li>Language is required</li>}
+                                                        {errors.director?.type === "required" && <li>Director is required</li>}
+                                                        {errors.brand?.type === "required" && <li>Brand is required</li>}
+                                                        {errors.cast?.type === "required" && <li>Cast is required</li>}
+                                                        {errors.url?.type === "required" && <li>Url is required</li>}
+                                                        {errors.description?.type === "required" && <li>Description is required</li>}
+                                                    </ul>
+                                                )}
+
+
+                                                <Button variant="primary" type='submit' {...allValues.isShowLoading && 'disabled'}>
+                                                    {allValues.isShowLoading &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isShowLoading &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+                                            </form>
 
                                         </div>
                                     </div>

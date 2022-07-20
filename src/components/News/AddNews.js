@@ -25,13 +25,31 @@ import { PlusOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
 import MyEditor from './MyEditor';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
 
+const schema = yup.object().shape({
+    name: yup
+        .string()
+        .required("Vui lòng nhập tiêu đề"),
+    description: yup
+        .string()
+        .required("Vui lòng nhập mô tả")
+
+});
 
 
 export default function AddNews() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({ resolver: yupResolver(schema) });
+
     let selectUser = useSelector(userState);
     const [startDate, setStartDate] = useState(new Date());
 
@@ -41,7 +59,7 @@ export default function AddNews() {
         status: 1,
         url: '',
         content: '',
-        typeNews: 1,
+        typeNews: null,
         errors: {},
         isLoadingButton: false
     });
@@ -152,11 +170,7 @@ export default function AddNews() {
     };
 
 
-    // function youtube_parser(url){
-    //     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    //     var match = url.match(regExp);
-    //     return (match&&match[7].length==11)? match[7] : false;
-    // }
+
 
 
 
@@ -165,33 +179,7 @@ export default function AddNews() {
 
     }, []);
 
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
 
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -213,8 +201,10 @@ export default function AddNews() {
     const handleSavePost = async () => {
 
 
-        console.log(allValues);
-
+        if (!allValues.content || !allValues.typeNews) {
+            toast.error("Please complete all information");
+            return;
+        }
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -346,76 +336,100 @@ export default function AddNews() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tiêu đề</label>
-                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} placeholder="Enter name" />
+                                            <form onSubmit={handleSubmit(handleSavePost)}>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tiêu đề</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        placeholder="Enter title"
+                                                        {...register("name", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                    {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Thể loại</label>
-                                                <div className="col-sm-9 radio-type-post">
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" id="customRadio1" name="typeNews" value={1} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" id="customRadio2" name="typeNews" value={2} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
-                                                    </div>
                                                 </div>
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Thể loại</label>
+                                                    <div className="col-sm-9 radio-type-post">
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio1" name="typeNews" value={1} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
+                                                        </div>
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio2" name="typeNews" value={2} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
+                                                        </div>
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
+                                                        </div>
+                                                    </div>
 
-                                            </div>
+                                                    {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tóm tắt</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="3"></textarea>
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+                                                </div>
 
-                                            </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tóm tắt</label>
+                                                    <textarea className="form-control"
+                                                        id="exampleFormControlTextarea1"
+                                                        name="description"
+                                                        {...register("description", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                        rows="3"></textarea>
+                                                    {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Nội dung</label>
-                                                <MyEditor handleChangeCKEdittor={handleChangeCKEdittor} />
-                                                {/* <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea> */}
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+                                                </div>
 
-                                            </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Nội dung</label>
+                                                    <MyEditor handleChangeCKEdittor={handleChangeCKEdittor} />
+                                                    {/* <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea> */}
+                                                    {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+
+                                                </div>
 
 
-                                            {/* <button
-                                                type="submit"
-                                                onClick={() => handleSaveMovieTheater()}
-                                                className="btn btn-primary btn-submit">Submit</button> */}
-
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleSavePost()}>
-                                                {allValues.isLoadingButton &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
-
+                                                {Object.keys(errors).length !== 0 &&
+                                                    <ul className="error-container">
+                                                        {errors.name && errors.name.message &&
+                                                            <li>{errors.name.message}</li>
+                                                        }
+                                                        {errors.description && errors.description.message &&
+                                                            <li>{errors.description.message}</li>
+                                                        }
+                                                    </ul>
                                                 }
-                                                {!allValues.isLoadingButton &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+
+                                                <Button variant="primary" type='submit' {...allValues.isLoadingButton && 'disabled'}>
+                                                    {allValues.isLoadingButton &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isLoadingButton &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+                                            </form>
 
                                         </div>
                                     </div>

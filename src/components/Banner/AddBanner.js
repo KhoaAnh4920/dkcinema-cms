@@ -22,13 +22,31 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
+
+
+const schema = yup.object().shape({
+    name: yup
+        .string()
+        .required("Vui lòng nhập tên banner")
+
+});
 
 
 
 export default function AddBanner() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm({ resolver: yupResolver(schema) });
+
+
     const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
@@ -82,7 +100,7 @@ export default function AddBanner() {
             toast.error("Maximum 1 poster");
             return;
         }
-        if (fileList.length > 0) {
+        if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
             const reader = new FileReader();
             reader.readAsDataURL(fileList[fileList.length - 1].originFileObj);
             reader.addEventListener('load', event => {
@@ -95,8 +113,10 @@ export default function AddBanner() {
                     console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
-                    } else
-                        fileList[fileList.length - 1].typeImage = 2; // Hình dọc
+                    } else {
+                        toast.success("Kích thước hình ảnh không phù hợp");
+                        return
+                    }
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
@@ -135,46 +155,12 @@ export default function AddBanner() {
     };
 
 
-    // function youtube_parser(url){
-    //     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-    //     var match = url.match(regExp);
-    //     return (match&&match[7].length==11)? match[7] : false;
-    // }
-
 
 
     useEffect(() => {
 
 
     }, []);
-
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
-
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -193,9 +179,9 @@ export default function AddBanner() {
 
 
 
-    const handleSaveBanner = async () => {
+    const handleSaveBanner = async (data) => {
 
-        // allValues.isLoadingButton = true;
+        console.log('data: ', data)
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -205,6 +191,10 @@ export default function AddBanner() {
 
         if (valImg.fileList.length < 1) {
             toast.error("Please upload image");
+            setAllValues((prevState) => ({
+                ...prevState,
+                isLoadingButton: false,
+            }))
             return;
         }
 
@@ -256,7 +246,7 @@ export default function AddBanner() {
                         <Header />
                         {/* Topbar */}
                         {/* Container Fluid*/}
-                        <div className="container-fluid" id="container-wrapper">
+                        <div className="container-fluid add-banner-container" id="container-wrapper">
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
                                 <ol className="breadcrumb">
@@ -308,47 +298,71 @@ export default function AddBanner() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tên Banner</label>
-                                                <input type="text" className="form-control input-sm" name='name' onChange={changeHandler} placeholder="Enter name" />
+                                            <form onSubmit={handleSubmit(handleSaveBanner)}>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tên Banner</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        name='name'
+                                                        placeholder="Enter name"
+                                                        {...register("name", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
+                                                </div>
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Mô tả</label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="exampleFormControlTextarea1"
+                                                        name="description"
+                                                        rows="5"
+                                                        {...register("name", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    ></textarea>
 
-                                            </div>
+                                                </div>
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Mô tả</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="5"></textarea>
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+                                                {/* {console.log('errors: ', Object.keys(errors).length)} */}
 
-                                            </div>
-
-
-                                            {/* <button
-                                                type="submit"
-                                                onClick={() => handleSaveMovieTheater()}
-                                                className="btn btn-primary btn-submit">Submit</button> */}
-
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleSaveBanner()}>
-                                                {allValues.isLoadingButton &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
-
+                                                {Object.keys(errors).length !== 0 &&
+                                                    <ul className="error-container">
+                                                        {errors.name && errors.name.message &&
+                                                            <li>{errors.name.message}</li>
+                                                        }
+                                                    </ul>
                                                 }
-                                                {!allValues.isLoadingButton &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+
+
+
+                                                <Button variant="primary" type='submit' {...allValues.isLoadingButton && 'disabled'}>
+                                                    {allValues.isLoadingButton &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isLoadingButton &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+
+                                            </form>
 
                                         </div>
                                     </div>

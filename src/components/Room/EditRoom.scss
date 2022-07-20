@@ -39,15 +39,15 @@
                             margin: 0 auto;
                             display: flex;
                             flex-direction: column-reverse;
-                            column-gap: 20px;
+                            // column-gap: 20px;
                             justify-content: center;
                             align-items: center;
-                            row-gap: 20px;
+                            row-gap: 3px;
 
                             .one_row {
                                 display: flex;
                                 flex-direction: row;
-                                column-gap: 20px;
+                                column-gap: 5px;
 
                                 .name-column {
                                     background-color: transparent;

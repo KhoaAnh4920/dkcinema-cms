@@ -25,11 +25,30 @@ import { Link } from "react-router-dom";
 import MyEditor from './MyEditor';
 import { editPost, getDetailPost } from '../../services/NewsServices';
 import { useParams } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
+
+const schema = yup.object().shape({
+    name: yup
+        .string()
+        .required("Vui lòng nhập tiêu đề"),
+    description: yup
+        .string()
+        .required("Vui lòng nhập mô tả")
+
+});
 
 export default function EditNews() {
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm({ resolver: yupResolver(schema) });
     let selectUser = useSelector(userState);
     const [startDate, setStartDate] = useState(new Date());
     const { id } = useParams();
@@ -86,6 +105,9 @@ export default function EditNews() {
                 fileList: result
             }));
 
+            let defaultValues = {};
+            defaultValues.title = dataPost.title;
+            defaultValues.description = dataPost.tomTat;
 
             setAllValues((prevState) => ({
                 ...prevState,
@@ -95,6 +117,8 @@ export default function EditNews() {
                 typeNews: dataPost.type,
                 isLoadingButton: false
             }));
+
+            reset({ ...defaultValues });
 
 
         }
@@ -261,58 +285,58 @@ export default function EditNews() {
 
 
 
+        // if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
+        //     setAllValues((prevState) => ({
+        //         ...prevState,
+        //         isLoadingButton: true,
+        //     }))
 
-        if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isLoadingButton: true,
-            }))
+        //     let result = [];
+        //     await Promise.all(valImg.fileList.map(async (item, index) => {
 
-            let result = [];
-            await Promise.all(valImg.fileList.map(async (item, index) => {
+        //         let obj = {};
+        //         obj.image = await getBase64(item.originFileObj);
+        //         obj.fileName = item.name;
+        //         result.push(obj);
 
-                let obj = {};
-                obj.image = await getBase64(item.originFileObj);
-                obj.fileName = item.name;
-                result.push(obj);
+        //     }))
 
-            }))
-            let res = await editPost({
-                id: id,
-                title: allValues.name,
-                noiDung: allValues.content,
-                type: allValues.typeNews,
-                thumbnail: result[0].image,
-                fileName: result[0].fileName,
-                tomTat: allValues.description,
-            })
-            if (res && res.errCode == 0) {
-                history.push("/news-management")
-                toast.success("Update news success");
-            } else {
-                toast.error(res.errMessage);
-            }
-        } else {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isLoadingButton: true,
-            }))
+        //     let res = await editPost({
+        //         id: id,
+        //         title: allValues.name,
+        //         noiDung: allValues.content,
+        //         type: allValues.typeNews,
+        //         thumbnail: result[0].image,
+        //         fileName: result[0].fileName,
+        //         tomTat: allValues.description,
+        //     })
+        //     if (res && res.errCode == 0) {
+        //         history.push("/news-management")
+        //         toast.success("Update news success");
+        //     } else {
+        //         toast.error(res.errMessage);
+        //     }
+        // } else {
+        //     setAllValues((prevState) => ({
+        //         ...prevState,
+        //         isLoadingButton: true,
+        //     }))
 
-            let res = await editPost({
-                id: id,
-                title: allValues.name,
-                noiDung: allValues.content,
-                type: allValues.typeNews,
-                tomTat: allValues.description,
-            })
+        //     let res = await editPost({
+        //         id: id,
+        //         title: allValues.name,
+        //         noiDung: allValues.content,
+        //         type: allValues.typeNews,
+        //         tomTat: allValues.description,
+        //     })
 
-            if (res && res.errCode == 0) {
-                history.push("/news-management")
-                toast.success("Update news success");
-            } else {
-                toast.error(res.errMessage);
-            }
-        }
+        //     if (res && res.errCode == 0) {
+        //         history.push("/news-management")
+        //         toast.success("Update news success");
+        //     } else {
+        //         toast.error(res.errMessage);
+        //     }
+        // }
 
         // let result = [];
 
@@ -439,75 +463,98 @@ export default function EditNews() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tiêu đề</label>
-                                                <input type="text" className="form-control input-sm" name='name' value={allValues.name} onChange={changeHandler} placeholder="Enter title" />
+                                            <form onSubmit={handleSubmit(handleEditPost)}>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tiêu đề</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        placeholder="Enter name"
+                                                        {...register("name", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                    {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
-                                            </div>
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Thể loại</label>
-                                                <div className="col-sm-9 radio-type-post">
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" id="customRadio1" name="typeNews" value={1} checked={(allValues.typeNews === 1)} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" id="customRadio2" name="typeNews" value={2} checked={(allValues.typeNews === 2)} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} checked={(allValues.typeNews === 3)} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                        <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
-                                                    </div>
                                                 </div>
 
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Thể loại</label>
+                                                    <div className="col-sm-9 radio-type-post">
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio1" name="typeNews" value={1} checked={(allValues.typeNews === 1)} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
+                                                        </div>
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" id="customRadio2" name="typeNews" value={2} checked={(allValues.typeNews === 2)} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
+                                                        </div>
+                                                        <div className="custom-control custom-radio">
+                                                            <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} checked={(allValues.typeNews === 3)} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
+                                                        </div>
+                                                    </div>
 
-                                            </div>
+                                                    {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tóm tắt</label>
-                                                <textarea className="form-control" id="exampleFormControlTextarea1" value={allValues.description} name="description" onChange={changeHandler} rows="3">{allValues.description}</textarea>
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
+                                                </div>
 
-                                            </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tóm tắt</label>
+                                                    <textarea className="form-control"
+                                                        id="exampleFormControlTextarea1"
+                                                        name="description"
+                                                        {...register("description", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                        rows="3"></textarea>
 
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Nội dung</label>
-                                                <MyEditor handleChangeCKEdittor={handleChangeCKEdittor} defaultValue={allValues.content} />
+                                                </div>
+
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Nội dung</label>
+                                                    <MyEditor handleChangeCKEdittor={handleChangeCKEdittor} defaultValue={allValues.content} />
 
 
-                                            </div>
+                                                </div>
 
 
-                                            {/* <button
-                                                type="submit"
-                                                onClick={() => handleSaveMovieTheater()}
-                                                className="btn btn-primary btn-submit">Submit</button> */}
-
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={() => handleEditPost()}>
-                                                {allValues.isLoadingButton &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
-
+                                                {Object.keys(errors).length !== 0 &&
+                                                    <ul className="error-container">
+                                                        {errors.name && errors.name.message &&
+                                                            <li>{errors.name.message}</li>
+                                                        }
+                                                        {errors.description && errors.description.message &&
+                                                            <li>{errors.description.message}</li>
+                                                        }
+                                                    </ul>
                                                 }
-                                                {!allValues.isLoadingButton &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+
+                                                <Button variant="primary" type='submit' {...allValues.isLoadingButton && 'disabled'}>
+                                                    {allValues.isLoadingButton &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isLoadingButton &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+                                            </form>
 
                                         </div>
                                     </div>
