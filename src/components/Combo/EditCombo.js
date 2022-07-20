@@ -132,10 +132,10 @@ function EditCombo() {
 
 
     const handleEditCombo = async () => {
-        setAllValues((prevState) => ({
-            ...prevState,
-            isLoadingButton: true
-        }))
+        // setAllValues((prevState) => ({
+        //     ...prevState,
+        //     isLoadingButton: true
+        // }))
         console.log("Check all value: ", allValues);
         let quantity = document.getElementsByClassName("quantity");
         let items = [];
@@ -169,6 +169,16 @@ function EditCombo() {
 
             }))
 
+            // validate //
+            // console.log('item: ', items);
+            // console.log('allValues: ', allValues);
+            // console.log('result: ', result);
+
+            if (!allValues.name || !allValues.price) {
+                toast.error("Please complete all information")
+                return;
+            }
+
             res = await editCombo({
                 name: allValues.name,
                 price: +allValues.price,
@@ -179,6 +189,18 @@ function EditCombo() {
             })
 
         } else {
+            // validate //
+
+            // console.log('else');
+            // console.log('item: ', items);
+            // console.log('allValues: ', allValues);
+
+            if (!allValues.name || !allValues.price) {
+                toast.error("Please complete all information")
+                return;
+            }
+
+
             res = await editCombo({
                 name: allValues.name,
                 price: +allValues.price,
@@ -258,6 +280,32 @@ function EditCombo() {
     }
 
 
+    // const handleRemove = async (e) => {
+
+    //     if (e.public_id && typeof (e.uid) !== 'string') {
+    //         let res = await removeImageFilm(e.uid);
+
+    //         if (res && res.errCode === 0) {
+    //             toast.success("Delete image succeed !!!");
+    //             let fileList = valImg.fileList.filter(item => item.uid !== e.uid)
+
+    //             setValImg((prevState) => ({
+    //                 ...prevState,
+    //                 fileList
+    //             }));
+    //         }
+
+    //         else
+    //             toast.error(res.errMessage);
+    //     } else {
+    //         setValImg((prevState) => ({
+    //             ...prevState,
+    //         }));
+    //     }
+
+    // }
+
+
 
 
 
@@ -304,68 +352,30 @@ function EditCombo() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='edit-combo-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='edit-combo-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            {/* <div className="col-lg-12 mb-4">
+                <Sidebar />
 
-                                <div className="card mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu thực phẩm</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group horizon-form">
-
-                                            <div className='horizon-input'>
-                                                <label htmlFor="exampleInputEmail1" style={{ marginRight: '5px' }}>Loại thực phẩm</label>
-                                                <Select
-                                                    className='food-select'
-                                                    value={allValues.selectedTypeFood || {}}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listTypeFood}
-                                                    placeholder='Select type food'
-                                                    name='selectedTypeFood'
-                                                    styles={customStyles}
-                                                // styles={this.props.colourStyles}
-                                                />
-                                            </div>
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
 
 
-                                            <div className='horizon-input' style={{ marginLeft: '50px' }}>
-                                                <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="filter-food-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
-                                                </Button>
-                                            </div>
-
-
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
-
+                        <LoadingOverlay
+                            active={allValues.isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
                             <div className='row' style={{ padding: '10px' }}>
 
                                 <div className="col-lg-6 mb-4">
@@ -461,16 +471,17 @@ function EditCombo() {
                             </div>
 
 
-                        </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+                        </LoadingOverlay>
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

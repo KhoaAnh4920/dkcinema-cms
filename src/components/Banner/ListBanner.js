@@ -108,28 +108,29 @@ function ListBanner() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
+
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="List Banner"
                                     columns={columns}
@@ -183,19 +184,20 @@ function ListBanner() {
 
                                     }}
                                 />
-                            </div>
 
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

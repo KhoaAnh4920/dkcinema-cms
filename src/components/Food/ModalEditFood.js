@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import moment from 'moment';
 import { getAllTypeFood } from '../../services/FoodServices';
 import Select from 'react-select';
+import { useForm, Controller } from "react-hook-form";
+
 
 
 
@@ -15,6 +17,13 @@ export default function ModalEditFood(props) {
 
     // const [isOpen, setOpenModal] = useState(false);
     // const [show, setShow] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        formState: { errors },
+    } = useForm();
     const fileUploader = useRef(null);
     const [allValues, setAllValues] = useState({
         nameFood: '',
@@ -59,6 +68,11 @@ export default function ModalEditFood(props) {
                     let listTypeFood = buildDataInputSelect(dataType.dataTypeFood);
                     let selectedTypeFood = setDefaultValue(listTypeFood, dataFood.typeId);
 
+                    let defaultValues = {};
+                    defaultValues.nameFood = dataFood.name;
+                    defaultValues.priceFood = dataFood.tenRap;
+
+
                     setAllValues((prevState) => ({
                         ...prevState,
                         listTypeFood: listTypeFood,
@@ -67,6 +81,8 @@ export default function ModalEditFood(props) {
                         priceFood: dataFood.price,
                         id: dataFood.id
                     }));
+
+                    reset({ ...defaultValues });
                 }
             }
 
@@ -104,6 +120,7 @@ export default function ModalEditFood(props) {
     }
 
     const handleSaveFood = async () => {
+
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
@@ -116,55 +133,89 @@ export default function ModalEditFood(props) {
 
 
     return (
-        <Modal className={'modal-add-food'} isOpen={props.isOpen} toggle={() => toggle()} centered >
+        <Modal className={'modal-edit-food'} isOpen={props.isOpen} toggle={() => toggle()} centered >
             <ModalHeader toggle={() => toggle()} className='titleModal'>Edit food</ModalHeader>
-            <ModalBody className='modal-body-container'>
-                <div className='modal-add-food-body'>
-                    <div className='input-container'>
-                        <div className='input-row'>
-                            <Select
-                                className='food-select'
-                                value={allValues.selectedTypeFood || {}}
-                                onChange={handleChangeSelect}
-                                options={allValues.listTypeFood}
-                                isDisabled
-                                placeholder='Select type food'
-                                name='selectedTypeFood'
-                            />
-                            <input type="text" className="form-control input-small" name='nameFood' value={allValues.nameFood} onChange={changeHandler} placeholder="Enter name" style={{ marginTop: '20px' }} />
-                            <input type="text" className="form-control input-small" name='priceFood' value={allValues.priceFood} onChange={changeHandler} placeholder="Enter price" style={{ marginTop: '20px' }} />
+            <form onSubmit={handleSubmit(handleSaveFood)}>
+                <ModalBody className='modal-body-container'>
+                    <div className='modal-edit-food-body'>
+                        <div className='input-container'>
+                            <div className='input-row'>
+                                <Select
+                                    className='food-select'
+                                    value={allValues.selectedTypeFood || {}}
+                                    onChange={handleChangeSelect}
+                                    options={allValues.listTypeFood}
+                                    isDisabled
+                                    placeholder='Select type food'
+                                    name='selectedTypeFood'
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='nameFood'
+                                    placeholder="Enter name"
+                                    style={{ marginTop: '20px' }}
+                                    {...register("nameFood", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='priceFood'
+
+                                    placeholder="Enter price"
+                                    style={{ marginTop: '20px' }}
+                                    {...register("priceFood", {
+                                        required: true,
+                                        onChange: changeHandler,
+                                        pattern: /^(0|[1-9]\d*)(\.\d+)?$/
+                                    })}
+                                />
+
+                            </div>
+
+                            {Object.keys(errors).length !== 0 && (
+                                <ul className="error-container">
+                                    {errors.selectedTypeFood?.type === "required" && <li>Type Food is required</li>}
+                                    {errors.nameFood?.type === "required" && <li>Name Food is required</li>}
+                                    {errors.priceFood?.type === "required" && <li>Price Food is required</li>}
+                                    {errors.priceFood?.type === "pattern" && <li>Price Food is only number</li>}
+
+                                </ul>
+                            )}
 
                         </div>
-
                     </div>
-                </div>
-            </ModalBody>
-            <ModalFooter className='modal-footer-container'>
-                {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveFood()}>Save</Button> */}
+                </ModalBody>
+                <ModalFooter className='modal-footer-container'>
+                    {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveFood()}>Save</Button> */}
 
-                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveFood()}>
-                    {allValues.isShowLoading &&
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                        </>
+                    <Button variant="primary" type='submit' {...allValues.isShowLoading && 'disabled'}>
+                        {allValues.isShowLoading &&
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                                <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                            </>
 
-                    }
-                    {!allValues.isShowLoading &&
-                        <>
-                            <span className="visually">Submit</span>
-                        </>
-                    }
-                </Button>
+                        }
+                        {!allValues.isShowLoading &&
+                            <>
+                                <span className="visually">Submit</span>
+                            </>
+                        }
+                    </Button>
 
 
-            </ModalFooter>
+                </ModalFooter>
+            </form>
         </Modal>
     )
 }

@@ -1,0 +1,15 @@
+.add-banner-container {
+    .card-body {
+        .error-container {
+            margin-top: 10px;
+            border: 1px dashed lightgray;
+            padding: 1rem;
+            width: 100%;
+        }
+
+        ul {
+            list-style-position: inside;
+            color: lightcoral;
+        }
+    }
+}

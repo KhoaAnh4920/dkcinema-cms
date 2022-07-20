@@ -80,8 +80,6 @@ function AddCombo() {
     const test = (e) => {
         const isNegative = $(e.target).closest('.btn-minus').is('.btn-minus');
         const input = $(e.target).closest('.input-group').find('input');
-        console.log("input: ", input);
-        console.log("id: ", input[0].id);
         if (input.is('input')) {
             input[0][isNegative ? 'stepDown' : 'stepUp']()
         }
@@ -106,6 +104,11 @@ function AddCombo() {
             }
         }
 
+        if (!allValues.name || !allValues.price || items.length === 0) {
+            toast.error("Please complete all information")
+            return;
+        }
+
         let result = [];
 
         await Promise.all(valImg.fileList.map(async (item, index) => {
@@ -116,6 +119,11 @@ function AddCombo() {
         }))
 
         console.log('result: ', result)
+
+        if (result.length === 0) {
+            toast.error("Please upload image")
+            return;
+        }
 
         let res = await createNewComboService({
             name: allValues.name,
@@ -245,38 +253,39 @@ function AddCombo() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='add-combo-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='add-combo-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <Sidebar />
 
-                                <ol className="breadcrumb">
-                                    <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/combo-management`}>Quản lý combo</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm combo</li>
-                                </ol>
-                                <span className='date-today'>{allValues.dateToday}</span>
-                                {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
-                            </div>
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
+                            <ol className="breadcrumb">
+                                <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                <li className="breadcrumb-item"><Link to={`/combo-management`}>Quản lý combo</Link></li>
+                                <li className="breadcrumb-item active" aria-current="page">Thêm combo</li>
+                            </ol>
+                            <span className='date-today'>{allValues.dateToday}</span>
+                            {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
+                        </div>
+
+                        <LoadingOverlay
+                            active={allValues.isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
                             <div className='row' style={{ padding: '10px' }}>
 
                                 <div className="col-lg-6 mb-4">
@@ -371,17 +380,19 @@ function AddCombo() {
                                 </div>
                             </div>
 
+                        </LoadingOverlay>
 
-                        </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

@@ -96,25 +96,16 @@ function ListMovieTheater() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    { /* EXAMPLE MAP INTERGRATE*/}
+                <Sidebar />
+
+                { /* EXAMPLE MAP INTERGRATE*/}
 
 
-                    {/* <div className='row_chair col-lg-12'>
+                {/* <div className='row_chair col-lg-12'>
                         <div className='chair'>
                             <div className='one_row'>
                                 {
@@ -135,17 +126,26 @@ function ListMovieTheater() {
 
                     </div> */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
 
 
 
-                            <div className="col-lg-12 mb-4">
-
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Danh sách Rạp"
                                     // columns={columns}
@@ -196,17 +196,18 @@ function ListMovieTheater() {
                                     data={listMovieTheater}
 
                                 />
-                            </div>
-
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
-                    </div>
-                </div>
 
-            </LoadingOverlay>
+
+                    </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
+                </div>
+            </div>
+
+
 
         </>
     );

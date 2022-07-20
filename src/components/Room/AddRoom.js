@@ -110,7 +110,17 @@ export default function AddRoom() {
 
 
     const changeHandler = (e, type) => {
+
+
+
         if (type) {
+
+            // if (e.target.value > 10) {
+            //     toast.error("Maximum");
+            //     return;
+            // }
+            // console.log(e.target.value)
+
             let listAlpha = buildDataInputSelect(e.target.value);
             console.log("Check listAlpha: ", listAlpha);
 
@@ -129,7 +139,7 @@ export default function AddRoom() {
 
         console.log('allValue: ', allValues);
 
-        if (allValues.listSeet.length > +allValues.numberOfRow - 1) {
+        if (allValues.listSeet.length > +allValues.numberOfColumn - 1) {
             toast.error("Maximum number of columns exceeded");
             return;
         }

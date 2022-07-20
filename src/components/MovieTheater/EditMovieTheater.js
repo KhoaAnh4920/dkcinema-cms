@@ -26,7 +26,7 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
 
 
 
@@ -64,25 +64,15 @@ export default function EditMovieTheater() {
         selectedWard,
     } = state;
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm();
+
     const { id } = useParams();
 
-
-
-
-    const buildDataInputSelect = (inputData) => {
-        let result = [];
-        if (inputData && inputData.length > 0) {
-
-            inputData.map((item, index) => {
-                let object = {};
-
-                object.label = item.fullName;
-                object.value = item.id;
-                result.push(object);
-            })
-        }
-        return result;
-    }
 
     //Uploaded url
     const getBase64 = (file) => {
@@ -94,12 +84,6 @@ export default function EditMovieTheater() {
         });
     }
 
-    const handleChangeSelect = async (selectedOption, name) => {
-        let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
-        let stateCopy = { ...allValues };
-        stateCopy[stateName] = selectedOption;
-        setAllValues({ ...stateCopy })
-    }
 
 
     useEffect(() => {
@@ -109,8 +93,6 @@ export default function EditMovieTheater() {
             //  const userData = await getUserByRole(2);
             const movieTheaterData = await getAllMovieTheater();
             const movieTheaterEdit = await getEditMovieTheater(id);
-
-            console.log("movieTheaterEdit: ", movieTheaterEdit);
 
             if (movieTheaterEdit && movieTheaterEdit.data) {
                 const location = await testFunctionParent(movieTheaterEdit.data.cityCode, movieTheaterEdit.data.districtCode, movieTheaterEdit.data.wardCode);
@@ -140,6 +122,10 @@ export default function EditMovieTheater() {
                     })
                 }
 
+                let defaultValues = {};
+                defaultValues.tenRap = movieTheaterEdit.data.tenRap;
+                defaultValues.soDienThoai = movieTheaterEdit.data.tenRap;
+                defaultValues.address = movieTheaterEdit.data.address;
 
                 setAllValues((prevState) => ({
                     ...prevState,
@@ -156,6 +142,8 @@ export default function EditMovieTheater() {
                     ...prevState,
                     fileList: result
                 }));
+
+                reset({ ...defaultValues });
 
             }
 
@@ -233,7 +221,6 @@ export default function EditMovieTheater() {
 
 
     const handleSaveEditMovieTheater = async () => {
-
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -356,7 +343,14 @@ export default function EditMovieTheater() {
     };
 
     const handleChangeImage = ({ fileList }) => {
-        console.log('fileList: ', fileList);
+        if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
+            const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
+            console.log(isJpgOrPng);
+            if (!isJpgOrPng) {
+                toast.error("Please choose image");
+                return;
+            }
+        }
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -388,7 +382,7 @@ export default function EditMovieTheater() {
                 <Sidebar />
 
                 {/* Sidebar */}
-                <div id="content-wrapper" className="d-flex flex-column">
+                <div id="content-wrapper" className="d-flex flex-column edit-movie-theater">
                     <div id="content">
                         {/* TopBar */}
                         <Header />
@@ -447,101 +441,123 @@ export default function EditMovieTheater() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Tên rạp chiếu</label>
-                                                <input type="text" className="form-control input-sm" name='tenRap' value={allValues.tenRap} onChange={changeHandler} placeholder="Enter name" />
-
-                                                {/* <span className='error-code-input'>{allValues.errors["tenRap"]}</span> */}
-
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputPassword1">Số điện thoại</label>
-                                                <input type="text" className="form-control input-sm" name='soDienThoai' value={allValues.soDienThoai} onChange={changeHandler} placeholder="Enter phone" />
-                                                {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
-                                            </div>
-                                            {/* <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Quản lý rạp</label>
-                                                <Select
-                                                    className='gender-select'
-                                                    value={allValues.selectedUser}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listUser}
-                                                    placeholder='Select manage'
-                                                    name='selectedGender'
-                                                // styles={this.props.colourStyles}
-                                                />
-
-                                            </div> */}
-
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">City</label>
-                                                <Select
-                                                    name="cityId"
-                                                    key={`cityId_${selectedCity?.value}`}
-                                                    isDisabled={cityOptions.length === 0}
-                                                    options={cityOptions}
-                                                    onChange={(option) => onCitySelect(option)}
-                                                    placeholder="City"
-                                                    defaultValue={selectedCity}
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">District</label>
-                                                <Select
-                                                    name="districtId"
-                                                    key={`districtId_${selectedDistrict?.value}`}
-                                                    isDisabled={districtOptions.length === 0}
-                                                    options={districtOptions}
-                                                    onChange={(option) => onDistrictSelect(option)}
-                                                    placeholder="District"
-                                                    defaultValue={selectedDistrict}
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Ward</label>
-                                                <Select
-                                                    name="wardId"
-                                                    key={`wardId_${selectedWard?.value}`}
-                                                    isDisabled={wardOptions.length === 0}
-                                                    options={wardOptions}
-                                                    placeholder="Phường/Xã"
-                                                    onChange={(option) => onWardSelect(option)}
-                                                    defaultValue={selectedWard}
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="exampleInputEmail1">Address</label>
-                                                <input type="text" className="form-control input-sm" name='address' value={allValues.address} onChange={changeHandler} placeholder="Address" />
-                                                {/* <span className='error-code-input'>{allValues.errors["address"]}</span> */}
-
-                                            </div>
+                                            <form onSubmit={handleSubmit(handleSaveEditMovieTheater)}>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Tên rạp chiếu</label>
+                                                    <input type="text"
+                                                        className="form-control input-sm"
+                                                        name='tenRap'
+                                                        // value={allValues.tenRap}
+                                                        placeholder="Enter name"
+                                                        {...register("tenRap", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
 
 
-                                            {/* <button
-                                                type="submit"
-                                                onClick={() => handleSaveEditMovieTheater()}
-                                                className="btn btn-primary btn-submit">Submit</button> */}
 
-                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveEditMovieTheater()}>
-                                                {allValues.isShowLoading &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputPassword1">Số điện thoại</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        name='soDienThoai'
 
-                                                }
-                                                {!allValues.isShowLoading &&
-                                                    <>
-                                                        <span className="visually">Submit</span>
-                                                    </>
-                                                }
-                                            </Button>
+                                                        placeholder="Enter phone"
+                                                        {...register("soDienThoai", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
+
+                                                </div>
+
+
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">City</label>
+                                                    <Select
+                                                        name="cityId"
+                                                        key={`cityId_${selectedCity?.value}`}
+                                                        isDisabled={true}
+                                                        options={cityOptions}
+                                                        onChange={(option) => onCitySelect(option)}
+                                                        placeholder="City"
+                                                        defaultValue={selectedCity}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">District</label>
+                                                    <Select
+                                                        name="districtId"
+                                                        key={`districtId_${selectedDistrict?.value}`}
+                                                        isDisabled={true}
+                                                        options={districtOptions}
+                                                        onChange={(option) => onDistrictSelect(option)}
+                                                        placeholder="District"
+                                                        defaultValue={selectedDistrict}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Ward</label>
+                                                    <Select
+                                                        name="wardId"
+                                                        key={`wardId_${selectedWard?.value}`}
+                                                        isDisabled={true}
+                                                        options={wardOptions}
+                                                        placeholder="Phường/Xã"
+                                                        onChange={(option) => onWardSelect(option)}
+                                                        defaultValue={selectedWard}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="exampleInputEmail1">Address</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control input-sm"
+                                                        name='address'
+
+                                                        placeholder="Address"
+                                                        {...register("address", {
+                                                            required: true,
+                                                            onChange: changeHandler
+                                                        })}
+                                                    />
+
+                                                </div>
+
+
+                                                {Object.keys(errors).length !== 0 && (
+                                                    <ul className="error-container">
+                                                        {errors.tenRap?.type === "required" && <li>Name Theater is required</li>}
+                                                        {errors.soDienThoai?.type === "required" && <li>Phone number is required</li>}
+                                                        {errors.address?.type === "required" && <li>Address is required</li>}
+                                                    </ul>
+                                                )}
+
+                                                <Button variant="primary" type='submit' {...allValues.isShowLoading && 'disabled'}>
+                                                    {allValues.isShowLoading &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isShowLoading &&
+                                                        <>
+                                                            <span className="visually">Submit</span>
+                                                        </>
+                                                    }
+                                                </Button>
+
+                                            </form>
 
                                         </div>
                                     </div>

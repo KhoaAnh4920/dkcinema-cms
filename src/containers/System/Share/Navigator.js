@@ -9,12 +9,29 @@ class MenuGroup extends Component {
 
     render() {
         const { name, children, id } = this.props;
+        // console.log('name: ', name)
+        // console.log('id: ', id)
         return (
             // render title menu //
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target={'#' + id} aria-expanded="true"
                     aria-controls="collapseTableUser">
-                    <i className="fas fa-fw fa-table"></i>
+                    {id === 'tableUser' &&
+                        <i className="fas fa-user"></i>
+                    }
+                    {id === 'tableMovieTheater' &&
+                        <i className="fas fa-camera-retro"></i>
+                    }
+                    {id === 'tablefilms' &&
+                        <i className="fas fa-film"></i>
+                    }
+                    {id === 'tableFood' &&
+                        <i class='fas fa-hamburger'></i>
+                    }
+
+
+
+
                     <FormattedMessage id={name} />
                 </a>
                 <div id={id} className="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">

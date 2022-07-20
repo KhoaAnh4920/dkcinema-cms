@@ -120,12 +120,12 @@ function Users() {
                 roleId: data.selectedRoles.value,
                 movietheaterid: (data.selectedMovieTheater && data.selectedMovieTheater.value) ? data.selectedMovieTheater.value : null,
                 userName: data.userName,
-                address: data.address,
+                address: data.address || null,
                 avatar: data.avatar,
                 fileName: data.fileName,
-                cityCode: data.selectedCity.value,
-                districtCode: data.selectedDistrict.value,
-                wardCode: data.selectedWard.value
+                cityCode: (data.selectedCity && data.selectedCity.value) ? data.selectedCity.value : null,
+                districtCode: (data.selectedDistrict && data.selectedDistrict.value) ? data.selectedDistrict.value : null,
+                wardCode: (data.selectedWard && data.selectedWard.value) ? data.selectedWard.value : null
             })
 
             if (res && res.errCode == 0) {
@@ -177,28 +177,29 @@ function Users() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
+
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Danh sách người dùng"
                                     columns={columns}
@@ -226,23 +227,23 @@ function Users() {
                                             // onClick: (event, rowData) => history.push(`/edit-user/${rowData.id}`)
 
                                         },
-                                        {
-                                            icon: 'delete',
-                                            tooltip: 'Delete User',
-                                            onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    handleOnDeleteUser(rowData.id)
-                                                }
-                                            })
-                                        }
+                                        // {
+                                        //     icon: 'delete',
+                                        //     tooltip: 'Delete User',
+                                        //     onClick: (event, rowData) => Swal.fire({
+                                        //         title: 'Are you sure?',
+                                        //         text: "You won't be able to revert this!",
+                                        //         icon: 'warning',
+                                        //         showCancelButton: true,
+                                        //         confirmButtonColor: '#3085d6',
+                                        //         cancelButtonColor: '#d33',
+                                        //         confirmButtonText: 'Yes, delete it!'
+                                        //     }).then((result) => {
+                                        //         if (result.isConfirmed) {
+                                        //             handleOnDeleteUser(rowData.id)
+                                        //         }
+                                        //     })
+                                        // }
                                     ]}
                                     options={{
                                         actionsColumnIndex: -1,
@@ -251,37 +252,38 @@ function Users() {
 
                                     }}
                                 />
-                            </div>
-
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
-                {isOpenModalUser &&
-                    <ModalAddUsers
-                        isOpen={isOpenModalUser}
-                        toggleFromParent={toggleUserModal}
-                        saveNewUser={saveNewUserFromModal}
-                    />
-                }
+            {isOpenModalUser &&
+                <ModalAddUsers
+                    isOpen={isOpenModalUser}
+                    toggleFromParent={toggleUserModal}
+                    saveNewUser={saveNewUserFromModal}
+                />
+            }
 
-                {modalEditUser.isShow &&
-                    <ModalEditUsers
-                        isOpen={modalEditUser.isShow}
-                        toggleFromParentEditUser={toggleUserModalEditUser}
-                        saveEditUser={saveEditUserFromModal}
-                        dataUser={modalEditUser.dataUser}
-                    />
+            {modalEditUser.isShow &&
+                <ModalEditUsers
+                    isOpen={modalEditUser.isShow}
+                    toggleFromParentEditUser={toggleUserModalEditUser}
+                    saveEditUser={saveEditUserFromModal}
+                    dataUser={modalEditUser.dataUser}
+                />
 
-                }
+            }
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );
