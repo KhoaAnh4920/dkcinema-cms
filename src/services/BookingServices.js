@@ -23,7 +23,9 @@ const getTicketBooking = (id, page, PerPage) => {
 }
 
 
-
+const updateStatusComboBook = (data) => {
+    return axios.put('/status/commboBooking', data)
+}
 
 
 export {
@@ -31,5 +33,6 @@ export {
     getDetailBooking,
     getComboBooking,
     getBookingConfirm,
-    getTicketBooking
+    getTicketBooking,
+    updateStatusComboBook
 };

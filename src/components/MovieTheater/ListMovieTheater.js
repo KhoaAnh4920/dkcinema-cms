@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { getAllMovieTheater } from '../../services/MovieTheater';
+import { getAllMovieTheater, deleteMovieTheater } from '../../services/MovieTheater';
 import MaterialTable from 'material-table';
 import Swal from 'sweetalert2';
 import moment from 'moment';
@@ -91,6 +91,23 @@ function ListMovieTheater() {
 
     ]
 
+    const handleOnDelete = async (id) => {
+        try {
+            setShowLoading(true);
+
+            let res = await deleteMovieTheater(id);
+            if (res && res.errCode === 0) {
+                await fetchDataMovieTheater();
+            } else {
+                toast.error(res.errMessage)
+                setShowLoading(false);
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
 
     return (
@@ -169,20 +186,20 @@ function ListMovieTheater() {
                                         },
                                         {
                                             icon: 'delete',
-                                            tooltip: 'Delete User',
-                                            // onClick: (event, rowData) => Swal.fire({
-                                            //     title: 'Are you sure?',
-                                            //     text: "You won't be able to revert this!",
-                                            //     icon: 'warning',
-                                            //     showCancelButton: true,
-                                            //     confirmButtonColor: '#3085d6',
-                                            //     cancelButtonColor: '#d33',
-                                            //     confirmButtonText: 'Yes, delete it!'
-                                            // }).then((result) => {
-                                            //     if (result.isConfirmed) {
-                                            //         handleOnDeleteUser(rowData.id)
-                                            //     }
-                                            // })
+                                            tooltip: 'Delete Movie Theater',
+                                            onClick: (event, rowData) => Swal.fire({
+                                                title: 'Are you sure?',
+                                                text: "You won't be able to revert this!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonColor: '#3085d6',
+                                                cancelButtonColor: '#d33',
+                                                confirmButtonText: 'Yes, delete it!'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    handleOnDelete(rowData.id)
+                                                }
+                                            })
                                         }
                                     ]}
                                     options={{

@@ -32,6 +32,10 @@ const getTheaterSales = (data) => {
     return axios.get(`/count-turnover-of-movieTheater`, { params: { movieTheaterId: data.movieTheaterId } });
 }
 
+const deleteMovieTheater = (id) => {
+    return axios.delete(`/movieTheater/${id}`)
+}
+
 
 export {
     getAllMovieTheater,
@@ -40,5 +44,6 @@ export {
     editMovieTheater,
     removeImageMovieTheater,
     checkMerchantMovieTheater,
-    getTheaterSales
+    getTheaterSales,
+    deleteMovieTheater
 };

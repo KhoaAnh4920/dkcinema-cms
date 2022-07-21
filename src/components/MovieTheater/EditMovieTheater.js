@@ -361,11 +361,27 @@ export default function EditMovieTheater() {
 
         console.log('item remove: ', e);
 
-        let res = await removeImageMovieTheater(e.uid);
-        // setValImg((prevState) => ({
-        //     ...prevState,
-        //     fileList
-        // }));
+
+        if (e.public_id && typeof (e.uid) !== 'string') {
+            let res = await removeImageMovieTheater(e.uid);
+
+            if (res && res.errCode === 0) {
+                toast.success("Delete image succeed !!!");
+                let fileList = valImg.fileList.filter(item => item.uid !== e.uid)
+
+                setValImg((prevState) => ({
+                    ...prevState,
+                    fileList
+                }));
+            }
+
+            else
+                toast.error(res.errMessage);
+        } else {
+            setValImg((prevState) => ({
+                ...prevState,
+            }));
+        }
     }
 
 

@@ -193,14 +193,19 @@ export default function ModalAddUsers(props) {
 
                 let result = [];
                 await Promise.all(allValues.copyListMovieTheater.map(async (item, index) => {
+
+                    console.log(item)
                     let data = await checkMerchantMovieTheater({
-                        movieTheaterId: item.id,
+                        movieTheaterId: item.value,
                         roleId: 2
                     })
-                    if (!data) {
-                        result.push(data);
+                    console.log('data: ', data);
+                    if (data && data.data) {
+                        result.push(data.data);
                     }
                 }))
+
+                console.log('result: ', result);
 
                 let listMovieTheater = buildDataInputSelect(result);
 

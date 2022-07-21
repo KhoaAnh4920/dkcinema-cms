@@ -230,9 +230,11 @@ function ListFood() {
 
     const handleOnDeleteFood = async (id) => {
         try {
-            // this.setState({
-            //     isShowLoading: true
-            // })
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: true,
+            }))
+
 
             let res = await deleteFoodService(id);
             if (res && res.errCode === 0) {
@@ -241,9 +243,10 @@ function ListFood() {
             } else {
                 toast.error(res.errMessage)
             }
-            // this.setState({
-            //     isShowLoading: false
-            // })
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: false,
+            }))
         } catch (e) {
             console.log(e);
         }

@@ -99,6 +99,7 @@ function ListNews() {
                 await fetchDataPost();
             } else {
                 toast.error(res.errMessage)
+                setShowLoading(false);
             }
 
         } catch (e) {

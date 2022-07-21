@@ -85,20 +85,23 @@ function ListCombo() {
 
     const handleOnDeleteCombo = async (id) => {
         try {
-            // this.setState({
-            //     isShowLoading: true
-            // })
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: true
+            }))
 
             let res = await deleteComboService(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete food success !!")
+                toast.success("Delete combo success !!")
                 await fetchDataCombo();
             } else {
                 toast.error(res.errMessage)
             }
-            // this.setState({
-            //     isShowLoading: false
-            // })
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoading: false
+            }))
         } catch (e) {
             console.log(e);
         }

@@ -12,7 +12,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
-import { getAllBooking, getTicketBooking } from '../../services/BookingServices'
+import { getAllBooking, getTicketBooking, updateStatusComboBook } from '../../services/BookingServices'
 import moment from 'moment';
 import { useParams } from 'react-router-dom';
 // import "antd/dist/antd.css";
@@ -200,19 +200,31 @@ function PrintTicket() {
     }
 
 
-    const handlePrintTicket = () => {
+    const handlePrintTicket = async () => {
         setAllValues((prevState) => ({
             ...prevState,
             isLoadingButton: true,
         }))
 
-        setTimeout(() => {
+        let res = await updateStatusComboBook({
+            bookingId: id
+        })
+
+        if (res && res.errCode === 0) {
             toast.success("In vé thành công");
             setAllValues((prevState) => ({
                 ...prevState,
                 isLoadingButton: false,
             }))
-        }, 5000);
+        }
+
+        // setTimeout(() => {
+        //     toast.success("In vé thành công");
+        //     setAllValues((prevState) => ({
+        //         ...prevState,
+        //         isLoadingButton: false,
+        //     }))
+        // }, 5000);
     }
 
 

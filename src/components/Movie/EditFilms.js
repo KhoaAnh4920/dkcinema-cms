@@ -96,13 +96,6 @@ export default function EditFilms() {
 
     };
 
-    // const handleChangeImage = ({ fileList }) => {
-    //     console.log('fileList: ', fileList);
-    //     setValImg((prevState) => ({
-    //         ...prevState,
-    //         fileList
-    //     }));
-    // }
 
     const handleChangeImage = ({ fileList }) => {
 
