@@ -309,65 +309,77 @@ export default function AddSchedule() {
             ...prevState,
             isShowLoadingButton: true
         }));
-        let res = await createNewScheduleService({
-            movieId: allValues.selectedMovie.value,
-            roomId: allValues.selectedRoom.value,
-            premiereDate: formatedPremiereDate,
-            startTime: formatedStartTime,
-            endTime: formatedEndTime
-        })
 
-        if (res && res.errCode === 0) {
-            toast.success("Add new schedule succeed");
-            let formatedDate = new Date(allValues.dateSchedule).getTime(); // convert timestamp //
+        if (allValues.startTime === '' || allValues.endTime === '' || allValues.selectedMovie === '') {
+            toast.error("Empty !!! Can't add new schedule");
+            setAllValues((prevState) => ({
+                ...prevState,
+                isShowLoadingButton: false
+            }));
+            return;
+        } else {
+            let res = await createNewScheduleService({
+                movieId: allValues.selectedMovie.value,
+                roomId: allValues.selectedRoom.value,
+                premiereDate: formatedPremiereDate,
+                startTime: formatedStartTime,
+                endTime: formatedEndTime
+            })
 
-            let obj = {};
-            obj.date = formatedDate;
-            obj.roomId = allValues.selectedRoom.value
-            obj.movieTheaterId = allValues.movieTheaterId
-            let listSchedule = await getAllSchedule(obj);
+            if (res && res.errCode === 0) {
+                toast.success("Add new schedule succeed");
+                let formatedDate = new Date(allValues.dateSchedule).getTime(); // convert timestamp //
 
-            if (listSchedule && listSchedule.data) {
-                listSchedule = listSchedule.data.reverse();
-                console.log('listSchedule: ', listSchedule)
-                listSchedule.map((item, index) => {
-                    if (index < (listSchedule.length - 1)) {
-                        let newDateEndTime = new Date(item.endTime);
-                        console.log('newDateEndTime: ', newDateEndTime)
+                let obj = {};
+                obj.date = formatedDate;
+                obj.roomId = allValues.selectedRoom.value
+                obj.movieTheaterId = allValues.movieTheaterId
+                let listSchedule = await getAllSchedule(obj);
 
-                        let test2 = moment(newDateEndTime).format("HH:mm:ss a");
-                        let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
+                if (listSchedule && listSchedule.data) {
+                    listSchedule = listSchedule.data.reverse();
+                    console.log('listSchedule: ', listSchedule)
+                    listSchedule.map((item, index) => {
+                        if (index < (listSchedule.length - 1)) {
+                            let newDateEndTime = new Date(item.endTime);
+                            console.log('newDateEndTime: ', newDateEndTime)
 
-                        console.log("end: ", test2)
-                        console.log('startTime: ', startTime);
+                            let test2 = moment(newDateEndTime).format("HH:mm:ss a");
+                            let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
 
-                        var startTime2 = moment(test2, 'HH:mm:ss a');
-                        var endTime2 = moment(startTime, 'HH:mm:ss a');
+                            console.log("end: ", test2)
+                            console.log('startTime: ', startTime);
 
-                        let duration = endTime2.diff(startTime2, 'minutes');
+                            var startTime2 = moment(test2, 'HH:mm:ss a');
+                            var endTime2 = moment(startTime, 'HH:mm:ss a');
 
-                        item.duration = duration;
+                            let duration = endTime2.diff(startTime2, 'minutes');
 
-                        return item;
-                    }
-                })
+                            item.duration = duration;
+
+                            return item;
+                        }
+                    })
+                }
+
+
+                setAllValues((prevState) => ({
+                    ...prevState,
+                    startTime: '',
+                    endTime: '',
+                    listSchedule: listSchedule,
+                }))
+            } else {
+                toast.error(res.errMessage)
             }
-
 
             setAllValues((prevState) => ({
                 ...prevState,
-                startTime: '',
-                endTime: '',
-                listSchedule: listSchedule,
-            }))
-        } else {
-            toast.error(res.errMessage)
+                isShowLoadingButton: false
+            }));
         }
 
-        setAllValues((prevState) => ({
-            ...prevState,
-            isShowLoadingButton: false
-        }));
+
     }
 
 

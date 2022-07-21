@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import logo from '../../../assets/DKCinema-White.png';
+import logo from '../../../assets/Logo-White.png';
 import './Navigator.scss';
 
 class MenuGroup extends Component {
@@ -27,6 +27,36 @@ class MenuGroup extends Component {
                     }
                     {id === 'tableFood' &&
                         <i class='fas fa-hamburger'></i>
+                    }
+                    {id === 'tableCombo' &&
+                        <i className='fas fa-recycle'></i>
+                    }
+                    {id === 'tableBanner' &&
+                        <i className='fas fa-images'></i>
+                    }
+                    {id === 'tableNews' &&
+                        <i className='fas fa-edit'></i>
+                    }
+                    {id === 'tableComment' &&
+                        <i className='fas fa-comments'></i>
+                    }
+                    {id === 'tableVoucher' &&
+                        <i className='fas fa-ad'></i>
+                    }
+                    {id === 'tableFeedback' &&
+                        <i className='fas fa-reply-all'></i>
+                    }
+                    {id === 'tableStaff' &&
+                        <i className='fas fa-user-friends'></i>
+                    }
+                    {id === 'tableRoom' &&
+                        <i className='fas fa-couch'></i>
+                    }
+                    {id === 'tableshowTime' &&
+                        <i className='fas fa-calendar-check'></i>
+                    }
+                    {id === 'tableTicket' &&
+                        <i className='fas fa-ticket-alt'></i>
                     }
 
 
