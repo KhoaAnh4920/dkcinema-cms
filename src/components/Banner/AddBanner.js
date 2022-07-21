@@ -181,7 +181,7 @@ export default function AddBanner() {
 
     const handleSaveBanner = async (data) => {
 
-        console.log('data: ', data)
+        // console.log('data: ', data)
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -201,14 +201,14 @@ export default function AddBanner() {
         let result = [];
 
         await Promise.all(valImg.fileList.map(async (item, index) => {
-            console.log("Check item: ", item.originFileObj);
+            // console.log("Check item: ", item.originFileObj);
             let obj = {};
             obj.image = await getBase64(item.originFileObj);
             obj.fileName = item.name;
             result.push(obj);
         }))
 
-        console.log("Check result: ", result);
+        // console.log("Check result: ", result);
 
         let res = await createNewBanner({
             name: allValues.name,

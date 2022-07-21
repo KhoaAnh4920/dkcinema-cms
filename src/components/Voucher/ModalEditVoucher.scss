@@ -41,4 +41,16 @@
 
 
     }
+
+    .modal-footer-container {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .btn-ft {
+            width: 100%;
+        }
+    }
+
+
+
 }

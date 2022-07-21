@@ -50,7 +50,7 @@ function AccountProfile() {
         selectedMovieTheater: '',
         isShowMovieTheater: true,
         errors: {},
-        isShowLoading: false,
+        isShowLoading: true,
         imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png',
         activeTab: 'Tab1'
     });
@@ -207,7 +207,8 @@ function AccountProfile() {
                 roleId: dataUser.roleId,
                 listGender: listGender,
                 selectedGender,
-                movietheaterid: selectUser.adminInfo.movietheaterid
+                movietheaterid: selectUser.adminInfo.movietheaterid,
+                isShowLoading: false
             }));
 
             console.log(allValues);
@@ -261,10 +262,10 @@ function AccountProfile() {
     const handleClickSubmit = async () => {
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
 
-        // setAllValues({
-        //     ...allValues,
-        //     isShowLoading: true
-        // })
+        setAllValues({
+            ...allValues,
+            isShowLoading: true
+        })
         console.log('allValuesInput: ', allValuesInput)
 
         let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
@@ -277,9 +278,9 @@ function AccountProfile() {
             address: allValues.address,
             avatar: allValues.avatar,
             fileName: allValues.fileName,
-            cityCode: selectedCity.value,
-            districtCode: selectedDistrict.value,
-            wardCode: selectedWard.value,
+            cityCode: (selectedCity && selectedCity.value) ? selectedCity.value : null,
+            districtCode: (selectedDistrict && selectedDistrict.value) ? selectedDistrict.value : null,
+            wardCode: (selectedWard && selectedWard.value) ? selectedWard.value : null,
             roleId: allValues.roleId,
             id: allValues.id
         })
@@ -303,6 +304,11 @@ function AccountProfile() {
             // history.push("/users-management")
             toast.error(res.errMessage);
         }
+
+        setAllValues({
+            ...allValues,
+            isShowLoading: false
+        })
     }
 
 

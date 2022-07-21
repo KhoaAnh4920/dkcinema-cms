@@ -171,7 +171,7 @@ function ListCombo() {
 
                                         actions={[
                                             {
-                                                icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add new combo</button>,
+                                                icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add combo</button>,
                                                 onClick: async (event, rowData) => {
                                                     history.push('/add-new-combo')
                                                 },

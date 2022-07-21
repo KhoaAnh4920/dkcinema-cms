@@ -40,8 +40,6 @@ export default function Login() {
 
     const handleLogin = async () => {
 
-        console.log('OK');
-
         setLoadingButton(true);
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
@@ -72,18 +70,18 @@ export default function Login() {
 
     }
 
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            handleSubmit(handleLogin)
-        }
-    }
+    // const handleKeyDown = (event) => {
+    //     if (event.key === 'Enter') {
+    //         handleSubmit(handleLogin)
+    //     }
+    // }
 
     const checkKeyDown = (e) => {
-        if (e.code === 'Enter') handleSubmit(handleLogin)();
+        if (e.code === 'Enter') handleSubmit(handleLogin);
     };
 
     return (
-        <form onSubmit={handleSubmit(handleLogin)} onKeyDown={(e) => checkKeyDown(e)}>
+        <form onSubmit={handleSubmit(handleLogin)}>
             <div className='login-background'>
                 <div className='login-container'>
                     <div className='login-admin-content row'>
@@ -102,8 +100,9 @@ export default function Login() {
                                 {...register("email", {
                                     required: true,
                                     pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    onChange: (e => setEmail(e.target.value))
                                 })}
-                                onChange={e => setEmail(e.target.value)}
+                            // onChange={e => setEmail(e.target.value)}
                             />
                             {Object.keys(errors).length !== 0 && (
                                 (errors.email?.type === "required" && <span className='error-content'>Email is required</span>) ||
@@ -122,9 +121,11 @@ export default function Login() {
                                     {...register("password", {
                                         required: true,
                                         minLength: 6,
+                                        onChange: (e => setPassword(e.target.value))
                                     })}
                                     placeholder='Enter your password'
-                                    onChange={e => setPassword(e.target.value)}
+                                    onKeyDown={(e) => checkKeyDown(e)}
+                                // onChange={e => setPassword(e.target.value)}
 
 
                                 />

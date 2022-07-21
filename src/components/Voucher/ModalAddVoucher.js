@@ -24,8 +24,10 @@ const schema = yup.object().shape({
         .required("Vui lòng tạo mã"),
 
     discount: yup
-        .string()
-        .required("Vui lòng nhập giá khuyến mãi"),
+        .number()
+        .integer()
+        .min(1)
+        .required(),
 });
 
 
@@ -40,7 +42,8 @@ export default function ModalAddVoucher(props) {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        reset
     } = useForm({ resolver: yupResolver(schema) });
 
 
@@ -97,6 +100,11 @@ export default function ModalAddVoucher(props) {
             code: genCode
         }));
 
+        let defaultValues = {};
+        defaultValues.code = genCode;
+
+        reset({ ...defaultValues });
+
     }
 
 
@@ -134,14 +142,13 @@ export default function ModalAddVoucher(props) {
     }
 
     const handleSaveVoucher = async () => {
-        console.log('aaa')
-        // setAllValues((prevState) => ({
-        //     ...prevState,
-        //     isShowLoading: true
-        // }));
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: true
+        }));
 
-        // let allValuesInput = { ...allValues };
-        // props.saveNewVoucher(allValuesInput);
+        let allValuesInput = { ...allValues };
+        props.saveNewVoucher(allValuesInput);
 
     }
 
@@ -170,11 +177,8 @@ export default function ModalAddVoucher(props) {
                                         <input
                                             type="text"
                                             className="form-control input-small"
-                                            value={allValues.name}
                                             name='name'
-                                            onChange={changeHandler}
                                             {...register("name", {
-                                                required: true,
                                                 onChange: changeHandler,
                                             })}
                                         />
@@ -187,9 +191,13 @@ export default function ModalAddVoucher(props) {
                                             <input
                                                 type="text"
                                                 className="form-control input-small"
-                                                value={allValues.code}
+
                                                 name='code'
-                                                onChange={changeHandler}
+
+                                                {...register("code", {
+                                                    required: true,
+                                                    onChange: changeHandler,
+                                                })}
                                             />
                                             <Button variant="primary" {...allValues.isShowLoadingGenCode && 'disabled'} onClick={() => handleGenerateCode()}>
                                                 {allValues.isShowLoadingGenCode &&
@@ -227,10 +235,13 @@ export default function ModalAddVoucher(props) {
                                             <label htmlFor="exampleInputPassword1">*Giá trị giảm</label>
                                             <input
                                                 type="number"
+                                                min={1}
                                                 className="form-control input-small"
-                                                value={allValues.discount}
                                                 name='discount'
-                                                onChange={changeHandler}
+
+                                                {...register("discount", {
+                                                    onChange: changeHandler,
+                                                })}
                                             />
                                         </div>
                                     </div>
@@ -279,13 +290,21 @@ export default function ModalAddVoucher(props) {
                 </ModalBody>
 
                 <ModalFooter className='modal-footer-container'>
-                    {Object.keys(errors).length !== 0 && (
-                        <ul className="error-modal-container">
-                            {errors.name?.type === "required" && <li>Name Voucher is required</li>}
-                            {errors.code?.type === "required" && <li>Code is required</li>}
-                            {errors.discount?.type === "required" && <li>Discount value is required</li>}
+
+                    {Object.keys(errors).length !== 0 &&
+                        <ul className="error-container">
+                            {errors.name && errors.name.message &&
+                                <li>{errors.name.message}</li>
+                            }
+                            {errors.code && errors.code.message &&
+                                <li>{errors.code.message}</li>
+                            }
+                            {errors.discount && errors.discount.message &&
+                                <li>{errors.discount.message}</li>
+                            }
                         </ul>
-                    )}
+                    }
+
 
                     <Button className='btn-ft' variant="primary" {...allValues.isShowLoading && 'disabled'} type='submit'>
                         {allValues.isShowLoading &&

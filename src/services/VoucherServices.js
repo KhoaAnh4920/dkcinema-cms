@@ -26,7 +26,7 @@ const getEditVoucher = (id) => {
 
 
 const deleteVoucherService = (id) => {
-    return axios.delete(`/users/${id}`);
+    return axios.delete(`/voucher/${id}`);
 }
 
 

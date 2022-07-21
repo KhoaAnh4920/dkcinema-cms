@@ -208,7 +208,7 @@ function ListSchedule() {
             let reslistSchedule = await getAllSchedule(obj);
             let listRoom = buildDataInputSelect(roomData.room);
 
-            console.log("reslistSchedule: ", reslistSchedule);
+            // console.log("reslistSchedule: ", reslistSchedule);
 
             let timeNow = moment();
 
@@ -216,14 +216,14 @@ function ListSchedule() {
             if (reslistSchedule && reslistSchedule.data.length > 0) {
                 let listSchedule = reslistSchedule.data.reverse();
                 let res = listSchedule.map((item, index) => {
-                    console.log("Start: ", item.startTime);
-                    console.log((moment(item.startTime)));
+                    // console.log("Start: ", item.startTime);
+                    // console.log((moment(item.startTime)));
 
                     var duration = moment.duration(timeNow.diff(moment(item.premiereDate)));
 
-                    console.log("Check duation: ", duration);
+                    // console.log("Check duation: ", duration);
 
-                    console.log("Check day: ", duration.asDays());
+                    // console.log("Check day: ", duration.asDays());
 
                     if (Math.trunc(duration.asDays()) < 0 || Math.trunc(duration.asHours()) < 0 || Math.trunc(duration.asMinutes()) < 0) {
                         item.status = 0
@@ -435,7 +435,7 @@ function ListSchedule() {
                                                 <label htmlFor="exampleInputEmail1">Ngày chiếu</label>
                                                 <DatePicker
                                                     onChange={handleOnChangeDatePicker}
-                                                    className="form-control"
+                                                    className="form-control input-date-time"
                                                     value={allValues.dateSchedule || {}}
                                                 />
                                             </div>
@@ -466,13 +466,21 @@ function ListSchedule() {
                                                 />
                                             </div>
 
-                                            <div className='horizon-input' style={{ marginLeft: '50px' }}>
-                                                <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
-                                                </Button>
+                                            <div className='horizon-input' style={{ paddingLeft: 'auto' }}>
+                                                <label htmlFor="exampleInputEmail1" style={{ height: '22px' }}></label>
+
+
+                                                <div className='button-filter'>
+                                                    <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
+                                                        <span className="visually">Submit</span>
+                                                    </Button>
+                                                    <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
+                                                        <span className="visually">Clear</span>
+                                                    </Button>
+
+                                                </div>
+
+
                                             </div>
 
 

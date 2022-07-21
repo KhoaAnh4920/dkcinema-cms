@@ -334,66 +334,70 @@ export default function EditFilms() {
 
     const handleSaveEditFilms = async () => {
 
-        console.log(allValues);
         // Lọc check type //
-        // let arrType = [];
+        let arrType = [];
 
-        // for (let i = 0; i < allValues.listTypeMovie.length; i++) {
-        //     if (allValues.checked[i]) {
-        //         arrType.push({ id: allValues.listTypeMovie[i].id })
-        //     }
-        // }
+        for (let i = 0; i < allValues.listTypeMovie.length; i++) {
+            if (allValues.checked[i]) {
+                arrType.push({ id: allValues.listTypeMovie[i].id })
+            }
+        }
 
-        // setAllValues((prevState) => ({
-        //     ...prevState,
-        //     isShowLoading: true
-        // }));
+        if (arrType.length === 0) {
+            toast.error("Vui lòng chọn thể loại phim");
+            return;
+        }
 
-        // let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: true
+        }));
 
-        // let result = [];
+        let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
 
-        // await Promise.all(valImg.fileList.map(async (item, index) => {
-        //     let obj = {};
-        //     if (item.originFileObj) {
-        //         obj.image = await getBase64(item.originFileObj);
-        //         obj.fileName = item.name;
-        //         obj.typeImage = item.typeImage
-        //     } else {
-        //         obj.url = item.url;
-        //         obj.public_id = item.public_id;
-        //     }
+        let result = [];
 
-        //     result.push(obj);
-        // }))
+        await Promise.all(valImg.fileList.map(async (item, index) => {
+            let obj = {};
+            if (item.originFileObj) {
+                obj.image = await getBase64(item.originFileObj);
+                obj.fileName = item.name;
+                obj.typeImage = item.typeImage
+            } else {
+                obj.url = item.url;
+                obj.public_id = item.public_id;
+            }
 
-        // // console.log('result: ', result)
+            result.push(obj);
+        }))
 
-        // let res = await updateFilmsService({
-        //     name: allValues.name,
-        //     transName: allValues.transName,
-        //     country: allValues.country,
-        //     language: allValues.language,
-        //     duration: allValues.duration,
-        //     description: allValues.description,
-        //     brand: allValues.brand,
-        //     director: allValues.director,
-        //     cast: allValues.cast,
-        //     status: allValues.selectedStatus.value,
-        //     typeMovie: arrType,
-        //     poster: result,
-        //     url: allValues.url,
-        //     releaseTime: formatedDate,
-        //     id: allValues.id
-        // })
+        // console.log('result: ', result)
 
-        // if (res && res.errCode == 0) {
-        //     history.push("/films-management")
-        //     toast.success("Edit films succeed");
-        // } else {
-        //     history.push("/films-management")
-        //     toast.error(res.errMessage);
-        // }
+        let res = await updateFilmsService({
+            name: allValues.name,
+            transName: allValues.transName,
+            country: allValues.country,
+            language: allValues.language,
+            duration: allValues.duration,
+            description: allValues.description,
+            brand: allValues.brand,
+            director: allValues.director,
+            cast: allValues.cast,
+            status: allValues.selectedStatus.value,
+            typeMovie: arrType,
+            poster: result,
+            url: allValues.url,
+            releaseTime: formatedDate,
+            id: allValues.id
+        })
+
+        if (res && res.errCode == 0) {
+            history.push("/films-management")
+            toast.success("Edit films succeed");
+        } else {
+            history.push("/films-management")
+            toast.error(res.errMessage);
+        }
 
     }
 

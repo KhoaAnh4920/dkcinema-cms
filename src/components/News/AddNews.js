@@ -114,7 +114,7 @@ export default function AddNews() {
 
         console.log(fileList);
         if (fileList.length > 1) {
-            toast.error("Maximum 1 poster");
+            toast.error("Maximum 1 thumbnail");
             return;
         }
         if (fileList.length > 0) {
@@ -289,7 +289,7 @@ export default function AddNews() {
 
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý bài viết</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/news-management`}>Quản lý bài viết</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page">Thêm bài viết</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>

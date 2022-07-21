@@ -103,15 +103,6 @@ export const merchantMenu = [
         ]
     },
     {
-        name: 'menu.admin.movieTheater-management',
-        id: 'tableMovieTheater',
-        menus: [
-            {
-                name: 'menu.movieTheater-management.list-movieTheater', link: '/movieTheater-management',
-            },
-        ]
-    },
-    {
         name: 'menu.admin.room-management',
         id: 'tableRoom',
         menus: [

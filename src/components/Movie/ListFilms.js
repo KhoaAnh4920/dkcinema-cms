@@ -114,9 +114,7 @@ function ListFilms() {
 
     const handleOnDeleteMovie = async (id) => {
         try {
-            // this.setState({
-            //     isShowLoading: true
-            // })
+            setShowLoading(true);
 
             let res = await deleteMovieService({
                 id: id,
@@ -126,11 +124,9 @@ function ListFilms() {
                 toast.success("Xóa thành công")
                 await fetchDataMovie();
             } else {
-                alert(res.errMessage)
+                toast.error(res.errMessage)
             }
-            // this.setState({
-            //     isShowLoading: false
-            // })
+            setShowLoading(false);
         } catch (e) {
             console.log(e);
         }
@@ -160,17 +156,18 @@ function ListFilms() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <div className="col-lg-12 mb-4">
-                            <LoadingOverlay
-                                active={isShowLoading}
-                                spinner={<BeatLoader color='#6777ef' size={20} />}
-                                styles={{
-                                    overlay: (base) => ({
-                                        ...base,
-                                        background: '#fff'
-                                    })
-                                }}
-                            >
+                        <LoadingOverlay
+                            active={isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
+                            <div className="col-lg-12 mb-4">
+
                                 <MaterialTable
                                     title="Danh sách Phim"
                                     columns={columns}
@@ -220,9 +217,9 @@ function ListFilms() {
 
                                     }}
                                 />
-                            </LoadingOverlay>
-                        </div>
 
+                            </div>
+                        </LoadingOverlay>
 
                     </div>
                     {/* Footer */}

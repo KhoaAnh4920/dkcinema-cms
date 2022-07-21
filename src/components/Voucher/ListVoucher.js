@@ -23,7 +23,7 @@ import ModalEditVoucher from './ModalEditVoucher';
 function ListVoucher() {
 
     const [listVoucher, setVoucherData] = useState([]);
-    const [isShowLoading, setShowLoading] = useState(false);
+    const [isShowLoading, setShowLoading] = useState(true);
     const [isOpenModalVoucher, setOpenModalVoucher] = useState(false);
 
     const [loading, setLoading] = useState(false);
@@ -43,7 +43,6 @@ function ListVoucher() {
         const voucherData = await getAllVoucher();
         console.log("voucherData: ", voucherData);
         if (voucherData && voucherData.data) {
-
 
             setVoucherData(voucherData.data);
             setShowLoading(false);
@@ -185,36 +184,54 @@ function ListVoucher() {
 
     ]
 
+    const handleOnDeleteVoucher = async (id) => {
+        try {
+            setShowLoading(true);
+            let res = await deleteVoucherService(id);
+            if (res && res.errCode === 0) {
+                toast.success("Delete voucher success")
+                await fetchDataVoucher();
+            } else {
+                toast.error(res.errMessage)
+                setShowLoading(false);
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
 
 
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    { /* EXAMPLE MAP INTERGRATE*/}
+                <Sidebar />
+
+                { /* EXAMPLE MAP INTERGRATE*/}
 
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
 
+                        <LoadingOverlay
+                            active={isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
 
 
                             <div className="col-lg-12 mb-4">
@@ -258,7 +275,7 @@ function ListVoucher() {
                                                 confirmButtonText: 'Yes, delete it!'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
-                                                    deleteVoucherService(rowData.id)
+                                                    handleOnDeleteVoucher(rowData.id)
                                                 }
                                             })
                                         }
@@ -276,33 +293,34 @@ function ListVoucher() {
                                 />
                             </div>
 
-                        </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+                        </LoadingOverlay>
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
-                {isOpenModalVoucher &&
-                    <ModalAddVoucher
-                        isOpen={isOpenModalVoucher}
-                        toggleFromParent={toggleVoucherModal}
-                        saveNewVoucher={saveNewVoucherFromModal}
-                    />
-                }
+            {isOpenModalVoucher &&
+                <ModalAddVoucher
+                    isOpen={isOpenModalVoucher}
+                    toggleFromParent={toggleVoucherModal}
+                    saveNewVoucher={saveNewVoucherFromModal}
+                />
+            }
 
-                {modalEditVoucher.isShow &&
-                    <ModalEditVoucher
-                        isOpen={modalEditVoucher.isShow}
-                        toggleFromParentEditVoucher={toggleModalEditVoucher}
-                        saveEditVoucher={saveEditVoucherFromModal}
-                        dataVoucher={modalEditVoucher.dataVoucher}
-                    />
+            {modalEditVoucher.isShow &&
+                <ModalEditVoucher
+                    isOpen={modalEditVoucher.isShow}
+                    toggleFromParentEditVoucher={toggleModalEditVoucher}
+                    saveEditVoucher={saveEditVoucherFromModal}
+                    dataVoucher={modalEditVoucher.dataVoucher}
+                />
 
-                }
+            }
 
-            </LoadingOverlay>
+
 
         </>
     );

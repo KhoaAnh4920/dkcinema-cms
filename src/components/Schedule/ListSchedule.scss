@@ -8,16 +8,20 @@
             align-items: center;
 
             .horizon-input {
-                display: flex;
+                // display: flex;
                 width: 25%;
                 margin-right: 10px;
 
                 label {
-                    text-align: center;
+                    text-align: left;
                     display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    // justify-content: center;
+                    // align-items: center;
                     width: 40%;
+                }
+
+                .input-date-time {
+                    height: 38px;
                 }
 
                 .room-select,
@@ -26,11 +30,17 @@
                     z-index: 9;
                 }
 
-                .filter-schedule-data {
-                    margin-left: 20px;
-                    background-color: #fff;
-                    border: 1px solid #6777ef;
-                    color: #6777ef;
+
+
+                .button-filter {
+                    float: right;
+
+                    .filter-schedule-data {
+                        margin-left: 20px;
+                        background-color: #fff;
+                        border: 1px solid #6777ef;
+                        color: #6777ef;
+                    }
                 }
             }
         }

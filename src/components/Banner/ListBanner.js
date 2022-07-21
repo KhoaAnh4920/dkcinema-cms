@@ -88,6 +88,7 @@ function ListBanner() {
             } else {
                 toast.error(res.errMessage)
             }
+            setShowLoading(false);
 
         } catch (e) {
             console.log(e);
@@ -120,17 +121,18 @@ function ListBanner() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <div className="col-lg-12 mb-4">
-                            <LoadingOverlay
-                                active={isShowLoading}
-                                spinner={<BeatLoader color='#6777ef' size={20} />}
-                                styles={{
-                                    overlay: (base) => ({
-                                        ...base,
-                                        background: '#fff'
-                                    })
-                                }}
-                            >
+                        <LoadingOverlay
+                            active={isShowLoading}
+                            spinner={<BeatLoader color='#6777ef' size={20} />}
+                            styles={{
+                                overlay: (base) => ({
+                                    ...base,
+                                    background: '#fff'
+                                })
+                            }}
+                        >
+                            <div className="col-lg-12 mb-4">
+
                                 <MaterialTable
                                     title="List Banner"
                                     columns={columns}
@@ -185,9 +187,9 @@ function ListBanner() {
                                     }}
                                 />
 
-                            </LoadingOverlay>
-                        </div>
 
+                            </div>
+                        </LoadingOverlay>
                     </div>
                     {/* Footer */}
                     <Footer />

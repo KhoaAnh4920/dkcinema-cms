@@ -28,7 +28,7 @@ export const userSlice = createSlice({
         },
 
         adminLoginSuccess: (state, action) => {
-            console.log("Check payload: ", action.payload);
+            // console.log("Check payload: ", action.payload);
             state.adminInfo = action.payload;
             state.isLoggedInAdmin = true;
         },

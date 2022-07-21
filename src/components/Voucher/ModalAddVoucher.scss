@@ -13,20 +13,20 @@
 
             .input-code-voucher {
                 display: flex;
-                gap    : 40px;
+                gap: 40px;
             }
 
             button {
-                height   : 32px;
+                height: 32px;
                 font-size: 12px;
-                width    : 140px;
+                width: 140px;
             }
         }
 
         .form-horizontal-voucher {
             margin-top: 10px;
-            display   : flex;
-            gap       : 30px;
+            display: flex;
+            gap: 30px;
 
             .form-timeStart-voucher,
             .form-timeEnd-voucher {
@@ -45,6 +45,7 @@
 
     .modal-footer-container {
         flex-direction: column;
+        align-items: flex-start;
 
         .btn-ft {
             width: 100%;
@@ -54,13 +55,13 @@
 
 .error-modal-container {
     margin-top: 10px;
-    border    : 1px dashed lightgray;
-    padding   : 1rem;
-    width     : 100%;
+    border: 1px dashed lightgray;
+    padding: 1rem;
+    width: 100%;
 
 }
 
 ul {
     list-style-position: inside;
-    color              : lightcoral;
+    color: lightcoral;
 }

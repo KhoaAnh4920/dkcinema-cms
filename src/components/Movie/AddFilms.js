@@ -187,33 +187,6 @@ export default function AddFilms() {
         fetchDataTypeMovie();
     }, []);
 
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
-
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -236,50 +209,54 @@ export default function AddFilms() {
 
     const handleSaveFilms = async () => {
 
-        console.log('OK')
-        // setAllValues((prevState) => ({
-        //     ...prevState,
-        //     isShowLoading: true
-        // }));
+
+        if (typeCheck.typeMovie.length === 0) {
+            toast.error("Vui lòng chọn thể loại phim");
+            return;
+        }
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: true
+        }));
 
 
-        // let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
+        let formatedDate = new Date(allValues.releaseTime).getTime(); // convert timestamp //
 
-        // let result = [];
+        let result = [];
 
-        // await Promise.all(valImg.fileList.map(async (item, index) => {
-        //     console.log("Check item: ", item.originFileObj);
-        //     let obj = {};
-        //     obj.image = await getBase64(item.originFileObj);
-        //     obj.fileName = item.name;
-        //     obj.typeImage = item.typeImage
-        //     result.push(obj);
-        // }))
+        await Promise.all(valImg.fileList.map(async (item, index) => {
+            let obj = {};
+            obj.image = await getBase64(item.originFileObj);
+            obj.fileName = item.name;
+            obj.typeImage = item.typeImage
+            result.push(obj);
+        }))
 
-        // let res = await createNewFilmsService({
-        //     name: allValues.name,
-        //     transName: allValues.transName,
-        //     country: allValues.country,
-        //     language: allValues.language,
-        //     duration: allValues.duration,
-        //     description: allValues.description,
-        //     brand: allValues.brand,
-        //     director: allValues.director,
-        //     cast: allValues.cast,
-        //     status: 0,
-        //     typeMovie: typeCheck.typeMovie,
-        //     poster: result,
-        //     url: allValues.url,
-        //     releaseTime: formatedDate,
-        // })
+        let res = await createNewFilmsService({
+            name: allValues.name,
+            transName: allValues.transName,
+            country: allValues.country,
+            language: allValues.language,
+            duration: allValues.duration,
+            description: allValues.description,
+            brand: allValues.brand,
+            director: allValues.director,
+            cast: allValues.cast,
+            status: 0,
+            typeMovie: typeCheck.typeMovie,
+            poster: result,
+            url: allValues.url,
+            releaseTime: formatedDate,
+        })
 
-        // if (res && res.errCode == 0) {
-        //     history.push("/films-management")
-        //     toast.success("Add new films succeed");
-        // } else {
-        //     history.push("/films-management")
-        //     toast.error("Add new films fail");
-        // }
+        if (res && res.errCode == 0) {
+            history.push("/films-management")
+            toast.success("Add new films succeed");
+        } else {
+            history.push("/films-management")
+            toast.error("Add new films fail");
+        }
 
     }
 
