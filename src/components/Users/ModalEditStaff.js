@@ -303,7 +303,7 @@ export default function ModalEditStaff(props) {
                                 onChange={handleOnChangeDatePicker}
                                 className="form-control"
                                 value={allValues.birthday}
-                                placeholder="Enter dob"
+                                placeholder="Enter birthday"
                             />
                             <div className='input-flex'>
                                 <Select
