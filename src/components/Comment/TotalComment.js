@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 function TotalComment() {
 
     const [listPost, setPostData] = useState([]);
-    const [isShowLoading, setShowLoading] = useState(false);
+    const [isShowLoading, setShowLoading] = useState(true);
 
     let history = useHistory();
 
@@ -27,7 +27,7 @@ function TotalComment() {
 
         // You can await here
         const postData = await getAllPost();
-        console.log("postData: ", postData);
+        // console.log("postData: ", postData);
         if (postData && postData.data) {
 
 
@@ -95,28 +95,29 @@ function TotalComment() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='listPost-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='listPost-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
+
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="List comment"
                                     columns={columns}
@@ -140,19 +141,20 @@ function TotalComment() {
 
                                     }}
                                 />
-                            </div>
-
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

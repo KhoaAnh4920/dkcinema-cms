@@ -41,7 +41,7 @@ function ListVoucher() {
 
         // You can await here
         const voucherData = await getAllVoucher();
-        console.log("voucherData: ", voucherData);
+        // console.log("voucherData: ", voucherData);
         if (voucherData && voucherData.data) {
 
             setVoucherData(voucherData.data);
@@ -222,19 +222,20 @@ function ListVoucher() {
                         <Header />
                         {/* Topbar */}
 
-                        <LoadingOverlay
-                            active={isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
 
 
-                            <div className="col-lg-12 mb-4">
+
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
 
                                 <MaterialTable
                                     title="Danh sách Voucher"
@@ -255,9 +256,10 @@ function ListVoucher() {
                                             // tooltip: 'Edit movie theater',
                                             onClick: async (event, rowData) => {
                                                 let dataVoucher = await getEditVoucher(+rowData.id);
+                                                console.log('rowData.id: ', rowData.id)
                                                 setOpenModaEditVoucher({
                                                     isShow: true,
-                                                    id: rowData.id,
+                                                    id: +rowData.id,
                                                     dataVoucher: (dataVoucher.errCode === 0) ? dataVoucher.data : {}
                                                 });
                                             }
@@ -291,9 +293,10 @@ function ListVoucher() {
                                     data={listVoucher}
 
                                 />
-                            </div>
+                            </LoadingOverlay>
+                        </div>
 
-                        </LoadingOverlay>
+
                     </div>
                     {/* Footer */}
                     <Footer />

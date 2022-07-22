@@ -361,23 +361,7 @@ function ConfirmBill() {
                                                 <h6>Scanned By WebCam Code: {scanResultWebCam}</h6>
                                             </div>
                                         </div>
-                                        {/* <div className="form-group horizon-form">
 
-
-                                            <div className='horizon-input'>
-                                                <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên mã đơn hàng hoặc tên khách hàng" />
-                                            </div>
-
-                                            <div className='horizon-input' style={{ marginLeft: '50px' }}>
-                                                <Button variant="primary" className="submit-schedule-data" >
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="filter-schedule-data" >
-                                                    <span className="visually">Clear</span>
-                                                </Button>
-                                            </div>
-
-                                        </div> */}
                                     </div>
                                 </div>
                             </div>

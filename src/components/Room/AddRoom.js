@@ -26,8 +26,7 @@ import { Link } from "react-router-dom";
 const schema = yup.object().shape({
     name: yup
         .string()
-        .required("Vui lòng nhập name")
-        .max(10, "name tối đa 50 ký tự").typeError("string"),
+        .required("Vui lòng nhập name"),
 
     numberOfColumn: yup
         .string()
@@ -37,11 +36,11 @@ const schema = yup.object().shape({
     numberOfRow: yup
         .string()
         .required("Vui lòng nhập số cột")
-        .max(20, "Số hàng tối đa 20"),
+        .max(20, "Số cột tối đa 20"),
 
-    numberSeet: yup
-        .string()
-        .required("Vui lòng nhập số ghế của hàng"),
+    // numberSeet: yup
+    //     .string()
+    //     .required("Vui lòng nhập số ghế của hàng"),
 });
 
 
@@ -98,7 +97,6 @@ export default function AddRoom() {
 
     useEffect(() => {
 
-
     }, []);
 
     useEffect(() => {
@@ -111,41 +109,24 @@ export default function AddRoom() {
 
     }, [selectUser]);
 
-    const checkValidateInput = () => {
-        let isValid = true;
-        let errors = {};
-        let arrInput = ['email', 'password', 'name', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-        for (let i = 0; i < arrInput.length; i++) {
-            // this.state[arrInput[i]] == this.state.email or this.state.password
-            if (!allValues[arrInput[i]]) {
-                isValid = false;
-                errors[arrInput[i]] = "Cannot be empty";
-            }
-        }
-
-        if (!isValid) {
-            Swal.fire({
-                title: 'Missing data?',
-                text: "Vui lòng điền đầy đủ thông tin!",
-                icon: 'warning',
-            })
-
-            setAllValues((prevState) => ({
-                ...prevState,
-                errors: errors,
-                isShowLoading: false
-            }));
-        }
-        return isValid;
-    }
 
 
 
     const changeHandler = (e, type) => {
 
 
-        console.log(e.target.value)
+        console.log(e.target.name)
         console.log(type)
+
+        if (e.target.name === 'numberOfColumn' && e.target.value > 16) {
+            toast.error("Hàng ghế tối đa 16 hàng")
+            return
+        }
+        if (e.target.name === 'numberOfRow' && e.target.value > 20) {
+            toast.error("Tối đa 20 ghế mỗi hàng")
+            return
+        }
+
         if (type) {
 
             // if (e.target.value > 10) {
@@ -155,7 +136,6 @@ export default function AddRoom() {
             // console.log(e.target.value)
 
             let listAlpha = buildDataInputSelect(e.target.value);
-            console.log("Check listAlpha: ", listAlpha);
 
             setAllValues({ ...allValues, [e.target.name]: e.target.value, listAlpha: listAlpha, selectedColumn: { label: 'A', value: 0 } })
         }
@@ -165,13 +145,19 @@ export default function AddRoom() {
 
 
     const handleAddSeet = () => {
-        console.log('bbb');
+
+
+        if (!allValues.numberSeet) {
+            toast.error("Vui lòng chọn số lượng ghế");
+            return;
+        }
+
+
+
         if (+allValues.numberSeet > +allValues.numberOfRow) {
             toast.error("The number of seats exceeds the limit");
             return;
         }
-
-        console.log('allValue: ', allValues);
 
         if (allValues.listSeet.length > +allValues.numberOfColumn - 1) {
             toast.error("Maximum number of columns exceeded");
@@ -191,7 +177,6 @@ export default function AddRoom() {
         objSeet.posOfColumn = posOfColumn;
         objSeet.posOfRow = posOfRow;
 
-        console.log("objSeet: ", objSeet);
         listSeet.push(objSeet);
         setAllValues((prevState) => ({
             ...prevState,
@@ -208,16 +193,13 @@ export default function AddRoom() {
             isShowLoading: false,
             numberOfColumn: '',
             numberOfRow: '',
-            numberSeet: ''
+            numberSeet: '',
+            selectedColumn: {}
         }));
     }
 
     const handleSaveRoom = async () => {
 
-        console.log('aaa');
-
-
-        console.log("allValues: ", allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true
@@ -249,10 +231,6 @@ export default function AddRoom() {
             }
 
         }
-
-
-
-
 
     }
 
@@ -318,7 +296,7 @@ export default function AddRoom() {
                         <Header />
                         {/* Topbar */}
                         {/* Container Fluid*/}
-                        <div className="container-fluid" id="container-wrapper">
+                        <div className="container-fluid add-room-container" id="container-wrapper">
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
                                 <ol className="breadcrumb">
@@ -355,7 +333,7 @@ export default function AddRoom() {
                                                             })}
                                                         />
                                                         {errors.name && errors.name.message &&
-                                                            <span>{errors.name.message}</span>
+                                                            <span className='error-input'>{errors.name.message}</span>
                                                         }
                                                         {/* <span className='error-code-input'>{allValues.errors["name"]}</span> */}
 
@@ -363,7 +341,9 @@ export default function AddRoom() {
                                                     <div className="form-group">
                                                         <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
                                                         <input
-                                                            type="text"
+                                                            type="number"
+                                                            min={1}
+                                                            max={16}
                                                             className="form-control input-sm"
                                                             value={allValues.numberOfColumn}
                                                             readOnly={(allValues.listSeet.length > 0) ? true : false}
@@ -377,14 +357,16 @@ export default function AddRoom() {
                                                             })}
                                                         />
                                                         {errors.numberOfRow && errors.numberOfRow.message &&
-                                                            <span>{errors.numberOfRow.message}</span>
+                                                            <span className='error-input'>{errors.numberOfRow.message}</span>
                                                         }
                                                         {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
                                                     </div>
                                                     <div className="form-group">
                                                         <label htmlFor="exampleInputPassword1">Số lượng cột</label>
                                                         <input
-                                                            type="text"
+                                                            type="number"
+                                                            min={1}
+                                                            max={20}
                                                             className="form-control input-sm"
                                                             value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false}
                                                             name='numberOfRow'
@@ -396,7 +378,7 @@ export default function AddRoom() {
                                                             })}
                                                         />
                                                         {errors.numberOfColumn && errors.numberOfColumn.message &&
-                                                            <span>{errors.numberOfColumn.message}</span>
+                                                            <span className='error-input'>{errors.numberOfColumn.message}</span>
                                                         }
                                                         {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
                                                     </div>
@@ -461,21 +443,19 @@ export default function AddRoom() {
                                                                 <label htmlFor="exampleInputEmail1">Số lượng ghế</label>
                                                                 <input
                                                                     type="number"
-                                                                    max={allValues.numberOfColumn}
+                                                                    max={allValues.numberOfRow}
                                                                     value={allValues.numberSeet}
                                                                     min={1}
                                                                     className="form-control input-sm"
-                                                                    // onChange={(e) => changeHandler(e)}
+                                                                    onChange={(e) => changeHandler(e)}
                                                                     name='numberSeet'
                                                                     placeholder="Enter number"
-                                                                    {...register("numberSeet", {
-                                                                        required: true,
-                                                                        onChange: (e) => changeHandler(e)
-                                                                    })}
+                                                                // {...register("numberSeet", {
+                                                                //     required: true,
+                                                                //     onChange: (e) => changeHandler(e)
+                                                                // })}
                                                                 />
-                                                                {errors.numberSeet && errors.numberSeet.message &&
-                                                                    <span>{errors.numberSeet.message}</span>
-                                                                }
+
 
                                                             </div>
                                                             <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleAddSeet}>

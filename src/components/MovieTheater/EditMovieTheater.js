@@ -94,6 +94,8 @@ export default function EditMovieTheater() {
             const movieTheaterData = await getAllMovieTheater();
             const movieTheaterEdit = await getEditMovieTheater(id);
 
+            console.log('movieTheaterEdit: ', movieTheaterEdit)
+
             if (movieTheaterEdit && movieTheaterEdit.data) {
                 const location = await testFunctionParent(movieTheaterEdit.data.cityCode, movieTheaterEdit.data.districtCode, movieTheaterEdit.data.wardCode);
 
@@ -109,7 +111,11 @@ export default function EditMovieTheater() {
                 //  let selectedUser = setDefaultValue(listUser, movieTheaterEdit.data.userId);
 
                 let result = [];
-                if (movieTheaterEdit.data.MovieTheaterImage && movieTheaterEdit.data.MovieTheaterImage.id) {
+                console.log('movieTheaterEdit.data.MovieTheaterImage: ', movieTheaterEdit.data.MovieTheaterImage)
+
+                if (movieTheaterEdit.data.MovieTheaterImage && movieTheaterEdit.data.MovieTheaterImage.length > 0) {
+
+
 
                     movieTheaterEdit.data.MovieTheaterImage.map((item, index) => {
                         let obj = {};
@@ -124,7 +130,7 @@ export default function EditMovieTheater() {
 
                 let defaultValues = {};
                 defaultValues.tenRap = movieTheaterEdit.data.tenRap;
-                defaultValues.soDienThoai = movieTheaterEdit.data.tenRap;
+                defaultValues.soDienThoai = movieTheaterEdit.data.soDienThoai;
                 defaultValues.address = movieTheaterEdit.data.address;
 
                 setAllValues((prevState) => ({
@@ -533,6 +539,7 @@ export default function EditMovieTheater() {
                                                         type="text"
                                                         className="form-control input-sm"
                                                         name='address'
+                                                        readOnly
 
                                                         placeholder="Address"
                                                         {...register("address", {

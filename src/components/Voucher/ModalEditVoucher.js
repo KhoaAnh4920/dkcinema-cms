@@ -196,6 +196,7 @@ export default function ModalEditVoucher(props) {
                                                 type="text"
                                                 className="form-control input-small"
                                                 name='code'
+                                                readOnly
                                                 {...register("code", {
                                                     required: true,
                                                     onChange: changeHandler,
@@ -230,7 +231,7 @@ export default function ModalEditVoucher(props) {
                                     <div className='form-maxUses-voucher'>
                                         <div className='label-voucher'>
                                             <label htmlFor="exampleInputPassword1">*Số lượng voucher</label>
-                                            <input type="number" className="form-control input-small" value={allValues.maxUses} name='maxUses' onChange={changeHandler} />
+                                            <input type="number" readOnly className="form-control input-small" value={allValues.maxUses} name='maxUses' onChange={changeHandler} />
                                         </div>
                                     </div>
                                     <div className='form-maxUses-voucher'>
@@ -239,6 +240,7 @@ export default function ModalEditVoucher(props) {
                                             <input
                                                 type="number"
                                                 min={1}
+                                                readOnly
                                                 className="form-control input-small"
                                                 name='discount'
                                                 {...register("discount", {
@@ -260,10 +262,11 @@ export default function ModalEditVoucher(props) {
                                         <div className='label-voucher'>
                                             <label htmlFor="exampleInputPassword1">*Thời gian bắt đầu</label>
                                             <DatePicker
-                                                onChange={handleOnChangeDatePickerStart}
+                                                readOnly
+                                                onChange={handleOnChangeDatePickerEnd}
                                                 className="form-control"
                                                 value={allValues.timeStart}
-                                                minDate="today"
+
                                             />
                                         </div>
                                     </div>
@@ -271,6 +274,7 @@ export default function ModalEditVoucher(props) {
                                         <div className='label-voucher'>
                                             <label htmlFor="exampleInputPassword1">*Thời gian kết thúc</label>
                                             <DatePicker
+                                                readOnly
                                                 onChange={handleOnChangeDatePickerEnd}
                                                 className="form-control"
                                                 value={allValues.timeEnd}

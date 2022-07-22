@@ -1,0 +1,21 @@
+.list-ticket-main {
+    .horizon-form {
+        display: flex;
+
+        .horizon-input {
+            input {
+                height: 38px;
+            }
+        }
+
+        .submit-ticket-data {
+            margin: 0px 10px;
+        }
+
+        .filter-ticket-data {
+            background-color: #fff;
+            border: 1px solid #6777ef;
+            color: #6777ef;
+        }
+    }
+}

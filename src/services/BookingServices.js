@@ -2,8 +2,8 @@ import axios from '../axios';
 
 
 
-const getAllBooking = (movieTheaterId) => {
-    return axios.get(`/get-list-booking`, { params: { movieTheaterId: movieTheaterId } });
+const getAllBooking = (movieTheaterId, id, nameCus) => {
+    return axios.get(`/get-list-booking`, { params: { movieTheaterId: movieTheaterId, id: id, nameCus: nameCus } });
 }
 
 const getDetailBooking = (id) => {

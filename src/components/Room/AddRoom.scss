@@ -1,8 +1,17 @@
-.container-fluid {
+.add-room-container {
     .card-body {
         .room-container {
             display: flex;
             gap: 30px;
+
+            .form-group {
+                width: 20%;
+
+                .error-input {
+                    font-size: 10px;
+                    color: red;
+                }
+            }
         }
 
         .seet-container {
@@ -50,7 +59,14 @@
                                 column-gap: 3px;
 
                                 .name-column {
+                                    margin: 0px 10px;
+                                    padding-top: 2px;
+                                    font-size: 10px;
+                                    height: fit-content;
+                                    width: 17px;
                                     background-color: transparent;
+                                    text-align: center;
+                                    border: 1px solid #000;
                                 }
                             }
 

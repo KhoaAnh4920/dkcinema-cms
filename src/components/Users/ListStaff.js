@@ -130,7 +130,6 @@ function ListStaff() {
 
     const saveNewUserFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
@@ -144,19 +143,19 @@ function ListStaff() {
                 phone: data.phone,
                 gender: data.selectedGender.value,
                 roleId: data.selectedRoles.value,
-                movietheaterid: (data.selectedMovieTheater && data.selectedMovieTheater.value) ? data.selectedMovieTheater.value : null,
+                movietheaterid: allValues.movieTheaterId,
                 userName: data.userName,
                 address: data.address,
                 avatar: data.avatar,
                 fileName: data.fileName,
-                cityCode: data.selectedCity.value,
-                districtCode: data.selectedDistrict.value,
-                wardCode: data.selectedWard.value
+                cityCode: (data.selectedCity && data.selectedCity.value) ? data.selectedCity.value : null,
+                districtCode: (data.selectedDistrict && data.selectedDistrict.value) ? data.selectedDistrict.value : null,
+                wardCode: (data.selectedWard && data.selectedWard.value) ? data.selectedWard.value : null
             })
 
             if (res && res.errCode == 0) {
                 setOpenModalUser(false);
-                await fetchDataUser();
+                await fetchDataUser(allValues.movieTheaterId);
                 toast.success("Add new user success");
             }
         }
@@ -176,23 +175,23 @@ function ListStaff() {
                 phone: data.phone,
                 gender: data.selectedGender.value,
                 roleId: data.selectedRoles.value,
-                movietheaterid: (data.selectedMovieTheater && data.selectedMovieTheater.value) ? data.selectedMovieTheater.value : null,
+                movietheaterid: allValues.movieTheaterId,
                 userName: data.userName,
                 address: data.address,
                 avatar: data.avatar,
                 fileName: data.fileName,
-                cityCode: data.selectedCity.value,
-                districtCode: data.selectedDistrict.value,
-                wardCode: data.selectedWard.value,
+                cityCode: (data.selectedCity && data.selectedCity.value) ? data.selectedCity.value : null,
+                districtCode: (data.selectedDistrict && data.selectedDistrict.value) ? data.selectedDistrict.value : null,
+                wardCode: (data.selectedWard && data.selectedWard.value) ? data.selectedWard.value : null,
                 id: modalEditStaff.id,
             })
 
-            if (res && res.errCode == 0) {
+            if (res && res.errCode === 0) {
                 setOpenModaEditlUser((prevState) => ({
                     ...prevState,
                     isShow: false
                 }));
-                await fetchDataUser();
+                await fetchDataUser(allValues.movieTheaterId);
                 toast.success("Edit user success");
             }
         }
@@ -203,28 +202,30 @@ function ListStaff() {
     return (
 
         <>
-            <LoadingOverlay
-                active={isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
+
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Danh sách nhân viên"
                                     columns={columns}
@@ -277,36 +278,36 @@ function ListStaff() {
 
                                     }}
                                 />
-                            </div>
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
-                {isOpenModalUser &&
-                    <ModalAddStaff
-                        isOpen={isOpenModalUser}
-                        toggleFromParent={toggleUserModal}
-                        saveNewUser={saveNewUserFromModal}
-                        movieTheaterId={allValues.movieTheaterId}
-                    />
-                }
+            {isOpenModalUser &&
+                <ModalAddStaff
+                    isOpen={isOpenModalUser}
+                    toggleFromParent={toggleUserModal}
+                    saveNewUser={saveNewUserFromModal}
+                    movieTheaterId={allValues.movieTheaterId}
+                />
+            }
 
-                {modalEditStaff.isShow &&
-                    <ModalEditStaff
-                        isOpen={modalEditStaff.isShow}
-                        toggleFromParentEditUser={toggleUserModalEditUser}
-                        saveEditUser={saveEditUserFromModal}
-                        dataUser={modalEditStaff.dataUser}
-                    />
+            {modalEditStaff.isShow &&
+                <ModalEditStaff
+                    isOpen={modalEditStaff.isShow}
+                    toggleFromParentEditUser={toggleUserModalEditUser}
+                    saveEditUser={saveEditUserFromModal}
+                    dataUser={modalEditStaff.dataUser}
+                />
 
-                }
+            }
 
-
-
-            </LoadingOverlay>
 
         </>
     );

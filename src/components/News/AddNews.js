@@ -241,7 +241,7 @@ export default function AddNews() {
 
         if (res && res.errCode == 0) {
             history.push("/news-management")
-            toast.success("Add new banner success");
+            toast.success("Add new news success");
         } else {
             toast.error(res.errMessage);
         }

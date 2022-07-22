@@ -156,18 +156,19 @@ function ListFilms() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <LoadingOverlay
-                            active={isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
-                            <div className="col-lg-12 mb-4">
 
+                        <div className="col-lg-12 mb-4">
+
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Danh sách Phim"
                                     columns={columns}
@@ -217,9 +218,10 @@ function ListFilms() {
 
                                     }}
                                 />
+                            </LoadingOverlay>
 
-                            </div>
-                        </LoadingOverlay>
+                        </div>
+
 
                     </div>
                     {/* Footer */}

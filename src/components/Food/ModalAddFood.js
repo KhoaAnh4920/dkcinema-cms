@@ -115,6 +115,7 @@ export default function ModalAddFood(props) {
     }
 
     const handleChangeSelect = async (selectedOption, name) => {
+        console.log('name: ', handleChangeSelect)
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
         stateCopy[stateName] = selectedOption;
@@ -147,20 +148,15 @@ export default function ModalAddFood(props) {
                     <div className='modal-add-food-body'>
                         <div className='input-container'>
                             <div className='input-row'>
-                                <Controller
-                                    control={control}
+
+
+                                <Select
+                                    options={allValues.listTypeFood}
                                     name="selectedTypeFood"
-                                    rules={{ required: true }}
+
                                     className='food-select'
                                     placeholder='Select type food'
                                     onChange={handleChangeSelect}
-
-                                    render={({ field }) => (
-                                        <Select
-                                            {...field}
-                                            options={allValues.listTypeFood}
-                                        />
-                                    )}
                                 />
 
                                 <input

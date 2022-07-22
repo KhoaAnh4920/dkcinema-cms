@@ -202,6 +202,10 @@ function ListFood() {
     const handleSubmitFilter = () => {
 
         console.log(allValues);
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: true,
+        }))
 
         fetchDataFood(allValues.selectedTypeFood.value);
 
@@ -220,11 +224,12 @@ function ListFood() {
     }
 
     const handleClearFilter = () => {
-        // setAllValues((prevState) => ({
-        //     ...prevState,
-        //     selectedMovie: {},
-        //     selectedTypeFood: {}
-        // }))
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: true,
+            selectedTypeFood: {}
+        }))
+        fetchDataFood()
     }
 
 
@@ -278,7 +283,7 @@ function ListFood() {
                                 <div className="card-body">
                                     <div className="form-group horizon-form">
 
-                                        <div className='horizon-input'>
+                                        <div className='select-type'>
                                             <label htmlFor="exampleInputEmail1" style={{ marginRight: '5px' }}>Loại thực phẩm</label>
                                             <Select
                                                 className='food-select'
@@ -293,7 +298,8 @@ function ListFood() {
                                         </div>
 
 
-                                        <div className='horizon-input' style={{ marginLeft: '20px' }}>
+                                        <div className='horizon-input-submit' style={{ marginLeft: '20px' }}>
+                                            <label htmlFor="exampleInputEmail1" style={{ height: '22px' }}></label>
                                             <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
                                                 <span className="visually">Submit</span>
                                             </Button>

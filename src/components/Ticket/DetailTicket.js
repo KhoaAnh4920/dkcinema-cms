@@ -101,7 +101,7 @@ export default function DetailTicket() {
 
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                    <li className="breadcrumb-item"><Link to={`/films-management`}>Quản lý Vé</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/ticket-management`}>Quản lý Vé</Link></li>
                                     <li className="breadcrumb-item active" aria-current="page">Chi tiết Vé</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>

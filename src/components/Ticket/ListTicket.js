@@ -84,22 +84,7 @@ function ListTicket() {
         }
     }
 
-    async function fetchDataMovie(status) {
-        // You can await here
-        const dataMovie = await getAllFilmsByStatus(status);
 
-        console.log("Check phim: ", dataMovie);
-
-        let listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
-
-        if (dataMovie && dataMovie.data) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isShowLoading: false,
-                listMovie: listMovie
-            }));
-        }
-    }
 
 
 
@@ -133,7 +118,7 @@ function ListTicket() {
 
 
     useEffect(() => {
-        console.log('selectUser: ', selectUser)
+
         if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
             fetchAllData(selectUser.adminInfo.movietheaterid)
 
@@ -165,59 +150,45 @@ function ListTicket() {
     ]
 
 
-    const handleChangeSelect = async (selectedOption, name) => {
-        let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
-        let stateCopy = { ...allValues };
-        stateCopy[stateName] = selectedOption;
 
 
-        setAllValues({ ...stateCopy })
-    }
 
-    const handleOnChangeDatePicker = (date) => {
-        setAllValues({ ...allValues, dateSchedule: date[0] })
-    }
 
-    const customStyles = {
-        // control: base => ({
-        //     ...base,
-        //     height: 30,
-        //     minHeight: 30,
-        // }),
-        // dropdownIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 5,
-        //     paddingBottom: 10,
-        // }),
-        // clearIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 7,
-        //     paddingBottom: 7,
-        // }),
-    };
+    const handleSubmitFilter = async () => {
 
-    const handleSubmitFilter = () => {
-        setAllValues((prevState) => ({
-            ...prevState,
-            isShowLoading: false,
-        }))
+        console.log('key: ', allValues.key);
 
-        let formatedDate = new Date(allValues.dateSchedule).getTime(); // convert timestamp //
+        let check = isNaN(+allValues.key);
 
-        let obj = {};
-        obj.date = formatedDate;
-        obj.roomId = allValues.selectedRoom.value;
-        obj.movieId = allValues.selectedMovie.value;
-        obj.movieTheaterId = allValues.movieTheaterId;
+        console.log(check)
+
+        let bookData = null;
+        if (check) {
+            bookData = await getAllBooking(movieTheaterId, null, allValues.key);
+
+
+        } else {
+            bookData = await getAllBooking(movieTheaterId, allValues.key);
+        }
+
+        // console.log('bookData: ', bookData);
+        if (bookData && bookData.data) {
+            setAllValues((prevState) => ({
+                ...prevState,
+                listBooking: bookData.data || [],
+                isShowLoading: false,
+            }))
+        }
+
 
     }
 
     const handleClearFilter = () => {
-        setAllValues((prevState) => ({
-            ...prevState,
-            selectedMovie: {},
-            selectedRoom: {}
-        }))
+        // setAllValues((prevState) => ({
+        //     ...prevState,
+        //     selectedMovie: {},
+        //     selectedRoom: {}
+        // }))
     }
 
     const changeHandler = e => {
@@ -229,60 +200,62 @@ function ListTicket() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='list-schedule-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='list-ticket-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
 
-                                <div className="card mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu đặt vé</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group horizon-form">
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
+
+                            <div className="card mb-4">
+                                <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 className="m-0 font-weight-bold text-primary">Tra cứu đặt vé</h6>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-group horizon-form">
 
 
-                                            <div className='horizon-input'>
-                                                <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên mã đơn hàng hoặc tên khách hàng" />
-                                            </div>
-
-                                            <div className='horizon-input' style={{ marginLeft: '50px' }}>
-                                                <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
-                                                </Button>
-                                            </div>
-
-
-
-
+                                        <div className='horizon-input'>
+                                            <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='key' placeholder="Nhập tên mã đơn hàng hoặc tên khách hàng" />
                                         </div>
+
+                                        <div className='horizon-input' style={{ marginLeft: '50px' }}>
+                                            <Button variant="primary" className="submit-ticket-data" onClick={handleSubmitFilter}>
+                                                <span className="visually">Submit</span>
+                                            </Button>
+                                            <Button variant="primary" className="filter-ticket-data" onClick={handleClearFilter}>
+                                                <span className="visually">Clear</span>
+                                            </Button>
+                                        </div>
+
+
+
+
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            <div className="col-lg-12 mb-4">
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+
+                            >
 
                                 <MaterialTable
                                     title="Danh sách đặt vé"
@@ -307,16 +280,17 @@ function ListTicket() {
                                     }}
 
                                 />
-                            </div>
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
-                    </div>
-                </div>
 
-            </LoadingOverlay>
+                    </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
+                </div>
+            </div>
+
+
 
         </>
     );

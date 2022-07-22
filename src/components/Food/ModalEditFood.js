@@ -70,7 +70,7 @@ export default function ModalEditFood(props) {
 
                     let defaultValues = {};
                     defaultValues.nameFood = dataFood.name;
-                    defaultValues.priceFood = dataFood.tenRap;
+                    defaultValues.priceFood = dataFood.price;
 
 
                     setAllValues((prevState) => ({

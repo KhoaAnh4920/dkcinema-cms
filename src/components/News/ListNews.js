@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 function ListNews() {
 
     const [listPost, setPostData] = useState([]);
-    const [isShowLoading, setShowLoading] = useState(false);
+    const [isShowLoading, setShowLoading] = useState(true);
 
     let history = useHistory();
 
@@ -27,7 +27,7 @@ function ListNews() {
 
         // You can await here
         const postData = await getAllPost();
-        console.log("postData: ", postData);
+        // console.log("postData: ", postData);
         if (postData && postData.data) {
 
 
@@ -48,7 +48,7 @@ function ListNews() {
 
     const handleChange = async (data) => {
 
-        console.log('data: ', data);
+        // console.log('data: ', data);
 
         setShowLoading(true);
 

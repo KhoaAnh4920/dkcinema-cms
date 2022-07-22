@@ -402,98 +402,100 @@ function ListSchedule() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='list-schedule-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='list-schedule-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
 
-                                <div className="card mb-4">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu suất chiếu</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group horizon-form">
-                                            <div className='horizon-input'>
-                                                <label htmlFor="exampleInputEmail1">Ngày chiếu</label>
-                                                <DatePicker
-                                                    onChange={handleOnChangeDatePicker}
-                                                    className="form-control input-date-time"
-                                                    value={allValues.dateSchedule || {}}
-                                                />
-                                            </div>
-                                            <div className='horizon-input'>
-                                                <label htmlFor="exampleInputEmail1">Phòng</label>
-                                                <Select
-                                                    className='room-select'
-                                                    value={allValues.selectedRoom || {}}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listRoom}
-                                                    placeholder='Select room'
-                                                    name='selectedRoom'
-                                                    styles={customStyles}
-                                                // styles={this.props.colourStyles}
-                                                />
-                                            </div>
-                                            <div className='horizon-input'>
-                                                <label htmlFor="exampleInputEmail1">Phim</label>
-                                                <Select
-                                                    className='movie-select'
-                                                    value={allValues.selectedMovie || {}}
-                                                    onChange={handleChangeSelect}
-                                                    options={allValues.listMovie}
-                                                    placeholder='Select movie'
-                                                    name='selectedMovie'
-                                                    styles={customStyles}
-                                                // styles={this.props.colourStyles}
-                                                />
-                                            </div>
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
 
-                                            <div className='horizon-input' style={{ paddingLeft: 'auto' }}>
-                                                <label htmlFor="exampleInputEmail1" style={{ height: '22px' }}></label>
+                            <div className="card mb-4">
+                                <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 className="m-0 font-weight-bold text-primary">Tra cứu suất chiếu</h6>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-group horizon-form">
+                                        <div className='horizon-input'>
+                                            <label htmlFor="exampleInputEmail1">Ngày chiếu</label>
+                                            <DatePicker
+                                                onChange={handleOnChangeDatePicker}
+                                                className="form-control input-date-time"
+                                                value={allValues.dateSchedule || {}}
+                                            />
+                                        </div>
+                                        <div className='horizon-input'>
+                                            <label htmlFor="exampleInputEmail1">Phòng</label>
+                                            <Select
+                                                className='room-select'
+                                                value={allValues.selectedRoom || {}}
+                                                onChange={handleChangeSelect}
+                                                options={allValues.listRoom}
+                                                placeholder='Select room'
+                                                name='selectedRoom'
+                                                styles={customStyles}
+                                            // styles={this.props.colourStyles}
+                                            />
+                                        </div>
+                                        <div className='horizon-input'>
+                                            <label htmlFor="exampleInputEmail1">Phim</label>
+                                            <Select
+                                                className='movie-select'
+                                                value={allValues.selectedMovie || {}}
+                                                onChange={handleChangeSelect}
+                                                options={allValues.listMovie}
+                                                placeholder='Select movie'
+                                                name='selectedMovie'
+                                                styles={customStyles}
+                                            // styles={this.props.colourStyles}
+                                            />
+                                        </div>
+
+                                        <div className='horizon-input' style={{ paddingLeft: 'auto' }}>
+                                            <label htmlFor="exampleInputEmail1" style={{ height: '22px' }}></label>
 
 
-                                                <div className='button-filter'>
-                                                    <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                        <span className="visually">Submit</span>
-                                                    </Button>
-                                                    <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
-                                                        <span className="visually">Clear</span>
-                                                    </Button>
-
-                                                </div>
-
+                                            <div className='button-filter'>
+                                                <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
+                                                    <span className="visually">Submit</span>
+                                                </Button>
+                                                <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
+                                                    <span className="visually">Clear</span>
+                                                </Button>
 
                                             </div>
-
-
 
 
                                         </div>
+
+
+
+
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
 
-                            <div className="col-lg-12 mb-4">
 
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+
+                            >
                                 <MaterialTable
                                     title="Danh sách suất chiếu"
                                     columns={columns}
@@ -535,16 +537,19 @@ function ListSchedule() {
                                     }}
 
                                 />
-                            </div>
 
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
-                    </div>
-                </div>
 
-            </LoadingOverlay>
+
+                    </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
+                </div>
+            </div>
+
+
 
         </>
     );

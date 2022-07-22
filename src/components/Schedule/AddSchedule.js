@@ -106,8 +106,8 @@ export default function AddSchedule() {
 
         setAllValues((prevState) => ({
             ...prevState,
-            startTime: time._d,
-            endTime: addEndTime._d
+            startTime: (time && time._d) ? time._d : null,
+            endTime: (addEndTime && addEndTime._d) ? addEndTime._d : null
         }))
 
         console.log("Check allvalues: ", allValues.startTime);
@@ -242,33 +242,6 @@ export default function AddSchedule() {
     }, [selectUser]);
 
 
-    const checkValidateInput = () => {
-        let isValid = true;
-        let errors = {};
-        let arrInput = ['email', 'password', 'name', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-        for (let i = 0; i < arrInput.length; i++) {
-            // this.state[arrInput[i]] == this.state.email or this.state.password
-            if (!allValues[arrInput[i]]) {
-                isValid = false;
-                errors[arrInput[i]] = "Cannot be empty";
-            }
-        }
-
-        if (!isValid) {
-            Swal.fire({
-                title: 'Missing data?',
-                text: "Vui lòng điền đầy đủ thông tin!",
-                icon: 'warning',
-            })
-
-            setAllValues((prevState) => ({
-                ...prevState,
-                errors: errors,
-                isShowLoading: false
-            }));
-        }
-        return isValid;
-    }
 
 
 
@@ -297,12 +270,32 @@ export default function AddSchedule() {
 
         // console.log("Check allvalue: ", allValues);
 
+        if (!allValues.premiereDate || !allValues.startTime) {
+            toast.error("Vui lòng chọn thời gian");
+            return;
+        }
+
         let formatedPremiereDate = new Date(allValues.premiereDate).getTime(); // convert timestamp //
         let formatedStartTime = new Date(allValues.startTime).getTime(); // convert timestamp //
-        let formatedEndTime = new Date(allValues.endTime).getTime(); // convert timestamp //
+        let formatedEndTime = new Date(allValues.startTime).getTime(); // convert timestamp //
         // console.log("Check formatedPremiereDate: ", formatedPremiereDate);
         // console.log("Check formatedStartTime: ", formatedStartTime);
         // console.log("Check formatedEndTime: ", formatedEndTime);
+
+        let checkTime = moment(allValues.startTime).format('HH');
+
+        if (+checkTime < 9 || +checkTime > 22) {
+            toast.error("Thời gian không hợp lệ");
+            return;
+        }
+        if (+checkTime === 22) {
+            let checkMinutes = moment(allValues.startTime).format('mm');
+            if (checkMinutes > 30) {
+                toast.error("Thời gian không hợp lệ");
+                return;
+            }
+        }
+
 
 
         setAllValues((prevState) => ({
@@ -444,41 +437,44 @@ export default function AddSchedule() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper">
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper">
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            {/* Container Fluid*/}
-                            <div className="container-fluid" id="container-wrapper">
-                                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <Sidebar />
 
-                                    <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                        <li className="breadcrumb-item"><Link to={`/showTime-management`}>Quản lý lịch chiếu</Link></li>
-                                        <li className="breadcrumb-item active" aria-current="page">Thêm lịch chiếu</li>
-                                    </ol>
-                                    <span className='date-today'>{allValues.dateToday}</span>
-                                    {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
-                                </div>
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        {/* Container Fluid*/}
+                        <div className="container-fluid" id="container-wrapper">
+                            <div className="d-sm-flex align-items-center justify-content-between mb-4">
+
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/showTime-management`}>Quản lý lịch chiếu</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Thêm lịch chiếu</li>
+                                </ol>
+                                <span className='date-today'>{allValues.dateToday}</span>
+                                {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
+                            </div>
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+
+                            >
                                 <div className="row">
                                     <div className='col-1'></div>
+
                                     <div className="col-10">
                                         <div className="card mb-4">
                                             <div className="card-header">
@@ -614,6 +610,7 @@ export default function AddSchedule() {
                                                                 </div>
                                                                 <div className="form-group row">
                                                                     <label htmlFor="exampleInputEmail1" className='col-4'>Giờ bắt đầu</label>
+
                                                                     <TimePicker className='col-4' use12Hours format="h:mm a" name='selectedStartTime' value={(allValues.startTime) ? moment(allValues.startTime, 'h:mm a') : ''} onChange={onChange} />
                                                                     <div className='col-4'></div>
                                                                 </div>
@@ -659,20 +656,22 @@ export default function AddSchedule() {
                                         </div>
 
                                     </div>
+
                                     <div className='col-1'></div>
 
                                 </div>
+                            </LoadingOverlay>
 
-                            </div>
-                            {/*-Container Fluid*/}
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+                        {/*-Container Fluid*/}
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
-            </LoadingOverlay>
+
 
 
 

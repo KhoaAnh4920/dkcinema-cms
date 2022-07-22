@@ -100,26 +100,11 @@ function ListFeedback() {
         { title: 'ID', field: 'id' },
         { title: 'Tên khách hàng', field: 'fullName' },
         { title: 'Số điện thoại', field: 'phone' },
-        { title: 'Ngày gửi', field: 'createdAt' },
+        { title: 'Ngày gửi', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD-MM-YYYY HH:mm')}</span> },
 
     ]
 
 
-    const handleOnDeleteComment = async (id) => {
-        try {
-
-
-            let res = await deleteCommentService(id);
-            if (res && res.errCode === 0) {
-                await fetchFeedback();
-            } else {
-                alert(res.errMessage)
-            }
-
-        } catch (e) {
-            console.log(e);
-        }
-    }
 
     const handleOnChangeDatePicker = (date) => {
         setAllValues({ ...allValues, startTime: date[0] })
@@ -170,73 +155,72 @@ function ListFeedback() {
     return (
 
         <>
-            <LoadingOverlay
-                active={allValues.isShowLoading}
-                spinner={<BeatLoader color='#fff' size={20} />}
-                styles={{
-                    overlay: (base) => ({
-                        ...base,
-                        background: 'rgb(10 10 10 / 68%)'
-                    })
-                }}
-            >
-                <div id="wrapper" className='listFeedback-main'>
-                    {/* Sidebar */}
 
-                    <Sidebar />
+            <div id="wrapper" className='listFeedback-main'>
+                {/* Sidebar */}
 
-                    {/* Sidebar */}
-                    <div id="content-wrapper" className="d-flex flex-column">
-                        <div id="content">
-                            {/* TopBar */}
-                            <Header />
-                            {/* Topbar */}
-                            <div className="col-lg-12 mb-4">
+                <Sidebar />
 
-                                <div className="card mb-4 filter-form">
-                                    <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 className="m-0 font-weight-bold text-primary">Tra cứu</h6>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-group horizon-form form-filter">
-                                            <div className='horizon-input '>
+                {/* Sidebar */}
+                <div id="content-wrapper" className="d-flex flex-column">
+                    <div id="content">
+                        {/* TopBar */}
+                        <Header />
+                        {/* Topbar */}
+                        <div className="col-lg-12 mb-4">
 
-                                                <input className='form-control' name='fullName' value={allValues.fullName} onChange={changeHandler} placeholder='Nhập mã hoặc tên khách hàng' />
-                                            </div>
-                                            <div className='horizon-input input-date'>
-                                                <label htmlFor="exampleInputEmail1">Từ</label>
-                                                <DatePicker
-                                                    onChange={handleOnChangeDatePicker}
-                                                    className="form-control"
-                                                    value={allValues.startTime || {}}
-                                                />
-                                            </div>
-                                            <div className='horizon-input input-date'>
-                                                <label htmlFor="exampleInputEmail1">Đến</label>
-                                                <DatePicker
-                                                    onChange={handleOnChangeDatePickerEndTime}
-                                                    className="form-control"
-                                                    value={allValues.endTime || {}}
-                                                />
-                                            </div>
+                            <div className="card mb-4 filter-form">
+                                <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 className="m-0 font-weight-bold text-primary">Tra cứu</h6>
+                                </div>
+                                <div className="card-body">
+                                    <div className="form-group horizon-form form-filter">
+                                        <div className='horizon-input '>
 
-
-                                            <div className='horizon-input button-filter-container'>
-                                                <Button variant="primary" className="submit-feedback-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
-                                                </Button>
-                                                <Button variant="primary" className="clear-feedback-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
-                                                </Button>
-                                            </div>
-
-
-
+                                            <input className='form-control' name='fullName' value={allValues.fullName} onChange={changeHandler} placeholder='Nhập mã hoặc tên khách hàng' />
                                         </div>
+                                        <div className='horizon-input input-date'>
+                                            <label htmlFor="exampleInputEmail1">Từ</label>
+                                            <DatePicker
+                                                onChange={handleOnChangeDatePicker}
+                                                className="form-control"
+                                                value={allValues.startTime || {}}
+                                            />
+                                        </div>
+                                        <div className='horizon-input input-date'>
+                                            <label htmlFor="exampleInputEmail1">Đến</label>
+                                            <DatePicker
+                                                onChange={handleOnChangeDatePickerEndTime}
+                                                className="form-control"
+                                                value={allValues.endTime || {}}
+                                            />
+                                        </div>
+
+
+                                        <div className='horizon-input button-filter-container'>
+                                            <Button variant="primary" className="submit-feedback-data" onClick={handleSubmitFilter}>
+                                                <span className="visually">Submit</span>
+                                            </Button>
+                                            <Button variant="primary" className="clear-feedback-data" onClick={handleClearFilter}>
+                                                <span className="visually">Clear</span>
+                                            </Button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-12 mb-4">
+                        </div>
+                        <div className="col-lg-12 mb-4">
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
                                 <MaterialTable
                                     title="Feedback"
                                     columns={columns}
@@ -260,19 +244,21 @@ function ListFeedback() {
 
                                     }}
                                 />
-                            </div>
 
-
+                            </LoadingOverlay>
                         </div>
-                        {/* Footer */}
-                        <Footer />
-                        {/* Footer */}
+
+
                     </div>
+                    {/* Footer */}
+                    <Footer />
+                    {/* Footer */}
                 </div>
+            </div>
 
 
 
-            </LoadingOverlay>
+
 
         </>
     );

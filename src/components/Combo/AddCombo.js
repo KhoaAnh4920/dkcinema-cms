@@ -106,6 +106,10 @@ function AddCombo() {
 
         if (!allValues.name || !allValues.price || items.length === 0) {
             toast.error("Please complete all information")
+            setAllValues((prevState) => ({
+                ...prevState,
+                isLoadingButton: false
+            }))
             return;
         }
 
@@ -122,6 +126,10 @@ function AddCombo() {
 
         if (result.length === 0) {
             toast.error("Please upload image")
+            setAllValues((prevState) => ({
+                ...prevState,
+                isLoadingButton: false
+            }))
             return;
         }
 

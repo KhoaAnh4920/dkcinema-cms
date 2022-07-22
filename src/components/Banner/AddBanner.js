@@ -22,29 +22,13 @@ import { PlusOutlined } from '@ant-design/icons';
 // import "antd/dist/antd.css";
 import 'antd/dist/antd.min.css';
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 
-
-
-
-const schema = yup.object().shape({
-    name: yup
-        .string()
-        .required("Vui lòng nhập tên banner")
-
-});
 
 
 
 export default function AddBanner() {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm({ resolver: yupResolver(schema) });
+
 
 
     const [startDate, setStartDate] = useState(new Date());
@@ -298,71 +282,59 @@ export default function AddBanner() {
                                                     </Modal>
                                                 </div>
                                             </div>
-                                            <form onSubmit={handleSubmit(handleSaveBanner)}>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Tên Banner</label>
-                                                    <input
-                                                        type="text"
-                                                        className="form-control input-sm"
-                                                        name='name'
-                                                        placeholder="Enter name"
-                                                        {...register("name", {
-                                                            required: true,
-                                                            onChange: changeHandler
-                                                        })}
-                                                    />
-                                                </div>
 
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Mô tả</label>
-                                                    <textarea
-                                                        className="form-control"
-                                                        id="exampleFormControlTextarea1"
-                                                        name="description"
-                                                        rows="5"
-                                                        {...register("name", {
-                                                            required: true,
-                                                            onChange: changeHandler
-                                                        })}
-                                                    ></textarea>
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Tên Banner</label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control input-sm"
+                                                    name='name'
+                                                    placeholder="Enter name"
+                                                    onChange={changeHandler}
+                                                />
+                                            </div>
 
-                                                </div>
+                                            <div className="form-group">
+                                                <label htmlFor="exampleInputEmail1">Mô tả</label>
+                                                <textarea
+                                                    className="form-control"
+                                                    id="exampleFormControlTextarea1"
+                                                    name="description"
+                                                    rows="5"
+                                                    onChange={changeHandler}
 
-                                                {/* {console.log('errors: ', Object.keys(errors).length)} */}
+                                                ></textarea>
 
-                                                {Object.keys(errors).length !== 0 &&
-                                                    <ul className="error-container">
-                                                        {errors.name && errors.name.message &&
-                                                            <li>{errors.name.message}</li>
-                                                        }
-                                                    </ul>
+                                            </div>
+
+
+
+
+
+
+
+                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={handleSaveBanner} >
+                                                {allValues.isLoadingButton &&
+                                                    <>
+                                                        <Spinner
+                                                            as="span"
+                                                            animation="border"
+                                                            size="sm"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                        />
+                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                    </>
+
                                                 }
+                                                {!allValues.isLoadingButton &&
+                                                    <>
+                                                        <span className="visually">Submit</span>
+                                                    </>
+                                                }
+                                            </Button>
 
 
-
-                                                <Button variant="primary" type='submit' {...allValues.isLoadingButton && 'disabled'}>
-                                                    {allValues.isLoadingButton &&
-                                                        <>
-                                                            <Spinner
-                                                                as="span"
-                                                                animation="border"
-                                                                size="sm"
-                                                                role="status"
-                                                                aria-hidden="true"
-                                                            />
-                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                        </>
-
-                                                    }
-                                                    {!allValues.isLoadingButton &&
-                                                        <>
-                                                            <span className="visually">Submit</span>
-                                                        </>
-                                                    }
-                                                </Button>
-
-
-                                            </form>
 
                                         </div>
                                     </div>

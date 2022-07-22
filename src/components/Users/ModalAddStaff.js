@@ -11,6 +11,9 @@ import { getAllMovieTheater, checkMerchantMovieTheater } from '../../services/Mo
 import Select from 'react-select';
 import DatePicker from '../../containers/System/Share/DatePicker';
 import useLocationForm from "./useLocationForm";
+import { useForm } from "react-hook-form";
+
+
 
 
 
@@ -39,7 +42,7 @@ export default function ModalAddStaff(props) {
     });
 
     const { state, onCitySelect, onDistrictSelect, onWardSelect, onSubmit } =
-        useLocationForm(true);
+        useLocationForm(false);
 
     const {
         cityOptions,
@@ -49,6 +52,12 @@ export default function ModalAddStaff(props) {
         selectedDistrict,
         selectedWard,
     } = state;
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
     // const handleClose = () => setShow(false);
     // const handleShow = () => setShow(true);
@@ -252,128 +261,195 @@ export default function ModalAddStaff(props) {
     return (
         <Modal className={'modal-Add-Staff'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
             <ModalHeader toggle={() => toggle()} className='editdetail'>Add news staff</ModalHeader>
-            <ModalBody className='modal-body-container'>
-                <div className='modal-playlist-body'>
-                    <div className='image-edit-playlist'>
-                        <img className='image-playlist' onClick={handleOpenUploadFile} src={allValues.imagePreviewUrl} />
-                        <input
-                            id='uploadFile'
-                            ref={fileUploader}
-                            accept="image/*"
-                            hidden type='file'
-                            onChange={(e) => _handleImageChange(e)}
-                        />
-                    </div>
-                    <div className='input-container'>
-                        <div className='input-flex'>
-                            <input type="text" className="form-control input-small" name='email' onChange={changeHandler} placeholder="Enter Email address" />
-                            <input type="text" className="form-control input-small" name='userName' onChange={changeHandler} placeholder="Enter Username" />
-                        </div>
-                        <div className='input-row'>
-                            <input type="password" className="form-control input-small" name='password' onChange={changeHandler} placeholder="Enter Password" />
-                            <input type="text" className="form-control input-small" name='fullName' onChange={changeHandler} placeholder="Enter FullName" />
-                            <input type="text" className="form-control input-small" name='phone' onChange={changeHandler} placeholder="Enter Phone" />
-                            <DatePicker
-                                onChange={handleOnChangeDatePicker}
-                                className="form-control"
-                                value={allValues.birthday}
-                                placeholder="Enter dob"
+            <form onSubmit={handleSubmit(handleSaveUser)}>
+                <ModalBody className='modal-body-container'>
+                    <div className='modal-playlist-body'>
+                        <div className='image-edit-playlist'>
+                            <img className='image-playlist' onClick={handleOpenUploadFile} src={allValues.imagePreviewUrl} />
+                            <input
+                                id='uploadFile'
+                                ref={fileUploader}
+                                accept="image/*"
+                                hidden type='file'
+                                onChange={(e) => _handleImageChange(e)}
                             />
+                        </div>
+                        <div className='input-container'>
                             <div className='input-flex'>
-                                <Select
-                                    className='gender-select'
-                                    value={allValues.selectedGender}
-                                    onChange={handleChangeSelect}
-                                    options={allValues.listGender}
-                                    placeholder='Select gender'
-                                    name='selectedGender'
-                                // styles={this.props.colourStyles}
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='email'
+                                    placeholder="Enter Email address"
+                                    {...register("email", {
+                                        required: true,
+                                        pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        onChange: changeHandler
+                                    })}
                                 />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='userName'
+                                    placeholder="Enter Username"
+                                    {...register("userName", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                            </div>
+                            <div className='input-row'>
+                                <input
+                                    type="password"
+                                    className="form-control input-small"
+                                    name='password'
+                                    placeholder="Enter Password"
+                                    {...register("password", {
+                                        required: true,
+                                        minLength: 6,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='fullName'
+                                    onChange={changeHandler}
+                                    placeholder="Enter FullName"
+                                    {...register("fullName", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='phone'
+                                    onChange={changeHandler}
+                                    placeholder="Enter Phone"
+                                    {...register("phone", {
+                                        required: true,
+                                        onChange: changeHandler
+                                    })}
+                                />
+                                <DatePicker
+                                    onChange={handleOnChangeDatePicker}
+                                    className="form-control"
+                                    value={allValues.birthday}
+                                    placeholder="Enter dob"
+                                />
+                                <div className='input-flex'>
+                                    <Select
+                                        className='gender-select'
+                                        value={allValues.selectedGender}
+                                        onChange={handleChangeSelect}
+                                        options={allValues.listGender}
+                                        placeholder='Select gender'
+                                        name='selectedGender'
+                                    // styles={this.props.colourStyles}
+                                    />
+                                    <Select
+                                        className='role-select'
+                                        value={allValues.selectedRoles}
+                                        onChange={handleChangeSelect}
+                                        options={allValues.listRoles}
+                                        placeholder='Select roles'
+                                        name='selectedRoles'
+                                    // styles={this.props.colourStyles}
+                                    />
+                                </div>
+                                <div className='input-flex'>
+                                    <Select
+                                        className='city-select'
+                                        name="cityId"
+                                        key={`cityId_${selectedCity?.value}`}
+                                        isDisabled={cityOptions.length === 0}
+                                        options={cityOptions}
+                                        onChange={(option) => onCitySelect(option)}
+                                        placeholder="City"
+                                        defaultValue={selectedCity}
+                                    />
+                                    <Select
+                                        className='district-select'
+                                        name="districtId"
+                                        key={`districtId_${selectedDistrict?.value}`}
+                                        isDisabled={districtOptions.length === 0}
+                                        options={districtOptions}
+                                        onChange={(option) => onDistrictSelect(option)}
+                                        placeholder="District"
+                                        defaultValue={selectedDistrict}
+                                    />
+                                    <Select
+                                        className='ward-select'
+                                        name="wardId"
+                                        key={`wardId_${selectedWard?.value}`}
+                                        isDisabled={wardOptions.length === 0}
+                                        options={wardOptions}
+                                        placeholder="Phường/Xã"
+                                        onChange={(option) => onWardSelect(option)}
+                                        defaultValue={selectedWard}
+                                    />
+                                </div>
+                                <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
                                 <Select
-                                    className='role-select'
-                                    value={allValues.selectedRoles}
+                                    className='movieTheater-select'
+                                    value={allValues.selectedMovieTheater}
                                     onChange={handleChangeSelect}
-                                    options={allValues.listRoles}
-                                    placeholder='Select roles'
-                                    name='selectedRoles'
+                                    options={allValues.listMovieTheater}
+                                    isDisabled={true}
+                                    placeholder='Select movie theater'
+                                    name='selectedMovieTheater'
+
                                 // styles={this.props.colourStyles}
                                 />
                             </div>
-                            <div className='input-flex'>
-                                <Select
-                                    className='city-select'
-                                    name="cityId"
-                                    key={`cityId_${selectedCity?.value}`}
-                                    isDisabled={cityOptions.length === 0}
-                                    options={cityOptions}
-                                    onChange={(option) => onCitySelect(option)}
-                                    placeholder="City"
-                                    defaultValue={selectedCity}
-                                />
-                                <Select
-                                    className='district-select'
-                                    name="districtId"
-                                    key={`districtId_${selectedDistrict?.value}`}
-                                    isDisabled={districtOptions.length === 0}
-                                    options={districtOptions}
-                                    onChange={(option) => onDistrictSelect(option)}
-                                    placeholder="District"
-                                    defaultValue={selectedDistrict}
-                                />
-                                <Select
-                                    className='ward-select'
-                                    name="wardId"
-                                    key={`wardId_${selectedWard?.value}`}
-                                    isDisabled={wardOptions.length === 0}
-                                    options={wardOptions}
-                                    placeholder="Phường/Xã"
-                                    onChange={(option) => onWardSelect(option)}
-                                    defaultValue={selectedWard}
-                                />
-                            </div>
-                            <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
-                            <Select
-                                className='movieTheater-select'
-                                value={allValues.selectedMovieTheater}
-                                onChange={handleChangeSelect}
-                                options={allValues.listMovieTheater}
-                                isDisabled={true}
-                                placeholder='Select movie theater'
-                                name='selectedMovieTheater'
 
-                            // styles={this.props.colourStyles}
-                            />
+                            {Object.keys(errors).length !== 0 && (
+                                <ul className="error-container">
+                                    {errors.userName?.type === "required" && <li>User Name is required</li>}
+                                    {errors.password?.type === "required" && (
+                                        <li>Password is required</li>
+                                    )}
+                                    {errors.password?.type === "minLength" && (
+                                        <li>Password must be 6 characters long</li>
+                                    )}
+                                    {errors.email?.type === "required" && <li>Email is required</li>}
+                                    {errors.email?.type === "pattern" && <li>Invalid Email Address</li>}
+                                    {errors.fullName?.type === "required" && <li>Full Name is required</li>}
+                                    {errors.phone?.type === "required" && <li>Phone is required</li>}
+                                </ul>
+                            )}
+
                         </div>
-
                     </div>
-                </div>
-            </ModalBody>
-            <ModalFooter className='modal-footer-container'>
-                {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveUser()}>Save</Button> */}
+                </ModalBody>
+                <ModalFooter className='modal-footer-container'>
+                    {/* <Button color="primary" className='btn btn-save-edit' onClick={() => handleSaveUser()}>Save</Button> */}
 
-                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={() => handleSaveUser()}>
-                    {allValues.isShowLoading &&
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                        </>
+                    <Button variant="primary" type='submit' {...allValues.isShowLoading && 'disabled'}>
+                        {allValues.isShowLoading &&
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                                <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                            </>
 
-                    }
-                    {!allValues.isShowLoading &&
-                        <>
-                            <span className="visually">Submit</span>
-                        </>
-                    }
-                </Button>
+                        }
+                        {!allValues.isShowLoading &&
+                            <>
+                                <span className="visually">Submit</span>
+                            </>
+                        }
+                    </Button>
 
 
-            </ModalFooter>
+                </ModalFooter>
+            </form>
         </Modal>
     )
 }

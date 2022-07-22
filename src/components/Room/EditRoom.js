@@ -17,11 +17,26 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
 
 export default function EditRoom() {
+    const schema = yup.object().shape({
+        name: yup
+            .string()
+            .required("Vui lòng nhập tên phòng chiếu")
+    });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm({ resolver: yupResolver(schema) });
+
     const [allValues, setAllValues] = useState({
         name: '',
         errors: {},
@@ -68,67 +83,77 @@ export default function EditRoom() {
         console.log("Check state: ", allValues);
     }
 
+    async function fetchDataRoom() {
+        // You can await here
+
+        const dataRoom = await getEditRoom(id);
+        // console.log("Check data room: ", dataRoom);
+
+        // console.log("Check data room length: ", dataRoom.data.RoomSeet.length);
+
+        if (dataRoom && dataRoom.data && dataRoom.data.RoomSeet && dataRoom.data.RoomSeet.length > 0) {
+            let result = [];
+
+            // tìm posOfColumn max 
+
+            let maxPosColoumn = Math.max(...dataRoom.data.RoomSeet.map(o => +o.posOfColumn))
+
+            // console.log("Check maxPosColoumn: ", maxPosColoumn);
+
+
+            for (let i = 0; i <= maxPosColoumn; i++) {
+                let objSeet = {};
+                let posOfRow = [];
+                objSeet.posOfColumn = i;
+                dataRoom.data.RoomSeet.map((item, index) => {
+                    if (i === +item.posOfColumn) {
+                        let obj = {};
+                        obj.pos = +item.posOfRow;
+                        obj.typeId = item.typeId;
+                        posOfRow.push(obj);
+
+                    }
+                    else return;
+                })
+                objSeet.posOfRow = posOfRow;
+                objSeet.posOfRow.sort((a, b) => (a.pos > b.pos) ? 1 : ((b.pos > a.pos) ? -1 : 0))
+
+                result.push(objSeet);
+            }
+
+            let listAlpha = buildDataInputSelect(dataRoom.data.numberOfColumn);
+
+            let selectedColumn = listAlpha[maxPosColoumn + 1];
+
+
+            let defaultValues = {};
+            defaultValues.name = dataRoom.data.name;
+
+
+
+            setAllValues((prevState) => ({
+                ...prevState,
+                name: dataRoom.data.name,
+                preName: dataRoom.data.name,
+                errors: {},
+                listAlpha: listAlpha,
+                listSeet: result,
+                seetCopy: result,
+                isShowLoading: false,
+                numberOfColumn: dataRoom.data.numberOfColumn,
+                numberOfRow: dataRoom.data.numberOfRow,
+                numberSeet: '',
+                selectedColumn: selectedColumn
+            }));
+
+            reset({ ...defaultValues });
+
+
+        }
+    }
 
     useEffect(() => {
-        async function fetchDataRoom() {
-            // You can await here
 
-            const dataRoom = await getEditRoom(id);
-            console.log("Check data room: ", dataRoom);
-
-            console.log("Check data room length: ", dataRoom.data.RoomSeet.length);
-
-            if (dataRoom && dataRoom.data && dataRoom.data.RoomSeet && dataRoom.data.RoomSeet.length > 0) {
-                let result = [];
-
-                // tìm posOfColumn max 
-
-                let maxPosColoumn = Math.max(...dataRoom.data.RoomSeet.map(o => +o.posOfColumn))
-
-                console.log("Check maxPosColoumn: ", maxPosColoumn);
-
-
-                for (let i = 0; i <= maxPosColoumn; i++) {
-                    let objSeet = {};
-                    let posOfRow = [];
-                    objSeet.posOfColumn = i;
-                    dataRoom.data.RoomSeet.map((item, index) => {
-                        if (i === +item.posOfColumn) {
-                            let obj = {};
-                            obj.pos = +item.posOfRow;
-                            obj.typeId = item.typeId;
-                            posOfRow.push(obj);
-
-                        }
-                        else return;
-                    })
-                    objSeet.posOfRow = posOfRow;
-                    objSeet.posOfRow.sort((a, b) => (a.pos > b.pos) ? 1 : ((b.pos > a.pos) ? -1 : 0))
-                    console.log("Check objSeet: ", objSeet);
-                    result.push(objSeet);
-                }
-
-                let listAlpha = buildDataInputSelect(dataRoom.data.numberOfColumn);
-
-                let selectedColumn = listAlpha[maxPosColoumn + 1];
-
-
-                setAllValues((prevState) => ({
-                    ...prevState,
-                    name: dataRoom.data.name,
-                    preName: dataRoom.data.name,
-                    errors: {},
-                    listAlpha: listAlpha,
-                    listSeet: result,
-                    seetCopy: result,
-                    isShowLoading: false,
-                    numberOfColumn: dataRoom.data.numberOfColumn,
-                    numberOfRow: dataRoom.data.numberOfRow,
-                    numberSeet: '',
-                    selectedColumn: selectedColumn
-                }));
-            }
-        }
         fetchDataRoom();
 
 
@@ -141,38 +166,11 @@ export default function EditRoom() {
             movieTheaterId: selectUser.adminInfo.movietheaterid
         }));
 
-        console.log(allValues);
 
 
     }, [selectUser]);
 
-    const checkValidateInput = () => {
-        let isValid = true;
-        let errors = {};
-        let arrInput = ['email', 'password', 'name', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-        for (let i = 0; i < arrInput.length; i++) {
-            // this.state[arrInput[i]] == this.state.email or this.state.password
-            if (!allValues[arrInput[i]]) {
-                isValid = false;
-                errors[arrInput[i]] = "Cannot be empty";
-            }
-        }
 
-        if (!isValid) {
-            Swal.fire({
-                title: 'Missing data?',
-                text: "Vui lòng điền đầy đủ thông tin!",
-                icon: 'warning',
-            })
-
-            setAllValues((prevState) => ({
-                ...prevState,
-                errors: errors,
-                isShowLoading: false
-            }));
-        }
-        return isValid;
-    }
 
 
 
@@ -222,20 +220,27 @@ export default function EditRoom() {
         }));
     }
 
-    const handleDeleteDiagam = () => {
-        setAllValues({
+    const handleRefeshDiagam = () => {
+
+        setAllValues(() => ({
+            name: '',
+            errors: {},
             listAlpha: [],
             listSeet: [],
+            seetCopy: [],
+            newListSeetUpdate: [],
             isShowLoading: false,
             numberOfColumn: '',
             numberOfRow: '',
-            numberSeet: ''
-        })
+            numberSeet: '',
+            movieTheaterId: allValues.movieTheaterId,
+            listSeetChangeType: []
+        }));
+
+        fetchDataRoom()
     }
 
     const handleSaveUpdateRoom = async () => {
-
-        console.log("Check: ", allValues);
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -268,6 +273,10 @@ export default function EditRoom() {
     }
 
     const handleClickSeet = (item1, item2) => {
+
+        console.log(allValues.listSeet)
+        console.log(allValues.seetCopy)
+        console.log(allValues.newListSeetUpdate)
 
         let listSeet = JSON.parse(JSON.stringify(allValues.listSeet));
         let copyList = JSON.parse(JSON.stringify(allValues.seetCopy));
@@ -380,7 +389,7 @@ export default function EditRoom() {
                         <Header />
                         {/* Topbar */}
                         {/* Container Fluid*/}
-                        <div className="container-fluid" id="container-wrapper">
+                        <div className="container-fluid edit-room-container" id="container-wrapper">
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
                                 <ol className="breadcrumb">
@@ -399,140 +408,153 @@ export default function EditRoom() {
                                             <h5 className="m-0 font-weight-bold text-primary">Update Room</h5>
                                         </div>
                                         <div className="card-body">
+                                            <form onSubmit={handleSubmit(handleSaveUpdateRoom)}>
+                                                <div className='room-container'>
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputEmail1">Tên phòng chiếu</label>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control input-sm"
+                                                            name='name'
+                                                            // onChange={(e) => changeHandler(e)}
+                                                            placeholder="Enter name"
+                                                            {...register("name", {
+                                                                required: true,
+                                                                onChange: (e) => changeHandler(e),
+                                                            })}
+                                                        />
 
-                                            <div className='room-container'>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Tên phòng chiếu</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.name} name='name' onChange={(e) => changeHandler(e)} placeholder="Enter name" />
+                                                        {errors.name && errors.name.message &&
+                                                            <span className='error-input'>{errors.name.message}</span>
+                                                        }
 
-                                                    {/* <span className='error-code-input'>{allValues.errors["name"]}</span> */}
-
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.numberOfColumn} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfColumn' onChange={(e) => changeHandler(e, 'column')} placeholder="Enter column" />
-
-                                                    {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="exampleInputPassword1">Số lượng cột</label>
-                                                    <input type="text" className="form-control input-sm" value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfRow' onChange={(e) => changeHandler(e)} placeholder="Enter phone" />
-                                                    {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
-                                                </div>
-                                            </div>
-
-                                            <div className='seet-container'>
-                                                <div className='title-main'>Thiết kế sơ đồ phòng chiếu</div>
-                                                <div className='row'>
-                                                    <div className='room-seet col-9'>
-                                                        { /* EXAMPLE MAP INTERGRATE*/}
-
-                                                        <div className='row_chair col-lg-12'>
-                                                            <div className='chair'>
-                                                                {allValues.listSeet && allValues.listSeet.length > 0 &&
-                                                                    allValues.listSeet.map((item, index) => {
-                                                                        return (
-                                                                            <div className='one_row' key={index}>
-                                                                                <p className='name-column'>{alphabet[item.posOfColumn]}</p>
-                                                                                {
-                                                                                    item.posOfRow.map((item2, index2) => {
-                                                                                        if (item2.typeId === 2)
-                                                                                            return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
-                                                                                        else
-                                                                                            return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
-                                                                                    })
-                                                                                }
-                                                                                <p className='name-column'>{alphabet[item.posOfColumn]}</p>
-                                                                            </div>
-                                                                        )
-                                                                    })
-
-                                                                }
-
-
-                                                            </div>
-
-                                                        </div>
-                                                        <div className='sreen-room'>
-                                                            <div className='text'>
-                                                                <p>Màn hình</p>
-                                                                <p className='line'></p>
-                                                            </div>
-                                                        </div>
                                                     </div>
-                                                    <div className='room-info col-3'>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Tên hàng ghế</label>
-                                                            {/* <input type="text" className="form-control input-sm" name='nameSeet' placeholder="Enter name" /> */}
-                                                            <Select
-                                                                className='gender-select'
-                                                                value={allValues.selectedColumn}
-                                                                isDisabled={true}
-                                                                // value={allValues.selectedAlpha}
-                                                                onChange={handleChangeSelect}
-                                                                options={allValues.listAlpha}
-                                                                placeholder='Select name column'
-                                                                name='selectedColumn'
-                                                            // styles={this.props.colourStyles}
-                                                            />
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.numberOfColumn} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfColumn' onChange={(e) => changeHandler(e, 'column')} placeholder="Enter column" />
 
+                                                        {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label htmlFor="exampleInputPassword1">Số lượng cột</label>
+                                                        <input type="text" className="form-control input-sm" value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false} name='numberOfRow' onChange={(e) => changeHandler(e)} placeholder="Enter phone" />
+                                                        {/* <span className='error-code-input'>{allValues.errors["password"]}</span> */}
+                                                    </div>
+                                                </div>
+
+                                                <div className='seet-container'>
+                                                    <div className='title-main'>Thiết kế sơ đồ phòng chiếu</div>
+                                                    <div className='row'>
+                                                        <div className='room-seet col-9'>
+                                                            { /* EXAMPLE MAP INTERGRATE*/}
+
+                                                            <div className='row_chair col-lg-12'>
+                                                                <div className='chair'>
+                                                                    {allValues.listSeet && allValues.listSeet.length > 0 &&
+                                                                        allValues.listSeet.map((item, index) => {
+                                                                            return (
+                                                                                <div className='one_row' key={index}>
+                                                                                    <p className='name-column'>{alphabet[item.posOfColumn]}</p>
+                                                                                    {
+                                                                                        item.posOfRow.map((item2, index2) => {
+                                                                                            if (item2.typeId === 2)
+                                                                                                return (<p className='seet-item active' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                            else
+                                                                                                return (<p className='seet-item' key={index2} onClick={() => handleClickSeet(item, item2)}>{item2.pos + 1}</p>);
+                                                                                        })
+                                                                                    }
+                                                                                    <p className='name-column'>{alphabet[item.posOfColumn]}</p>
+                                                                                </div>
+                                                                            )
+                                                                        })
+
+                                                                    }
+
+
+                                                                </div>
+
+                                                            </div>
+                                                            <div className='sreen-room'>
+                                                                <div className='text'>
+                                                                    <p>Màn hình</p>
+                                                                    <p className='line'></p>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="exampleInputEmail1">Số lượng ghế</label>
-                                                            <input type="number" max={allValues.numberOfRow} value={allValues.numberSeet} min={1} className="form-control input-sm" onChange={(e) => changeHandler(e)} name='numberSeet' placeholder="Enter number" />
+                                                        <div className='room-info col-3'>
+                                                            <div className="form-group">
+                                                                <label htmlFor="exampleInputEmail1">Tên hàng ghế</label>
+                                                                {/* <input type="text" className="form-control input-sm" name='nameSeet' placeholder="Enter name" /> */}
+                                                                <Select
+                                                                    className='gender-select'
+                                                                    value={allValues.selectedColumn}
+                                                                    isDisabled={true}
+                                                                    // value={allValues.selectedAlpha}
+                                                                    onChange={handleChangeSelect}
+                                                                    options={allValues.listAlpha}
+                                                                    placeholder='Select name column'
+                                                                    name='selectedColumn'
+                                                                // styles={this.props.colourStyles}
+                                                                />
 
-                                                        </div>
-                                                        <Button variant="primary" onClick={handleAddSeet}>
-                                                            <span className="visually">Thêm hàng ghế</span>
-                                                        </Button>
+                                                            </div>
+                                                            <div className="form-group">
+                                                                <label htmlFor="exampleInputEmail1">Số lượng ghế</label>
+                                                                <input type="number" max={allValues.numberOfRow} value={allValues.numberSeet} min={1} className="form-control input-sm" onChange={(e) => changeHandler(e)} name='numberSeet' placeholder="Enter number" />
 
-                                                        <div className='info-seet-container'>
-                                                            <div className='seet-default'>
-                                                                <p className='color-default'></p>
-                                                                <p className='name-seet'>Ghế thường</p>
+                                                            </div>
+                                                            <Button variant="primary" onClick={handleAddSeet}>
+                                                                <span className="visually">Thêm hàng ghế</span>
+                                                            </Button>
+
+                                                            <div className='info-seet-container'>
+                                                                <div className='seet-default'>
+                                                                    <p className='color-default'></p>
+                                                                    <p className='name-seet'>Ghế thường</p>
+                                                                </div>
+
+                                                                <div className='seet-vip'>
+                                                                    <p className='color-vip'></p>
+                                                                    <p className='name-seet'>Ghế Vip</p>
+                                                                </div>
+
                                                             </div>
 
-                                                            <div className='seet-vip'>
-                                                                <p className='color-vip'></p>
-                                                                <p className='name-seet'>Ghế Vip</p>
+                                                            <div className='button-sumit-seet-container'>
+                                                                <Button variant="primary" {...allValues.isShowLoading && 'disabled'} type="submit">
+                                                                    {allValues.isShowLoading &&
+                                                                        <>
+                                                                            <Spinner
+                                                                                as="span"
+                                                                                animation="border"
+                                                                                size="sm"
+                                                                                role="status"
+                                                                                aria-hidden="true"
+                                                                            />
+                                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                                        </>
+
+                                                                    }
+                                                                    {!allValues.isShowLoading &&
+                                                                        <>
+                                                                            <span className="visually">Lưu sơ đồ</span>
+                                                                        </>
+                                                                    }
+                                                                </Button>
+                                                                <Button variant="primary" className="delete-diagram-seet" onClick={handleRefeshDiagam}>
+                                                                    <span className="visually">Refresh</span>
+                                                                </Button>
                                                             </div>
 
-                                                        </div>
-
-                                                        <div className='button-sumit-seet-container'>
-                                                            <Button variant="primary" {...allValues.isShowLoading && 'disabled'} onClick={handleSaveUpdateRoom}>
-                                                                {allValues.isShowLoading &&
-                                                                    <>
-                                                                        <Spinner
-                                                                            as="span"
-                                                                            animation="border"
-                                                                            size="sm"
-                                                                            role="status"
-                                                                            aria-hidden="true"
-                                                                        />
-                                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                                    </>
-
-                                                                }
-                                                                {!allValues.isShowLoading &&
-                                                                    <>
-                                                                        <span className="visually">Lưu sơ đồ</span>
-                                                                    </>
-                                                                }
-                                                            </Button>
-                                                            <Button variant="primary" className="delete-diagram-seet" onClick={handleDeleteDiagam}>
-                                                                <span className="visually">Xóa sơ đồ</span>
-                                                            </Button>
-                                                        </div>
-
-                                                        {/* <div className="form-group">
+                                                            {/* <div className="form-group">
                                                     <label htmlFor="exampleInputPassword1">Số lượng hàng</label>
                                                     <input type="text" className="form-control input-sm" name='soDienThoai' onChange={changeHandler} placeholder="Enter phone" />
                                                     
                                                 </div> */}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </form>
 
 
 

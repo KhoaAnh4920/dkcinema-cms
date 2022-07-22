@@ -155,9 +155,9 @@ function Users() {
                 address: data.address,
                 avatar: data.avatar,
                 fileName: data.fileName,
-                cityCode: data.selectedCity.value,
-                districtCode: data.selectedDistrict.value,
-                wardCode: data.selectedWard.value,
+                cityCode: (data.selectedCity && data.selectedCity.value) ? data.selectedCity.value : null,
+                districtCode: (data.selectedDistrict && data.selectedDistrict.value) ? data.selectedDistrict.value : null,
+                wardCode: (data.selectedWard && data.selectedWard.value) ? data.selectedWard.value : null,
                 id: modalEditUser.id,
             })
 

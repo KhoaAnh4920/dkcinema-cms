@@ -102,7 +102,11 @@ export default function ModalEditUsers(props) {
         async function fetchEditUser() {
             if (props.dataUser) {
                 let dataUser = props.dataUser;
-                const location = await testFunctionParent(dataUser.cityCode, dataUser.districtCode, dataUser.wardCode);
+                let location = [];
+                if (dataUser.cityCode && dataUser.districtCode && dataUser.wardCode) {
+                    location = await testFunctionParent(dataUser.cityCode, dataUser.districtCode, dataUser.wardCode);
+                }
+                // const location = await testFunctionParent(dataUser.cityCode, dataUser.districtCode, dataUser.wardCode);
                 let listGender = buildDataInputSelect([], 'GENDERS');
                 let listRoles = [];
                 let listMovieTheater = [];
@@ -314,7 +318,7 @@ export default function ModalEditUsers(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='fullName'
-                                    value={allValues.fullName}
+
                                     placeholder="Enter FullName"
                                     {...register("fullName", {
                                         required: true,
@@ -325,7 +329,7 @@ export default function ModalEditUsers(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='phone'
-                                    value={allValues.phone}
+
                                     placeholder="Enter Phone"
                                     {...register("phone", {
                                         required: true,

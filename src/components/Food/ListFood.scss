@@ -7,8 +7,17 @@
             width: 100%;
             align-items: center;
 
-            .horizon-input {
-                display: flex;
+            .select-type {
+                width: 20%;
+
+                .food-select {
+                    width: 100%;
+                    z-index: 9;
+                }
+            }
+
+            .horizon-input-submit {
+
                 width: 30%;
                 margin-right: 10px;
 
@@ -20,10 +29,7 @@
                     width: 40%;
                 }
 
-                .food-select {
-                    width: 100%;
-                    z-index: 9;
-                }
+
 
                 .filter-food-data {
                     margin-left: 20px;

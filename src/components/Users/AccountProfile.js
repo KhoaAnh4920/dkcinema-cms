@@ -358,7 +358,7 @@ function AccountProfile() {
                                                     <span className='address-user'>{allValues.email}</span>
                                                     <span className='role-user'>
                                                         {selectUser.adminInfo.roleId === 1 && 'Admin'}
-                                                        {selectUser.adminInfo.roleId === 2 && 'Staff Ticket'}
+                                                        {selectUser.adminInfo.roleId === 3 && 'Staff Ticket'}
                                                         {selectUser.adminInfo.roleId === 5 && 'Staff Schedule'}
                                                     </span>
                                                 </div>
@@ -373,7 +373,7 @@ function AccountProfile() {
                                             <div className='input-flex' style={{ marginTop: '0px' }}>
                                                 <div className='input-content'>
                                                     <label htmlFor="exampleInputEmail1">Username</label>
-                                                    <input type="text" className="form-control input-small" onChange={changeHandler} value={allValues.userName} name='userName' placeholder="Email" />
+                                                    <input type="text" className="form-control input-small" readOnly onChange={changeHandler} value={allValues.userName} name='userName' placeholder="Email" />
                                                 </div>
 
                                                 <div className='input-content'>
@@ -406,6 +406,7 @@ function AccountProfile() {
                                                     <label htmlFor="exampleInputEmail1">Ngày sinh</label>
 
                                                     <DatePicker
+                                                        readOnly
                                                         onChange={handleOnChangeDatePicker}
                                                         className="form-control"
                                                         name="birthday"

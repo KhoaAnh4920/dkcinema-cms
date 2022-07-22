@@ -51,13 +51,25 @@ export default function Login() {
 
                 dispatch(adminLoginSuccess(data.data));
                 toast.success("Login success");
+
+                if (data.data.roleId === 3) {
+                    history.push("/ticket-management");
+                }
+                if (data.data.roleId === 5) {
+                    history.push("/showTime-management");
+                }
+
                 history.push("/");
+
+
+
             } else if (data.errorCode === 4) {
                 toast.error(data.message)
                 setLoadingButton(false);
             } else {
                 console.log("Lỗi: ", data.message);
 
+                toast.error(data.message);
                 setLoadingButton(false);
             }
         } catch (e) {

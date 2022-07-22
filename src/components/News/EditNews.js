@@ -33,7 +33,7 @@ import * as yup from "yup";
 
 
 const schema = yup.object().shape({
-    name: yup
+    title: yup
         .string()
         .required("Vui lòng nhập tiêu đề"),
     description: yup
@@ -56,7 +56,7 @@ export default function EditNews() {
 
 
     const [allValues, setAllValues] = useState({
-        name: '',
+        title: '',
         description: '',
         status: 1,
         url: '',
@@ -111,7 +111,7 @@ export default function EditNews() {
 
             setAllValues((prevState) => ({
                 ...prevState,
-                name: dataPost.title,
+                title: dataPost.title,
                 description: dataPost.tomTat,
                 content: dataPost.noiDung,
                 typeNews: dataPost.type,
@@ -232,33 +232,7 @@ export default function EditNews() {
 
     }, []);
 
-    // const checkValidateInput = () => {
-    //     let isValid = true;
-    //     let errors = {};
-    //     let arrInput = ['email', 'password', 'userName', 'fullName', 'birthday', 'phone', 'selectedGender', 'selectedRoles', 'address']
-    //     for (let i = 0; i < arrInput.length; i++) {
-    //         // this.state[arrInput[i]] == this.state.email or this.state.password
-    //         if (!allValues[arrInput[i]]) {
-    //             isValid = false;
-    //             errors[arrInput[i]] = "Cannot be empty";
-    //         }
-    //     }
 
-    //     if (!isValid) {
-    //         Swal.fire({
-    //             title: 'Missing data?',
-    //             text: "Vui lòng điền đầy đủ thông tin!",
-    //             icon: 'warning',
-    //         })
-
-    //         setAllValues((prevState) => ({
-    //             ...prevState,
-    //             errors: errors,
-    //             isShowLoading: false
-    //         }));
-    //     }
-    //     return isValid;
-    // }
 
 
     const changeHandler = e => {
@@ -281,91 +255,64 @@ export default function EditNews() {
 
         // allValues.isLoadingButton = true;
 
-        console.log(allValues);
+        // console.log(allValues);
 
 
 
-        // if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
-        //     setAllValues((prevState) => ({
-        //         ...prevState,
-        //         isLoadingButton: true,
-        //     }))
+        if (valImg.fileList && valImg.fileList[0] && valImg.fileList[0].originFileObj) {
+            setAllValues((prevState) => ({
+                ...prevState,
+                isLoadingButton: true,
+            }))
 
-        //     let result = [];
-        //     await Promise.all(valImg.fileList.map(async (item, index) => {
+            let result = [];
+            await Promise.all(valImg.fileList.map(async (item, index) => {
 
-        //         let obj = {};
-        //         obj.image = await getBase64(item.originFileObj);
-        //         obj.fileName = item.name;
-        //         result.push(obj);
+                let obj = {};
+                obj.image = await getBase64(item.originFileObj);
+                obj.fileName = item.name;
+                result.push(obj);
 
-        //     }))
+            }))
 
-        //     let res = await editPost({
-        //         id: id,
-        //         title: allValues.name,
-        //         noiDung: allValues.content,
-        //         type: allValues.typeNews,
-        //         thumbnail: result[0].image,
-        //         fileName: result[0].fileName,
-        //         tomTat: allValues.description,
-        //     })
-        //     if (res && res.errCode == 0) {
-        //         history.push("/news-management")
-        //         toast.success("Update news success");
-        //     } else {
-        //         toast.error(res.errMessage);
-        //     }
-        // } else {
-        //     setAllValues((prevState) => ({
-        //         ...prevState,
-        //         isLoadingButton: true,
-        //     }))
+            let res = await editPost({
+                id: id,
+                title: allValues.title,
+                noiDung: allValues.content,
+                type: allValues.typeNews,
+                thumbnail: result[0].image,
+                fileName: result[0].fileName,
+                tomTat: allValues.description,
+            })
+            if (res && res.errCode == 0) {
+                history.push("/news-management")
+                toast.success("Update news success");
+            } else {
+                toast.error(res.errMessage);
+            }
+            return;
+        } else {
+            setAllValues((prevState) => ({
+                ...prevState,
+                isLoadingButton: true,
+            }))
 
-        //     let res = await editPost({
-        //         id: id,
-        //         title: allValues.name,
-        //         noiDung: allValues.content,
-        //         type: allValues.typeNews,
-        //         tomTat: allValues.description,
-        //     })
+            let res = await editPost({
+                id: id,
+                title: allValues.title,
+                noiDung: allValues.content,
+                type: allValues.typeNews,
+                tomTat: allValues.description,
+            })
 
-        //     if (res && res.errCode == 0) {
-        //         history.push("/news-management")
-        //         toast.success("Update news success");
-        //     } else {
-        //         toast.error(res.errMessage);
-        //     }
-        // }
-
-        // let result = [];
-
-        // await Promise.all(valImg.fileList.map(async (item, index) => {
-        //     console.log("Check item: ", item.originFileObj);
-        //     let obj = {};
-        //     obj.image = await getBase64(item.originFileObj);
-        //     obj.fileName = item.name;
-        //     result.push(obj);
-        // }))
-
-
-        // let res = await createNewPost({
-        //     title: allValues.name,
-        //     noiDung: allValues.content,
-        //     tomTat: allValues.description,
-        //     userId: adminInfo.id,
-        //     type: allValues.typeNews,
-        //     thumbnail: result[0].image,
-        //     fileName: result[0].fileName
-
-        // })
-
-        // if (res && res.errCode == 0) {
-        //     history.push("/news-management")
-        //     toast.success("Add new news success");
-        // } else {
-        //     toast.error(res.errMessage);
-        // }
+            if (res && res.errCode == 0) {
+                history.push("/news-management")
+                toast.success("Update news success");
+            } else {
+                toast.error(res.errMessage);
+            }
+            return;
+        }
 
     }
 
@@ -417,7 +364,7 @@ export default function EditNews() {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/news-management`}>Quản lý bài viết</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Thêm bài viết</li>
+                                    <li className="breadcrumb-item active" aria-current="page">Sửa bài viết</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
@@ -427,7 +374,7 @@ export default function EditNews() {
                                 <div className="col-8">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new post</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Edit post</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -468,9 +415,10 @@ export default function EditNews() {
                                                     <label htmlFor="exampleInputEmail1">Tiêu đề</label>
                                                     <input
                                                         type="text"
+                                                        name='title'
                                                         className="form-control input-sm"
-                                                        placeholder="Enter name"
-                                                        {...register("name", {
+                                                        placeholder="Enter title"
+                                                        {...register("title", {
                                                             required: true,
                                                             onChange: changeHandler
                                                         })}
@@ -524,8 +472,8 @@ export default function EditNews() {
 
                                                 {Object.keys(errors).length !== 0 &&
                                                     <ul className="error-container">
-                                                        {errors.name && errors.name.message &&
-                                                            <li>{errors.name.message}</li>
+                                                        {errors.title && errors.title.message &&
+                                                            <li>{errors.title.message}</li>
                                                         }
                                                         {errors.description && errors.description.message &&
                                                             <li>{errors.description.message}</li>
