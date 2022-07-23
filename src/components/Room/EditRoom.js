@@ -187,12 +187,12 @@ export default function EditRoom() {
 
     const handleAddSeet = () => {
         if (allValues.numberSeet === '') {
-            toast.error("Please choose number Seet");
+            toast.error("Vui lòng chọn số lượng ghế");
             return;
         }
 
         if (+allValues.numberSeet > +allValues.numberOfRow) {
-            toast.error("The number of seats exceeds the limit");
+            toast.error("Số lượng ghế trong hàng vượt quá số hàng");
             return;
         }
 
@@ -257,7 +257,7 @@ export default function EditRoom() {
         })
 
         if (res && res.errCode == 0) {
-            toast.success("Update Room succeed");
+            toast.success("Cập nhật phòng chiếu thành công");
             setAllValues((prevState) => ({
                 ...prevState,
                 isShowLoading: false
@@ -405,7 +405,7 @@ export default function EditRoom() {
                                 <div className="col-10">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Update Room</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Cập nhật phòng chiếu</h5>
                                         </div>
                                         <div className="card-body">
                                             <form onSubmit={handleSubmit(handleSaveUpdateRoom)}>

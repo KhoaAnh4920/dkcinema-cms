@@ -155,12 +155,12 @@ export default function AddRoom() {
 
 
         if (+allValues.numberSeet > +allValues.numberOfRow) {
-            toast.error("The number of seats exceeds the limit");
+            toast.error("Số hàng vượt quá số lượng");
             return;
         }
 
         if (allValues.listSeet.length > +allValues.numberOfColumn - 1) {
-            toast.error("Maximum number of columns exceeded");
+            toast.error("Số ghế vượt quá số lượng");
             return;
         }
 
@@ -205,7 +205,7 @@ export default function AddRoom() {
             isShowLoading: true
         }));
         if (allValues.numberOfColumn === '' || allValues.numberOfRow === '' || allValues.numberSeet === '') {
-            toast.error("Empty !!!!");
+            toast.error("Thông tin rỗng !!!!");
             setAllValues((prevState) => ({
                 ...prevState,
                 isShowLoading: false
@@ -222,12 +222,12 @@ export default function AddRoom() {
             })
             if (res && res.errCode == 0) {
                 history.push("/room-management")
-                toast.success("Add new room succeed");
+                toast.success("Thêm phòng mới thành công");
 
 
             } else {
                 history.push("/room-management")
-                toast.error("Add new room fail");
+                toast.error("Thêm phòng mới thất bại");
             }
 
         }
@@ -313,7 +313,7 @@ export default function AddRoom() {
                                 <div className="col-10">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new Room</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Thêm phòng chiếu mới</h5>
                                         </div>
                                         <div className="card-body">
                                             <form onSubmit={handleSubmit(handleSaveRoom)}>
@@ -326,7 +326,7 @@ export default function AddRoom() {
                                                             className="form-control input-sm"
                                                             name='name'
                                                             // onChange={(e) => changeHandler(e)}
-                                                            placeholder="Enter name"
+                                                            placeholder="Tên phòng chiếu"
                                                             {...register("name", {
                                                                 required: true,
                                                                 onChange: (e) => changeHandler(e),
@@ -350,7 +350,7 @@ export default function AddRoom() {
                                                             name='numberOfColumn'
                                                             // onChange={(e) => changeHandler(e, 'column')}
 
-                                                            placeholder="Enter Row"
+                                                            placeholder="Số hàng"
                                                             {...register("numberOfColumn", {
                                                                 required: true,
                                                                 onChange: (e) => changeHandler(e, 'column')
@@ -371,7 +371,7 @@ export default function AddRoom() {
                                                             value={allValues.numberOfRow} readOnly={(allValues.listSeet.length > 0) ? true : false}
                                                             name='numberOfRow'
                                                             // onChange={(e) => changeHandler(e)}
-                                                            placeholder="Enter Column"
+                                                            placeholder="Số cột"
                                                             {...register("numberOfRow", {
                                                                 required: true,
                                                                 onChange: (e) => changeHandler(e)
@@ -449,7 +449,7 @@ export default function AddRoom() {
                                                                     className="form-control input-sm"
                                                                     onChange={(e) => changeHandler(e)}
                                                                     name='numberSeet'
-                                                                    placeholder="Enter number"
+                                                                    placeholder="Số lượng ghế một hàng"
                                                                 // {...register("numberSeet", {
                                                                 //     required: true,
                                                                 //     onChange: (e) => changeHandler(e)

@@ -61,13 +61,13 @@ function Users() {
 
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
-        { title: 'Avatar', field: 'avatar', render: rowData => <img src={rowData.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} /> },
-        { title: 'FullName', field: 'fullName' },
-        { title: 'Gender', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
-        { title: 'Role', field: 'rolesName' },
-        { title: 'Movie Theater', field: 'movieTheater' },
-        { title: 'Status', field: 'isActive', render: rowData => (rowData.isActive) ? <span className="badge badge-success">Active</span> : <span className="badge badge-danger">InActive</span> },
+        { title: 'Mã', field: 'id' },
+        { title: 'Ảnh', field: 'avatar', render: rowData => <img src={rowData.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} /> },
+        { title: 'Họ Và Tên', field: 'fullName' },
+        { title: 'Giới Tính', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
+        { title: 'Quyền', field: 'rolesName' },
+        { title: 'Rạp', field: 'movieTheater' },
+        { title: 'Trạng Thái', field: 'isActive', render: rowData => (rowData.isActive) ? <span className="badge badge-success">Active</span> : <span className="badge badge-danger">InActive</span> },
     ]
 
     const handleOnDeleteUser = async (id) => {
@@ -131,7 +131,7 @@ function Users() {
             if (res && res.errCode == 0) {
                 setOpenModalUser(false);
                 await fetchDataUser();
-                toast.success("Add new user success");
+                toast.success("Thêm người dùng thành công");
             }
         }
     }
@@ -167,7 +167,7 @@ function Users() {
                     isShow: false
                 }));
                 await fetchDataUser();
-                toast.success("Edit user success");
+                toast.success("Sửa thông tin người dùng thành công");
             }
         }
     }
@@ -207,7 +207,7 @@ function Users() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add user</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm người dùng</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalUser(true);
                                             },

@@ -88,12 +88,12 @@ function ListStaff() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Avatar', field: 'avatar', render: rowData => <img src={rowData.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} /> },
-        { title: 'FullName', field: 'fullName' },
-        { title: 'Gender', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
-        { title: 'Role', field: 'rolesName' },
-        { title: 'Movie Theater', field: 'movieTheater' },
-        { title: 'Status', field: 'isActive', render: rowData => (rowData.isActive) ? <span className="badge badge-success">Active</span> : <span className="badge badge-danger">InActive</span> },
+        { title: 'Ảnh', field: 'avatar', render: rowData => <img src={rowData.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} /> },
+        { title: 'Họ và tên', field: 'fullName' },
+        { title: 'Giới tính', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
+        { title: 'Quyền', field: 'rolesName' },
+        { title: 'Rạp phim', field: 'movieTheater' },
+        { title: 'Trạng thái', field: 'isActive', render: rowData => (rowData.isActive) ? <span className="badge badge-success">Active</span> : <span className="badge badge-danger">InActive</span> },
     ]
 
     // const handleOnDeleteUser = async (id) => {
@@ -130,6 +130,7 @@ function ListStaff() {
 
     const saveNewUserFromModal = async (data) => {
 
+        console.log('data: ', data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
@@ -156,8 +157,10 @@ function ListStaff() {
             if (res && res.errCode == 0) {
                 setOpenModalUser(false);
                 await fetchDataUser(allValues.movieTheaterId);
-                toast.success("Add new user success");
-            }
+                toast.success("Thêm nhân viên mới thành công");
+            } else toast.error(res.message);
+
+
         }
     }
 
@@ -192,8 +195,8 @@ function ListStaff() {
                     isShow: false
                 }));
                 await fetchDataUser(allValues.movieTheaterId);
-                toast.success("Edit user success");
-            }
+                toast.success("Cập nhật nhân viên mới thành công");
+            } else toast.error(res.message);
         }
     }
 
@@ -233,7 +236,7 @@ function ListStaff() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add staff</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm nhân viên</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalUser(true);
                                             },

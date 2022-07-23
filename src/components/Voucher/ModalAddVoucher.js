@@ -165,7 +165,7 @@ export default function ModalAddVoucher(props) {
 
 
         <Modal className={'modal-add-voucher'} isOpen={props.isOpen} toggle={() => toggle()} centered size="md-down" >
-            <ModalHeader toggle={() => toggle()} className='titleModal'>Add new Voucher</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='titleModal'>Thêm mới voucher</ModalHeader>
             <form onSubmit={handleSubmit(handleSaveVoucher)}>
                 <ModalBody className='modal-body-container'>
                     <div className='modal-add-voucher-body'>
@@ -322,7 +322,7 @@ export default function ModalAddVoucher(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Thêm</span>
                             </>
                         }
                     </Button>

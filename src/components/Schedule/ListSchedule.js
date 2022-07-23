@@ -463,10 +463,10 @@ function ListSchedule() {
 
                                             <div className='button-filter'>
                                                 <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                    <span className="visually">Submit</span>
+                                                    <span className="visually">Tìm kiếm</span>
                                                 </Button>
                                                 <Button variant="primary" className="filter-schedule-data" onClick={handleClearFilter}>
-                                                    <span className="visually">Clear</span>
+                                                    <span className="visually">Xóa</span>
                                                 </Button>
 
                                             </div>

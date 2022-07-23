@@ -175,7 +175,7 @@ function EditCombo() {
             // console.log('result: ', result);
 
             if (!allValues.name || !allValues.price) {
-                toast.error("Please complete all information")
+                toast.error("Điền đầy đủ thông tin !!")
                 return;
             }
 
@@ -196,7 +196,7 @@ function EditCombo() {
             // console.log('allValues: ', allValues);
 
             if (!allValues.name || !allValues.price) {
-                toast.error("Please complete all information")
+                toast.error("Điền đầy đủ thông tin !!")
                 return;
             }
 
@@ -211,7 +211,7 @@ function EditCombo() {
 
         if (res && res.errCode == 0) {
             history.push("/combo-management")
-            toast.success("Update combo succeed");
+            toast.success("Cập nhật thông tin combo thành công");
         } else {
             toast.error(res.errMessage);
         }
@@ -237,14 +237,14 @@ function EditCombo() {
 
         console.log(fileList);
         if (fileList.length > 1) {
-            toast.error("Maximum 1 image");
+            toast.error("Chỉ được tải lên 1 ảnh");
             return;
         }
         if (fileList.length > 0) {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
 
             if (!isJpgOrPng) {
-                toast.error("Please choose image");
+                toast.error("Hãy chọn ảnh !!");
                 setValImg((prevState) => ({
                     previewVisible: false,
                     previewImage: '',
@@ -381,7 +381,7 @@ function EditCombo() {
                                 <div className="col-lg-6 mb-4">
 
                                     <MaterialTable
-                                        title="Add food"
+                                        title="Danh sách thực phẩm"
                                         columns={columnsItemFood}
                                         data={allValues.listFood}
 
@@ -396,7 +396,7 @@ function EditCombo() {
                                 </div>
                                 <div className="col-lg-6 mb-4 card">
                                     <div className='form-edit-combo'>
-                                        <h5>Update Combo</h5>
+                                        <h5>Cập nhật thông tin combo</h5>
                                         <div className='vertical-input'>
                                             <Upload
                                                 action={""}
@@ -414,7 +414,7 @@ function EditCombo() {
                                                         <>
                                                             <div>
                                                                 <PlusOutlined />
-                                                                <div style={{ marginTop: 8 }}>Upload</div>
+                                                                <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                             </div>
                                                         </>}
                                             </Upload>
@@ -459,7 +459,7 @@ function EditCombo() {
                                                 }
                                                 {!allValues.isLoadingButton &&
                                                     <>
-                                                        <span className="visually">Submit</span>
+                                                        <span className="visually">Cập nhật</span>
                                                     </>
                                                 }
                                             </Button>

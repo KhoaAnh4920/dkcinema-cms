@@ -119,7 +119,7 @@ function ListFood() {
             if (res && res.errCode == 0) {
                 setOpenModaEditFood(false);
                 await fetchDataFood();
-                toast.success("Add new food success");
+                toast.success("Sửa thực phầm thành công");
             }
         }
     }
@@ -152,7 +152,7 @@ function ListFood() {
             if (res && res.errCode == 0) {
                 setOpenModalFood(false);
                 await fetchDataFood();
-                toast.success("Add new food success");
+                toast.success("Thêm thực phẩm thành công");
             }
         }
 
@@ -243,7 +243,7 @@ function ListFood() {
 
             let res = await deleteFoodService(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete food success !!")
+                toast.success("Xóa thực phẩm thành công !!")
                 await fetchDataFood();
             } else {
                 toast.error(res.errMessage)
@@ -301,10 +301,10 @@ function ListFood() {
                                         <div className='horizon-input-submit' style={{ marginLeft: '20px' }}>
                                             <label htmlFor="exampleInputEmail1" style={{ height: '22px' }}></label>
                                             <Button variant="primary" className="submit-schedule-data" onClick={handleSubmitFilter}>
-                                                <span className="visually">Submit</span>
+                                                <span className="visually">Tìm kiếm</span>
                                             </Button>
                                             <Button variant="primary" className="filter-food-data" onClick={handleClearFilter}>
-                                                <span className="visually">Clear</span>
+                                                <span className="visually">Xóa</span>
                                             </Button>
                                         </div>
 
@@ -336,7 +336,7 @@ function ListFood() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add new food</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm thực phẩm mới</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalFood(true);
                                             },
@@ -358,13 +358,13 @@ function ListFood() {
                                             icon: 'delete',
                                             tooltip: 'Delete food',
                                             onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
+                                                title: 'Bạn có chắc ?',
+                                                text: "Bạn không thể phục hồi lại chúng!",
                                                 icon: 'warning',
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'OK'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     handleOnDeleteFood(rowData.id)

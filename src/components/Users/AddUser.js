@@ -255,13 +255,18 @@ export default function AddUser() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new usser</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Thêm người dùng mới</h5>
                                         </div>
                                         <div className="card-body">
 
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">Email address</label>
-                                                <input type="text" className="form-control input-sm" name='email' onChange={changeHandler} placeholder="Enter Email" />
+                                                <input
+                                                    type="text"
+                                                    className="form-control input-sm"
+                                                    name='email'
+                                                    onChange={changeHandler}
+                                                    placeholder="Enter Email" />
                                                 <small id="emailHelp" className="form-text text-muted">We'll never share your
                                                     email with anyone else.</small>
 

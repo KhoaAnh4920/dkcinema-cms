@@ -81,7 +81,7 @@ export default function AddBanner() {
 
         console.log(fileList);
         if (fileList.length > 1) {
-            toast.error("Maximum 1 poster");
+            toast.error("Chỉ được tải lên một ảnh");
             return;
         }
         if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
@@ -106,7 +106,7 @@ export default function AddBanner() {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
             console.log(isJpgOrPng);
             if (!isJpgOrPng) {
-                toast.error("Please choose image");
+                toast.error("Hãy chọn ảnh");
                 return;
             }
         }
@@ -174,7 +174,7 @@ export default function AddBanner() {
 
 
         if (valImg.fileList.length < 1) {
-            toast.error("Please upload image");
+            toast.error("Hãy chọn ảnh !!");
             setAllValues((prevState) => ({
                 ...prevState,
                 isLoadingButton: false,
@@ -204,7 +204,7 @@ export default function AddBanner() {
 
         if (res && res.errCode == 0) {
             history.push("/banner-management")
-            toast.success("Add new banner success");
+            toast.success("Thêm banner mới thành công");
         } else {
             toast.error(res.errMessage);
         }
@@ -246,7 +246,7 @@ export default function AddBanner() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new Banner</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Thêm banner mới</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -268,7 +268,7 @@ export default function AddBanner() {
                                                                 <>
                                                                     <div>
                                                                         <PlusOutlined />
-                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                        <div style={{ marginTop: 8 }}>Tải lên</div>
                                                                     </div>
                                                                 </>}
                                                     </Upload>
@@ -329,7 +329,7 @@ export default function AddBanner() {
                                                 }
                                                 {!allValues.isLoadingButton &&
                                                     <>
-                                                        <span className="visually">Submit</span>
+                                                        <span className="visually">Thêm</span>
                                                     </>
                                                 }
                                             </Button>

@@ -103,10 +103,10 @@ export default function AddMovieTheater() {
 
         if (res && res.errCode == 0) {
             history.push("/movieTheater-management")
-            toast.success("Add new movie theater success");
+            toast.success("Thêm rạp chiếu mới thành công");
         } else {
             history.push("/movieTheater-management")
-            toast.error("Add fail");
+            toast.error("Thêm rạp chiếu thất bại");
         }
     }
 
@@ -239,7 +239,7 @@ export default function AddMovieTheater() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new MovieTheater</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Thêm rạp chiếu mới</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -261,7 +261,7 @@ export default function AddMovieTheater() {
                                                                 <>
                                                                     <div>
                                                                         <PlusOutlined />
-                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                        <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                                     </div>
                                                                 </>}
                                                     </Upload>
@@ -283,7 +283,7 @@ export default function AddMovieTheater() {
                                                         className="form-control input-sm"
                                                         name='tenRap'
 
-                                                        placeholder="Enter name"
+                                                        placeholder="Nhập tên rạp"
                                                         {...register("tenRap", {
                                                             required: true,
                                                             onChange: changeHandler
@@ -299,7 +299,7 @@ export default function AddMovieTheater() {
                                                         className="form-control input-sm"
                                                         name='soDienThoai'
                                                         onChange={changeHandler}
-                                                        placeholder="Enter phone"
+                                                        placeholder="Nhập số điện thoại"
                                                         {...register("soDienThoai", {
                                                             required: true,
                                                             onChange: changeHandler
@@ -310,31 +310,31 @@ export default function AddMovieTheater() {
 
 
                                                 <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">City</label>
+                                                    <label htmlFor="exampleInputEmail1">Tỉnh/Thành phố</label>
                                                     <Select
                                                         name="cityId"
                                                         key={`cityId_${selectedCity?.value}`}
                                                         isDisabled={cityOptions.length === 0}
                                                         options={cityOptions}
                                                         onChange={(option) => onCitySelect(option)}
-                                                        placeholder="City"
+                                                        placeholder="Tỉnh/Thành phố"
                                                         defaultValue={selectedCity}
                                                     />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">District</label>
+                                                    <label htmlFor="exampleInputEmail1">Quận/Huyện</label>
                                                     <Select
                                                         name="districtId"
                                                         key={`districtId_${selectedDistrict?.value}`}
                                                         isDisabled={districtOptions.length === 0}
                                                         options={districtOptions}
                                                         onChange={(option) => onDistrictSelect(option)}
-                                                        placeholder="District"
+                                                        placeholder="Quận/Huyện"
                                                         defaultValue={selectedDistrict}
                                                     />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Ward</label>
+                                                    <label htmlFor="exampleInputEmail1">Phường/Xã</label>
                                                     <Select
                                                         name="wardId"
                                                         key={`wardId_${selectedWard?.value}`}
@@ -346,7 +346,7 @@ export default function AddMovieTheater() {
                                                     />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="exampleInputEmail1">Address</label>
+                                                    <label htmlFor="exampleInputEmail1">Địa chỉ</label>
                                                     <input
                                                         type="text"
                                                         className="form-control input-sm"
@@ -356,16 +356,16 @@ export default function AddMovieTheater() {
                                                             required: true,
                                                             onChange: changeHandler
                                                         })}
-                                                        placeholder="Address" />
+                                                        placeholder="Nhập địa chỉ" />
 
 
                                                 </div>
 
                                                 {Object.keys(errors).length !== 0 && (
                                                     <ul className="error-container">
-                                                        {errors.tenRap?.type === "required" && <li>Name Theater is required</li>}
-                                                        {errors.soDienThoai?.type === "required" && <li>Phone number is required</li>}
-                                                        {errors.address?.type === "required" && <li>Address is required</li>}
+                                                        {errors.tenRap?.type === "required" && <li>Tên rạp bắt buộc</li>}
+                                                        {errors.soDienThoai?.type === "required" && <li>Số điện thoại bắt buộc</li>}
+                                                        {errors.address?.type === "required" && <li>Địa chỉ bắt buộc</li>}
                                                     </ul>
                                                 )}
 
@@ -387,7 +387,7 @@ export default function AddMovieTheater() {
                                                     }
                                                     {!allValues.isShowLoading &&
                                                         <>
-                                                            <span className="visually">Submit</span>
+                                                            <span className="visually">Thêm</span>
                                                         </>
                                                     }
                                                 </Button>
