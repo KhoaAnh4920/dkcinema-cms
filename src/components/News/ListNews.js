@@ -74,7 +74,7 @@ function ListNews() {
 
                 <>
                     {rowData.type == 1 && <span className="badge badge-success">Review phim</span>}
-                    {rowData.type == 2 && <span className="badge badge-success">Giới thiệu phim</span>}
+                    {rowData.type == 2 && <span className="badge badge-success">Blog điện ảnh</span>}
                     {rowData.type == 3 && <span className="badge badge-success">Khuyến mãi</span>}
                 </>
         },
