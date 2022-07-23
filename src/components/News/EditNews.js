@@ -437,7 +437,7 @@ export default function EditNews() {
                                                         </div>
                                                         <div className="custom-control custom-radio">
                                                             <input type="radio" id="customRadio2" name="typeNews" value={2} checked={(allValues.typeNews === 2)} onChange={(e) => handleChange(e)} className="custom-control-input" />
-                                                            <label className="custom-control-label" htmlFor="customRadio2">Giới thiệu phim</label>
+                                                            <label className="custom-control-label" htmlFor="customRadio2">Blog điện ảnh</label>
                                                         </div>
                                                         <div className="custom-control custom-radio">
                                                             <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} checked={(allValues.typeNews === 3)} onChange={(e) => handleChange(e)} className="custom-control-input" />

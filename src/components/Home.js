@@ -284,7 +284,7 @@ function Home() {
                                             <div className="row no-gutters align-items-center">
                                                 <div className="col mr-2">
                                                     <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng rạp</div>
-                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">2 rạp</div>
+                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">{(allValues.listTheater && allValues.listTheater.length) ? allValues.listTheater.length : 0} rạp</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-play fa-2x text-info" />
@@ -357,7 +357,7 @@ function Home() {
                                                 {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
                                                     <>
                                                         <div className='col-12 title-chart'>
-                                                            <p>Số lượng vé của từng phim</p>
+                                                            <p>Thống kế số lượng vé bán</p>
                                                             <BarChart options={options} chartData={userData} />
                                                         </div>
                                                     </>
