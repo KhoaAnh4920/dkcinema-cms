@@ -50,7 +50,7 @@ function AccountProfile() {
         selectedMovieTheater: '',
         isShowMovieTheater: true,
         errors: {},
-        isShowLoading: true,
+        isShowLoading: false,
         imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png',
         activeTab: 'Tab1'
     });

@@ -43,7 +43,7 @@ export default function Login() {
         setLoadingButton(true);
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
-            console.log("Check data: ", data);
+            console.log("Check data.data: ", data.data);
             if (data && data.errorCode === 0) {
                 console.log('---login ok---');
 
@@ -54,12 +54,13 @@ export default function Login() {
 
                 if (data.data.roleId === 3) {
                     history.push("/ticket-management");
+                    return;
                 }
-                if (data.data.roleId === 5) {
+                else if (data.data.roleId === 5) {
                     history.push("/showTime-management");
+                    return
                 }
-
-                history.push("/");
+                else history.push("/");
 
 
 
