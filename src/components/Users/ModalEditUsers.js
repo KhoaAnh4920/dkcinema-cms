@@ -59,6 +59,7 @@ export default function ModalEditUsers(props) {
         register,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm();
 
 
@@ -129,6 +130,9 @@ export default function ModalEditUsers(props) {
                 }
 
 
+                let defaultValues = {};
+                defaultValues.fullName = dataUser.fullName;
+                defaultValues.phone = dataUser.phone;
 
                 setAllValues({
                     listRoles,
@@ -148,6 +152,8 @@ export default function ModalEditUsers(props) {
                     dateToday: dateToday,
                     isShowMovieTheater
                 })
+
+                reset({ ...defaultValues });
             }
         }
         async function testFunctionParent(cityCode, districtCode, wardCode) {
