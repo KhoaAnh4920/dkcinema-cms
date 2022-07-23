@@ -228,10 +228,10 @@ function ListTicket() {
 
                                         <div className='horizon-input' style={{ marginLeft: '50px' }}>
                                             <Button variant="primary" className="submit-ticket-data" onClick={handleSubmitFilter}>
-                                                <span className="visually">Submit</span>
+                                                <span className="visually">Tìm kiếm</span>
                                             </Button>
                                             <Button variant="primary" className="filter-ticket-data" onClick={handleClearFilter}>
-                                                <span className="visually">Clear</span>
+                                                <span className="visually">Xóa</span>
                                             </Button>
                                         </div>
 

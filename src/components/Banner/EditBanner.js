@@ -91,7 +91,7 @@ export default function EditBanner() {
     const handleChangeImage = ({ fileList }) => {
 
         if (fileList.length > 1) {
-            toast.error("Maximum 1 poster");
+            toast.error("Chỉ được chọn một ảnh");
             return;
         }
         if (fileList.length > 0) {
@@ -114,7 +114,7 @@ export default function EditBanner() {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
             console.log(isJpgOrPng);
             if (!isJpgOrPng) {
-                toast.error("Please choose image");
+                toast.error("Hãy chọn ảnh !!!");
                 return;
             }
         }
@@ -235,7 +235,7 @@ export default function EditBanner() {
             })
             if (res && res.errCode == 0) {
                 history.push("/banner-management")
-                toast.success("Update banner success");
+                toast.success("Cập nhật banner thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -251,7 +251,7 @@ export default function EditBanner() {
 
             if (res && res.errCode == 0) {
                 history.push("/banner-management")
-                toast.success("Update banner success");
+                toast.success("Cập nhật banner thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -285,7 +285,7 @@ export default function EditBanner() {
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
                                     <li className="breadcrumb-item"><Link to={`/banner-management`}>Quản lý banner</Link></li>
-                                    <li className="breadcrumb-item active" aria-current="page">Edit banner</li>
+                                    <li className="breadcrumb-item active" aria-current="page">Cập nhật banner</li>
                                 </ol>
                                 <span className='date-today'>{allValues.dateToday}</span>
                                 {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
@@ -295,7 +295,7 @@ export default function EditBanner() {
                                 <div className="col-6">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Edit Banner</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Cập nhật banner</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -317,7 +317,7 @@ export default function EditBanner() {
                                                                 <>
                                                                     <div>
                                                                         <PlusOutlined />
-                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                        <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                                     </div>
                                                                 </>}
                                                     </Upload>
@@ -380,7 +380,7 @@ export default function EditBanner() {
                                                     }
                                                     {!allValues.isLoadingButton &&
                                                         <>
-                                                            <span className="visually">Submit</span>
+                                                            <span className="visually">Cập nhật</span>
                                                         </>
                                                     }
                                                 </Button>

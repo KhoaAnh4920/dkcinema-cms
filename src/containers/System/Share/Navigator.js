@@ -58,6 +58,9 @@ class MenuGroup extends Component {
                     {id === 'tableTicket' &&
                         <i className='fas fa-ticket-alt'></i>
                     }
+                    {id === 'tablePayment' &&
+                        <i className='fas fa-file-invoice'></i>
+                    }
 
 
 

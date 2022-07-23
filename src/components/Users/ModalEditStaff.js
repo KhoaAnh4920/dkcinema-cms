@@ -280,12 +280,17 @@ export default function ModalEditStaff(props) {
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
         props.saveEditUser(allValuesInput);
 
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: false
+        }));
+
     }
 
 
     return (
         <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
-            <ModalHeader toggle={() => toggle()} className='editdetail'>Edit user</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='editdetail'>Cập nhật thông tin nhân viên</ModalHeader>
             <form onSubmit={handleSubmit(handleSaveEditUser)}>
                 <ModalBody className='modal-body-container'>
                     <div className='modal-playlist-body'>
@@ -359,7 +364,7 @@ export default function ModalEditStaff(props) {
                                         isDisabled={cityOptions.length === 0}
                                         options={cityOptions}
                                         onChange={(option) => onCitySelect(option)}
-                                        placeholder="City"
+                                        placeholder="TP/Tỉnh"
                                         defaultValue={state.selectedCity}
                                     />
                                     <Select
@@ -369,7 +374,7 @@ export default function ModalEditStaff(props) {
                                         isDisabled={state.districtOptions.length === 0}
                                         options={state.districtOptions}
                                         onChange={(option) => onDistrictSelect(option)}
-                                        placeholder="District"
+                                        placeholder="Quận/Huyện"
                                         defaultValue={state.selectedDistrict}
                                     />
                                     <Select
@@ -387,7 +392,7 @@ export default function ModalEditStaff(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='address'
-                                    placeholder="Enter Address"
+                                    placeholder="Nhập địa chỉ"
                                     value={allValues.address}
                                     onChange={changeHandler}
                                 />
@@ -397,7 +402,7 @@ export default function ModalEditStaff(props) {
                                     onChange={handleChangeSelect}
                                     options={allValues.listMovieTheater}
                                     isDisabled={true}
-                                    placeholder='Select movie theater'
+                                    placeholder='Chọn rạp'
                                     name='selectedMovieTheater'
                                 // styles={this.props.colourStyles}
                                 />
@@ -430,7 +435,7 @@ export default function ModalEditStaff(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Cập nhật</span>
                             </>
                         }
                     </Button>

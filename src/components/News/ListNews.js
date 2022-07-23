@@ -58,7 +58,7 @@ function ListNews() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Cập nhật trạng thái thành công")
             await fetchDataPost();
         }
 
@@ -67,10 +67,10 @@ function ListNews() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Title', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
-        { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 150, height: 100 }} /> },
+        { title: 'Tiêu đề', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
+        { title: 'Ảnh', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 150, height: 100 }} /> },
         {
-            title: 'Type', field: 'type', render: rowData =>
+            title: 'Loại', field: 'type', render: rowData =>
 
                 <>
                     {rowData.type == 1 && <span className="badge badge-success">Review phim</span>}
@@ -78,10 +78,10 @@ function ListNews() {
                     {rowData.type == 3 && <span className="badge badge-success">Khuyến mãi</span>}
                 </>
         },
-        { title: 'Created at', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD/MM/YYYY')}</span> },
-        { title: 'Author', field: 'fullName', render: rowData => <span>{(rowData.UserNews && rowData.UserNews.fullName) ? rowData.UserNews.fullName : ''}</span> },
+        { title: 'Ngày tạo', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD/MM/YYYY')}</span> },
+        { title: 'Tác giả', field: 'fullName', render: rowData => <span>{(rowData.UserNews && rowData.UserNews.fullName) ? rowData.UserNews.fullName : ''}</span> },
         {
-            title: 'Show', field: 'status', render: rowData => <>
+            title: 'Trạng thái', field: 'status', render: rowData => <>
                 <div className="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
                     <label class="custom-control-label" for={rowData.id}></label>
@@ -95,7 +95,7 @@ function ListNews() {
             setShowLoading(true);
             let res = await deleteNews(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete post success")
+                toast.success("Xóa bài viết thành công")
                 await fetchDataPost();
             } else {
                 toast.error(res.errMessage)
@@ -137,13 +137,13 @@ function ListNews() {
                             <div className="col-lg-12 mb-4">
 
                                 <MaterialTable
-                                    title="List Post"
+                                    title="Danh sách bài viết"
                                     columns={columns}
                                     data={listPost}
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" >Add post</button>,
+                                            icon: () => <button type="button" className="btn btn-info" >Thêm bài viết</button>,
                                             onClick: async (event, rowData) => {
                                                 history.push('/add-new-post')
                                             },
@@ -162,13 +162,13 @@ function ListNews() {
                                             icon: 'delete',
                                             tooltip: 'Delete Post',
                                             onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
+                                                title: 'Bạn có chắc ?',
+                                                text: "Bạn sẽ không khôi phục được nó!",
                                                 icon: 'warning',
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'OK !'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     handleOnDeletePost(rowData.id)

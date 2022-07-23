@@ -289,7 +289,7 @@ export default function ModalEditUsers(props) {
 
     return (
         <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
-            <ModalHeader toggle={() => toggle()} className='editdetail'>Edit user</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='editdetail'>Sửa thông tin người dùng</ModalHeader>
             <form onSubmit={handleSubmit(handleSaveEditUser)}>
                 <ModalBody className='modal-body-container'>
                     <div className='modal-playlist-body'>
@@ -319,7 +319,7 @@ export default function ModalEditUsers(props) {
                                     className="form-control input-small"
                                     name='fullName'
 
-                                    placeholder="Enter FullName"
+                                    placeholder="Nhập họ và tên"
                                     {...register("fullName", {
                                         required: true,
                                         onChange: changeHandler
@@ -330,7 +330,7 @@ export default function ModalEditUsers(props) {
                                     className="form-control input-small"
                                     name='phone'
 
-                                    placeholder="Enter Phone"
+                                    placeholder="Nhập số điện thoại"
                                     {...register("phone", {
                                         required: true,
                                         onChange: changeHandler
@@ -340,7 +340,7 @@ export default function ModalEditUsers(props) {
                                     onChange={handleOnChangeDatePicker}
                                     className="form-control"
                                     value={allValues.birthday}
-                                    placeholder="Enter birthday"
+                                    placeholder="Nhập ngày sinh"
                                 />
                                 <div className='input-flex'>
                                     <Select
@@ -395,7 +395,13 @@ export default function ModalEditUsers(props) {
                                         defaultValue={state.selectedWard}
                                     />
                                 </div>
-                                <input type="text" className="form-control input-small" name='address' value={allValues.address} onChange={changeHandler} placeholder="Enter Address" />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='address'
+                                    value={allValues.address}
+                                    onChange={changeHandler}
+                                    placeholder="Nhập địa chỉ" />
                                 <Select
                                     className='movieTheater-select'
                                     value={allValues.selectedMovieTheater}
@@ -403,7 +409,7 @@ export default function ModalEditUsers(props) {
                                     options={allValues.listMovieTheater}
                                     isDisabled={true}
 
-                                    placeholder='Select movie theater'
+                                    placeholder='Chọn rạp chiếu'
                                     name='selectedMovieTheater'
                                 // styles={this.props.colourStyles}
                                 />

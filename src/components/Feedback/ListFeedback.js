@@ -89,7 +89,7 @@ function ListFeedback() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Cập nhật trạng thái thành công")
             await fetchFeedback();
         }
 
@@ -199,10 +199,10 @@ function ListFeedback() {
 
                                         <div className='horizon-input button-filter-container'>
                                             <Button variant="primary" className="submit-feedback-data" onClick={handleSubmitFilter}>
-                                                <span className="visually">Submit</span>
+                                                <span className="visually">Tìm kiếm</span>
                                             </Button>
                                             <Button variant="primary" className="clear-feedback-data" onClick={handleClearFilter}>
-                                                <span className="visually">Clear</span>
+                                                <span className="visually">Xóa</span>
                                             </Button>
                                         </div>
 
@@ -222,7 +222,7 @@ function ListFeedback() {
                                 }}
                             >
                                 <MaterialTable
-                                    title="Feedback"
+                                    title="Phản hồi"
                                     columns={columns}
                                     data={allValues.listFeedback}
 

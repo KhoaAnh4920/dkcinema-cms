@@ -255,6 +255,11 @@ export default function ModalAddStaff(props) {
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
         props.saveNewUser(allValuesInput);
 
+        setAllValues((prevState) => ({
+            ...prevState,
+            isShowLoading: false
+        }));
+
     }
 
 
@@ -280,7 +285,7 @@ export default function ModalAddStaff(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='email'
-                                    placeholder="Enter Email address"
+                                    placeholder="Nhập địa chỉ mail"
                                     {...register("email", {
                                         required: true,
                                         pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -291,7 +296,7 @@ export default function ModalAddStaff(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='userName'
-                                    placeholder="Enter Username"
+                                    placeholder="Nhập tên đăng nhập"
                                     {...register("userName", {
                                         required: true,
                                         onChange: changeHandler
@@ -303,7 +308,7 @@ export default function ModalAddStaff(props) {
                                     type="password"
                                     className="form-control input-small"
                                     name='password'
-                                    placeholder="Enter Password"
+                                    placeholder="Nhập mật khẩu"
                                     {...register("password", {
                                         required: true,
                                         minLength: 6,
@@ -315,7 +320,7 @@ export default function ModalAddStaff(props) {
                                     className="form-control input-small"
                                     name='fullName'
                                     onChange={changeHandler}
-                                    placeholder="Enter FullName"
+                                    placeholder="Nhập họ và tên"
                                     {...register("fullName", {
                                         required: true,
                                         onChange: changeHandler
@@ -326,7 +331,7 @@ export default function ModalAddStaff(props) {
                                     className="form-control input-small"
                                     name='phone'
                                     onChange={changeHandler}
-                                    placeholder="Enter Phone"
+                                    placeholder="Nhập số điện thoại"
                                     {...register("phone", {
                                         required: true,
                                         onChange: changeHandler
@@ -336,7 +341,7 @@ export default function ModalAddStaff(props) {
                                     onChange={handleOnChangeDatePicker}
                                     className="form-control"
                                     value={allValues.birthday}
-                                    placeholder="Enter dob"
+                                    placeholder="Nhập ngày sinh"
                                 />
                                 <div className='input-flex'>
                                     <Select
@@ -344,7 +349,7 @@ export default function ModalAddStaff(props) {
                                         value={allValues.selectedGender}
                                         onChange={handleChangeSelect}
                                         options={allValues.listGender}
-                                        placeholder='Select gender'
+                                        placeholder='Giới tính'
                                         name='selectedGender'
                                     // styles={this.props.colourStyles}
                                     />
@@ -353,7 +358,7 @@ export default function ModalAddStaff(props) {
                                         value={allValues.selectedRoles}
                                         onChange={handleChangeSelect}
                                         options={allValues.listRoles}
-                                        placeholder='Select roles'
+                                        placeholder='Chọn phân quyền'
                                         name='selectedRoles'
                                     // styles={this.props.colourStyles}
                                     />
@@ -366,7 +371,7 @@ export default function ModalAddStaff(props) {
                                         isDisabled={cityOptions.length === 0}
                                         options={cityOptions}
                                         onChange={(option) => onCitySelect(option)}
-                                        placeholder="City"
+                                        placeholder="TP/Tỉnh"
                                         defaultValue={selectedCity}
                                     />
                                     <Select
@@ -376,7 +381,7 @@ export default function ModalAddStaff(props) {
                                         isDisabled={districtOptions.length === 0}
                                         options={districtOptions}
                                         onChange={(option) => onDistrictSelect(option)}
-                                        placeholder="District"
+                                        placeholder="Quận/Huyện"
                                         defaultValue={selectedDistrict}
                                     />
                                     <Select
@@ -390,14 +395,19 @@ export default function ModalAddStaff(props) {
                                         defaultValue={selectedWard}
                                     />
                                 </div>
-                                <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='address'
+                                    onChange={changeHandler}
+                                    placeholder="Nhập địa chỉ" />
                                 <Select
                                     className='movieTheater-select'
                                     value={allValues.selectedMovieTheater}
                                     onChange={handleChangeSelect}
                                     options={allValues.listMovieTheater}
                                     isDisabled={true}
-                                    placeholder='Select movie theater'
+                                    placeholder='Chọn rạp phim'
                                     name='selectedMovieTheater'
 
                                 // styles={this.props.colourStyles}
@@ -442,7 +452,7 @@ export default function ModalAddStaff(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Thêm</span>
                             </>
                         }
                     </Button>

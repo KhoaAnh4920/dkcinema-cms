@@ -148,7 +148,7 @@ function AddCombo() {
 
         if (res && res.errCode == 0) {
             history.push("/combo-management")
-            toast.success("Add new combo succeed");
+            toast.success("Thêm combo thành công");
         } else {
             toast.error(res.errMessage);
         }
@@ -299,7 +299,7 @@ function AddCombo() {
                                 <div className="col-lg-6 mb-4">
 
                                     <MaterialTable
-                                        title="Add food"
+                                        title="Danh sách thực phẩm"
                                         columns={columnsItemFood}
                                         data={allValues.listFood}
 
@@ -314,7 +314,7 @@ function AddCombo() {
                                 </div>
                                 <div className="col-lg-6 mb-4 card">
                                     <div className='form-add-combo'>
-                                        <h5>New Combo</h5>
+                                        <h5>Combo Mới</h5>
                                         <div className='vertical-input'>
                                             <Upload
                                                 action={""}
@@ -332,7 +332,7 @@ function AddCombo() {
                                                         <>
                                                             <div>
                                                                 <PlusOutlined />
-                                                                <div style={{ marginTop: 8 }}>Upload</div>
+                                                                <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                             </div>
                                                         </>}
                                             </Upload>
@@ -377,7 +377,7 @@ function AddCombo() {
                                                 }
                                                 {!allValues.isLoadingButton &&
                                                     <>
-                                                        <span className="visually">Submit</span>
+                                                        <span className="visually">Thêm</span>
                                                     </>
                                                 }
                                             </Button>

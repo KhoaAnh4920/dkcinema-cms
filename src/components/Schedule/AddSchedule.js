@@ -95,7 +95,7 @@ export default function AddSchedule() {
 
 
         if (Object.keys(allValues.selectedMovie).length === 0) {
-            toast.error("Please select movie first !!");
+            toast.error("Chọn phim đầu tiên !!");
             return;
         }
 
@@ -304,7 +304,7 @@ export default function AddSchedule() {
         }));
 
         if (allValues.startTime === '' || allValues.endTime === '' || allValues.selectedMovie === '') {
-            toast.error("Empty !!! Can't add new schedule");
+            toast.error("Thông tin rỗng !! Không thể thêm lịch chiếu");
             setAllValues((prevState) => ({
                 ...prevState,
                 isShowLoadingButton: false
@@ -320,7 +320,7 @@ export default function AddSchedule() {
             })
 
             if (res && res.errCode === 0) {
-                toast.success("Add new schedule succeed");
+                toast.success("Thêm lịch chiếu mới thành công");
                 let formatedDate = new Date(allValues.dateSchedule).getTime(); // convert timestamp //
 
                 let obj = {};
@@ -478,7 +478,7 @@ export default function AddSchedule() {
                                     <div className="col-10">
                                         <div className="card mb-4">
                                             <div className="card-header">
-                                                <h5 className="m-0 font-weight-bold text-primary">Schedule Management</h5>
+                                                <h5 className="m-0 font-weight-bold text-primary">Quản lý lịch chiếu</h5>
                                             </div>
                                             <div className="card-body">
                                                 <div className='schedule-management'>
@@ -486,7 +486,7 @@ export default function AddSchedule() {
                                                         <div className='list-schedule col-5'>
                                                             <div className='content-schedule-top'>
                                                                 <div className='title-list'>
-                                                                    <p>List Schedule</p>
+                                                                    <p>Danh sách lịch chiếu</p>
                                                                 </div>
                                                                 <DatePicker
                                                                     onChange={handleOnChangeListSchedule}
@@ -499,7 +499,7 @@ export default function AddSchedule() {
                                                                     value={allValues.selectedRoom || {}}
                                                                     onChange={handleChangeSelect}
                                                                     options={allValues.listRoom}
-                                                                    placeholder='Select room'
+                                                                    placeholder='Chọn phòng chiếu'
                                                                     name='selectedRoom'
                                                                     styles={customStyles}
                                                                 // styles={this.props.colourStyles}
@@ -539,7 +539,7 @@ export default function AddSchedule() {
                                                                 {allValues && allValues.listSchedule && allValues.listSchedule.length === 0 &&
                                                                     <div className='data-movie-content'>
                                                                         <div className='movie-content'>
-                                                                            <p>No showtimes yet...</p>
+                                                                            <p>Không có suất chiếu mới nào !!</p>
                                                                         </div>
                                                                     </div>
                                                                 }
@@ -557,8 +557,8 @@ export default function AddSchedule() {
 
                                                                         </div>
                                                                         <div className='text-title col-8'>
-                                                                            <p className='text'>Update Schedule</p>
-                                                                            <p>Please complete all information</p>
+                                                                            <p className='text'>Cập nhật lịch chiếu</p>
+                                                                            <p>Điền đầy đủ thông tin !!!</p>
                                                                         </div>
 
                                                                     </div>
@@ -574,7 +574,7 @@ export default function AddSchedule() {
                                                                         value={allValues.selectedMovie || {}}
                                                                         onChange={handleChangeSelect}
                                                                         options={allValues.listMovie}
-                                                                        placeholder='Select movie'
+                                                                        placeholder='Chọn phim'
                                                                         name='selectedMovie'
                                                                         styles={customStyles}
                                                                     // styles={this.props.colourStyles}
@@ -589,7 +589,7 @@ export default function AddSchedule() {
                                                                         value={allValues.selectedRoom || {}}
                                                                         onChange={handleChangeSelect}
                                                                         options={allValues.listRoom}
-                                                                        placeholder='Select Room'
+                                                                        placeholder='Chọn phòng chiếu'
                                                                         name='selectedRoom'
                                                                         isDisabled
                                                                         styles={customStyles}
@@ -635,12 +635,12 @@ export default function AddSchedule() {
                                                                         }
                                                                         {!allValues.isShowLoadingButton &&
                                                                             <>
-                                                                                <span className="visually">Submit</span>
+                                                                                <span className="visually">Thêm</span>
                                                                             </>
                                                                         }
                                                                     </Button>
                                                                     <Button variant="primary" className="delete-schedule-data" onClick={handleClearData}>
-                                                                        <span className="visually">Clear</span>
+                                                                        <span className="visually">Xóa</span>
                                                                     </Button>
                                                                 </div>
 

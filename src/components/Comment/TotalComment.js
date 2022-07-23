@@ -58,7 +58,7 @@ function TotalComment() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Thay đổi trạng thái thành công")
             await fetchDataPost();
         }
 
@@ -67,9 +67,9 @@ function TotalComment() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Title', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
-        { title: 'Thumbnail', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
-        { title: 'Total Comment', field: 'CommentNews', render: rowData => <span>{rowData.CommentNews.length}</span> },
+        { title: 'Tiêu đề', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
+        { title: 'Ảnh', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
+        { title: 'Tổng số bình luận', field: 'CommentNews', render: rowData => <span>{rowData.CommentNews.length}</span> },
 
     ]
 
@@ -78,7 +78,7 @@ function TotalComment() {
             setShowLoading(true);
             let res = await deleteNews(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete post success")
+                toast.success("Xóa bình luận thành công")
                 await fetchDataPost();
             } else {
                 toast.error(res.errMessage)
@@ -119,7 +119,7 @@ function TotalComment() {
                                 }}
                             >
                                 <MaterialTable
-                                    title="List comment"
+                                    title="Danh sách bài viết"
                                     columns={columns}
                                     data={listPost}
 

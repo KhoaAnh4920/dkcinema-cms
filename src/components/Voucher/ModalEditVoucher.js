@@ -169,7 +169,7 @@ export default function ModalEditVoucher(props) {
 
     return (
         <Modal className={'modal-edit-voucher'} isOpen={props.isOpen} toggle={() => toggle()} centered size="md-down" >
-            <ModalHeader toggle={() => toggle()} className='titleModal'>Edit Voucher</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='titleModal'>Cập nhật voucher</ModalHeader>
             <form onSubmit={handleSubmit(handleEditVoucher)}>
                 <ModalBody className='modal-body-container'>
                     <div className='modal-edit-voucher-body'>
@@ -324,7 +324,7 @@ export default function ModalEditVoucher(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Cập nhật</span>
                             </>
                         }
                     </Button>

@@ -65,7 +65,7 @@ function DetailComment() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Thay đổi trạng thái thành công")
             await fetchDetailComment();
         }
 
@@ -74,9 +74,9 @@ function DetailComment() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Comment', field: 'comment' },
-        { title: 'Rating', field: 'rating' },
-        { title: 'FullName', field: 'FullName', render: rowData => <span>{rowData.CustomerComment.fullName}</span> },
+        { title: 'Nội dung', field: 'comment' },
+        { title: 'Đánh giá', field: 'rating' },
+        { title: 'Tên khách hàng', field: 'FullName', render: rowData => <span>{rowData.CustomerComment.fullName}</span> },
 
     ]
 
@@ -125,7 +125,7 @@ function DetailComment() {
                             {/* Topbar */}
                             <div className="col-lg-12 mb-4">
                                 <MaterialTable
-                                    title="Comment"
+                                    title="Danh sách bình luận"
                                     columns={columns}
                                     data={listComment}
 
@@ -135,13 +135,13 @@ function DetailComment() {
                                             icon: 'delete',
                                             tooltip: 'Delete Comment',
                                             onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
+                                                title: 'Bạn có chắc ?',
+                                                text: "Bạn sẽ không thể khôi phục được chúng !",
                                                 icon: 'warning',
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'OK !'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     handleOnDeleteComment(rowData.id)

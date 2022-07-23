@@ -57,7 +57,7 @@ function ListBanner() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Thay đổi trạng thái thành công")
             await fetchDataBanner();
         }
 
@@ -66,10 +66,10 @@ function ListBanner() {
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
         { title: 'ID', field: 'id' },
-        { title: 'Image', field: 'url', render: rowData => <img src={rowData.url} style={{ width: 500, height: 200 }} /> },
-        { title: 'Name', field: 'name' },
+        { title: 'Ảnh', field: 'url', render: rowData => <img src={rowData.url} style={{ width: 500, height: 200 }} /> },
+        { title: 'Tên', field: 'name' },
         {
-            title: 'Show', field: 'status', render: rowData => <>
+            title: 'Trạng thái', field: 'status', render: rowData => <>
                 <div className="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
                     <label class="custom-control-label" for={rowData.id}></label>
@@ -83,7 +83,7 @@ function ListBanner() {
             setShowLoading(true);
             let res = await deleteBanner(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete banner success")
+                toast.success("Xóa banner thành công")
                 await fetchDataBanner();
             } else {
                 toast.error(res.errMessage)
@@ -134,13 +134,13 @@ function ListBanner() {
                             <div className="col-lg-12 mb-4">
 
                                 <MaterialTable
-                                    title="List Banner"
+                                    title="Danh sách banner"
                                     columns={columns}
                                     data={listBanner}
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" >Add banner</button>,
+                                            icon: () => <button type="button" className="btn btn-info" >Thêm banner</button>,
                                             onClick: async (event, rowData) => {
                                                 history.push('/add-new-banner')
                                             },
@@ -165,13 +165,13 @@ function ListBanner() {
                                             icon: 'delete',
                                             tooltip: 'Delete Banner',
                                             onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
+                                                title: 'Bạn có chắc?',
+                                                text: "Bạn sẽ không khôi phục được chúng !",
                                                 icon: 'warning',
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'OK !'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     handleOnDeleteBanner(rowData.id)

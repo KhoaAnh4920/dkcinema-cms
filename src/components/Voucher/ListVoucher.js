@@ -95,7 +95,7 @@ function ListVoucher() {
             if (res && res.errCode == 0) {
                 setOpenModalVoucher(false);
                 await fetchDataVoucher();
-                toast.success("Add new voucher success");
+                toast.success("Thêm voucher thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -117,7 +117,7 @@ function ListVoucher() {
         })
 
         if (res && res.errCode === 0) {
-            toast.success("Update status success")
+            toast.success("Cập nhật trạng thái thành công")
             await fetchDataVoucher();
         }
 
@@ -151,7 +151,7 @@ function ListVoucher() {
                     isShow: false
                 }));
                 await fetchDataVoucher();
-                toast.success("Update voucher success");
+                toast.success("Cập nhật voucher thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -163,18 +163,18 @@ function ListVoucher() {
 
     const columns = [
         { title: 'ID', field: 'id' },
-        { title: 'Code', field: 'code' },
-        { title: 'Name', field: 'name' },
+        { title: 'Mã Voucher', field: 'code' },
+        { title: 'Tên', field: 'name' },
         {
-            title: 'Discount', field: 'discount', render: rowData =>
+            title: 'Mức khuyến mãi', field: 'discount', render: rowData =>
                 <>
                     {rowData.discount > 100 && rowData.discount.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                     {rowData.discount < 101 && rowData.discount + '%'}
                 </>
         },
-        { title: 'Condition', field: 'condition', render: rowData => (rowData.condition) ? rowData.condition.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : '' },
+        { title: 'Điều kiện', field: 'condition', render: rowData => (rowData.condition) ? rowData.condition.toLocaleString('it-IT', { style: 'currency', currency: 'VND' }) : '' },
         {
-            title: 'Show', field: 'status', render: rowData => <>
+            title: 'Trạng thái', field: 'status', render: rowData => <>
                 <div className="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
                     <label class="custom-control-label" for={rowData.id}></label>
@@ -189,7 +189,7 @@ function ListVoucher() {
             setShowLoading(true);
             let res = await deleteVoucherService(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete voucher success")
+                toast.success("Xóa voucher thành công")
                 await fetchDataVoucher();
             } else {
                 toast.error(res.errMessage)
@@ -244,7 +244,7 @@ function ListVoucher() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add Voucher</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm mới voucher</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalVoucher(true);
                                             },
@@ -268,13 +268,13 @@ function ListVoucher() {
                                             icon: 'delete',
                                             tooltip: 'Delete Voucher',
                                             onClick: (event, rowData) => Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: "You won't be able to revert this!",
+                                                title: 'Bạn có chắc?',
+                                                text: "Bạn sẽ không khôi phục được chúng!",
                                                 icon: 'warning',
                                                 showCancelButton: true,
                                                 confirmButtonColor: '#3085d6',
                                                 cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, delete it!'
+                                                confirmButtonText: 'OK !'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
                                                     handleOnDeleteVoucher(rowData.id)

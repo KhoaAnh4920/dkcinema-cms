@@ -318,7 +318,7 @@ function ConfirmBill() {
                                                         }
                                                         {!allValues.isLoadingButtonSubmit &&
                                                             <>
-                                                                <span className="visually">Submit</span>
+                                                                <span className="visually">Tìm kiếm</span>
                                                             </>
                                                         }
                                                     </Button>
@@ -327,12 +327,12 @@ function ConfirmBill() {
                                                         <span className="visually">Submit</span>
                                                     </Button> */}
                                                     <Button variant="primary" className="clear-bill-data" onClick={clearBooking} >
-                                                        <span className="visually">Clear</span>
+                                                        <span className="visually">Xóa</span>
                                                     </Button>
                                                 </div>
                                             </div>
                                             <div className='form-group col-6 qr-bill'>
-                                                <h6>Qr Code Scan by Web Cam</h6>
+                                                <h6>Quét mã QR</h6>
                                                 <div className='row'>
                                                     <div className='wrap-qr col-8 '>
                                                         {allValues.isShowScanQR &&
@@ -352,13 +352,13 @@ function ConfirmBill() {
 
                                                     </div>
                                                     <div className="button-scan-container col-4">
-                                                        <button type="button" className=" btn btn-scan" onClick={handleToggleScan}><i class="fas fa-camera" style={{ marginRight: '10px' }}></i>Scan QR</button>
+                                                        <button type="button" className=" btn btn-scan" onClick={handleToggleScan}><i class="fas fa-camera" style={{ marginRight: '10px' }}></i>Quét mã QR</button>
                                                     </div>
 
                                                 </div>
 
 
-                                                <h6>Scanned By WebCam Code: {scanResultWebCam}</h6>
+                                                <h6>Mã hiển thị: {scanResultWebCam}</h6>
                                             </div>
                                         </div>
 
@@ -376,7 +376,7 @@ function ConfirmBill() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Refresh</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Làm mới</button>,
                                             onClick: async (event, rowData) => {
                                                 let movietheaterid = (selectUser && selectUser.adminInfo && selectUser.adminInfo.movietheaterid) ? selectUser.adminInfo.movietheaterid : null;
                                                 console.log('movietheaterid: ', movietheaterid)

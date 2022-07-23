@@ -114,7 +114,7 @@ export default function AddNews() {
 
         console.log(fileList);
         if (fileList.length > 1) {
-            toast.error("Maximum 1 thumbnail");
+            toast.error("Chỉ được chọn một ảnh");
             return;
         }
         if (fileList.length > 0) {
@@ -137,7 +137,7 @@ export default function AddNews() {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
             console.log(isJpgOrPng);
             if (!isJpgOrPng) {
-                toast.error("Please choose image");
+                toast.error("Hãy chọn ảnh !!");
                 return;
             }
         }
@@ -202,7 +202,7 @@ export default function AddNews() {
 
 
         if (!allValues.content || !allValues.typeNews) {
-            toast.error("Please complete all information");
+            toast.error("Hãy điền đầy đủ thông tin");
             return;
         }
 
@@ -213,7 +213,7 @@ export default function AddNews() {
 
 
         if (valImg.fileList.length < 1) {
-            toast.error("Please upload image");
+            toast.error("Hãy chọn ảnh");
             return;
         }
 
@@ -241,7 +241,7 @@ export default function AddNews() {
 
         if (res && res.errCode == 0) {
             history.push("/news-management")
-            toast.success("Add new news success");
+            toast.success("Thêm bài viết mới thành công");
         } else {
             toast.error(res.errMessage);
         }
@@ -300,7 +300,7 @@ export default function AddNews() {
                                 <div className="col-8">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Add new post</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Thêm bài viết mới</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -322,7 +322,7 @@ export default function AddNews() {
                                                                 <>
                                                                     <div>
                                                                         <PlusOutlined />
-                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                        <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                                     </div>
                                                                 </>}
                                                     </Upload>
@@ -424,7 +424,7 @@ export default function AddNews() {
                                                     }
                                                     {!allValues.isLoadingButton &&
                                                         <>
-                                                            <span className="visually">Submit</span>
+                                                            <span className="visually">Thêm</span>
                                                         </>
                                                     }
                                                 </Button>

@@ -168,7 +168,7 @@ export default function EditNews() {
     const handleChangeImage = ({ fileList }) => {
 
         if (fileList.length > 1) {
-            toast.error("Maximum 1 thumbnail");
+            toast.error("Chỉ được chọn một ảnh");
             return;
         }
         if (fileList.length > 0) {
@@ -191,7 +191,7 @@ export default function EditNews() {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
             console.log(isJpgOrPng);
             if (!isJpgOrPng) {
-                toast.error("Please choose image");
+                toast.error("Hãy chọn ảnh");
                 return;
             }
         }
@@ -286,7 +286,7 @@ export default function EditNews() {
             })
             if (res && res.errCode == 0) {
                 history.push("/news-management")
-                toast.success("Update news success");
+                toast.success("Cập nhật bài viết thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -307,7 +307,7 @@ export default function EditNews() {
 
             if (res && res.errCode == 0) {
                 history.push("/news-management")
-                toast.success("Update news success");
+                toast.success("Cập nhật bài viết thành công");
             } else {
                 toast.error(res.errMessage);
             }
@@ -374,7 +374,7 @@ export default function EditNews() {
                                 <div className="col-8">
                                     <div className="card mb-4">
                                         <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h5 className="m-0 font-weight-bold text-primary">Edit post</h5>
+                                            <h5 className="m-0 font-weight-bold text-primary">Cập nhật bài viết</h5>
                                         </div>
                                         <div className="card-body">
                                             <div className="MainDiv">
@@ -396,7 +396,7 @@ export default function EditNews() {
                                                                 <>
                                                                     <div>
                                                                         <PlusOutlined />
-                                                                        <div style={{ marginTop: 8 }}>Upload</div>
+                                                                        <div style={{ marginTop: 8 }}>Tải ảnh</div>
                                                                     </div>
                                                                 </>}
                                                     </Upload>
@@ -497,7 +497,7 @@ export default function EditNews() {
                                                     }
                                                     {!allValues.isLoadingButton &&
                                                         <>
-                                                            <span className="visually">Submit</span>
+                                                            <span className="visually">Cập nhật</span>
                                                         </>
                                                     }
                                                 </Button>

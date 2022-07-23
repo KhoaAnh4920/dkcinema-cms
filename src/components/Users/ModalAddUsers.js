@@ -256,7 +256,7 @@ export default function ModalAddUsers(props) {
 
     return (
         <Modal className={'modal-edit-playlist-user'} isOpen={props.isOpen} toggle={() => toggle()} centered size='xl'>
-            <ModalHeader toggle={() => toggle()} className='editdetail'>Add news user</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='editdetail'>Thêm người dùng mới</ModalHeader>
             <form onSubmit={handleSubmit(handleSaveUser)}>
                 <ModalBody className='modal-body-container'>
 
@@ -282,13 +282,13 @@ export default function ModalAddUsers(props) {
                                         required: true,
                                         pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                     })}
-                                    placeholder="Enter Email address" />
+                                    placeholder="Nhập email" />
                                 <input
                                     type="text"
                                     className="form-control input-small"
                                     name='userName'
                                     onChange={changeHandler}
-                                    placeholder="Enter Username"
+                                    placeholder="Tên đăng nhập"
                                     {...register("userName", {
                                         required: true,
                                     })}
@@ -299,7 +299,7 @@ export default function ModalAddUsers(props) {
                                     className="form-control input-small"
                                     name='password'
                                     onChange={changeHandler}
-                                    placeholder="Enter Password"
+                                    placeholder="Nhập mật khẩu"
                                     {...register("password", {
                                         required: true,
                                         minLength: 6,
@@ -309,7 +309,7 @@ export default function ModalAddUsers(props) {
                                     name='fullName'
                                     id='fullName'
                                     onChange={changeHandler}
-                                    placeholder="Enter FullName"
+                                    placeholder="Nhập họ và tên"
                                     {...register("fullName", {
                                         required: true,
                                     })}
@@ -318,7 +318,7 @@ export default function ModalAddUsers(props) {
                                     className="form-control input-small"
                                     name='phone'
                                     onChange={changeHandler}
-                                    placeholder="Enter Phone"
+                                    placeholder="Nhập số điện thoại"
                                     {...register("phone", {
                                         required: true,
                                     })}
@@ -327,7 +327,7 @@ export default function ModalAddUsers(props) {
                                     onChange={handleOnChangeDatePicker}
                                     className="form-control"
                                     value={allValues.birthday}
-                                    placeholder="Enter birthday"
+                                    placeholder="Nhập ngày sinh"
                                 />
                                 <div className='input-flex'>
                                     <Select
@@ -335,7 +335,7 @@ export default function ModalAddUsers(props) {
                                         value={allValues.selectedGender}
                                         onChange={handleChangeSelect}
                                         options={allValues.listGender}
-                                        placeholder='Select gender'
+                                        placeholder='Chọn giới tính'
                                         name='selectedGender'
                                     // styles={this.props.colourStyles}
                                     />
@@ -344,7 +344,7 @@ export default function ModalAddUsers(props) {
                                         value={allValues.selectedRoles}
                                         onChange={handleChangeSelect}
                                         options={allValues.listRoles}
-                                        placeholder='Select roles'
+                                        placeholder='Chọn phân quyền'
                                         name='selectedRoles'
                                     // styles={this.props.colourStyles}
                                     />
@@ -357,7 +357,7 @@ export default function ModalAddUsers(props) {
                                         isDisabled={cityOptions.length === 0}
                                         options={cityOptions}
                                         onChange={(option) => onCitySelect(option)}
-                                        placeholder="City"
+                                        placeholder="Tỉnh"
                                         defaultValue={selectedCity}
                                     />
                                     <Select
@@ -367,7 +367,7 @@ export default function ModalAddUsers(props) {
                                         isDisabled={districtOptions.length === 0}
                                         options={districtOptions}
                                         onChange={(option) => onDistrictSelect(option)}
-                                        placeholder="District"
+                                        placeholder="Quận/Huyện"
                                         defaultValue={selectedDistrict}
                                     />
                                     <Select
@@ -381,13 +381,17 @@ export default function ModalAddUsers(props) {
                                         defaultValue={selectedWard}
                                     />
                                 </div>
-                                <input type="text" className="form-control input-small" name='address' onChange={changeHandler} placeholder="Enter Address" />
+                                <input
+                                    type="text"
+                                    className="form-control input-small"
+                                    name='address' onChange={changeHandler}
+                                    placeholder="Nhập địa chỉ" />
                                 <Select
                                     className='movieTheater-select'
                                     value={allValues.selectedMovieTheater}
                                     onChange={handleChangeSelect}
                                     options={allValues.listMovieTheater}
-                                    placeholder='Select movie theater'
+                                    placeholder='Chọn rạp chiếu'
                                     name='selectedMovieTheater'
                                     isDisabled={allValues.isShowMovieTheater}
                                 // styles={this.props.colourStyles}
@@ -433,7 +437,7 @@ export default function ModalAddUsers(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Thêm</span>
                             </>
                         }
                     </Button>

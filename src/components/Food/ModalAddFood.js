@@ -142,7 +142,7 @@ export default function ModalAddFood(props) {
 
     return (
         <Modal className={'modal-add-food'} isOpen={props.isOpen} toggle={() => toggle()} centered >
-            <ModalHeader toggle={() => toggle()} className='titleModal'>Add news food</ModalHeader>
+            <ModalHeader toggle={() => toggle()} className='titleModal'>Thêm thực phẩm mới</ModalHeader>
             <form onSubmit={handleSubmit(handleSaveFood)}>
                 <ModalBody className='modal-body-container'>
                     <div className='modal-add-food-body'>
@@ -155,7 +155,7 @@ export default function ModalAddFood(props) {
                                     name="selectedTypeFood"
 
                                     className='food-select'
-                                    placeholder='Select type food'
+                                    placeholder='Chọn loại thực phẩm'
                                     onChange={handleChangeSelect}
                                 />
 
@@ -163,7 +163,7 @@ export default function ModalAddFood(props) {
                                     type="text"
                                     className="form-control input-small"
                                     name='nameFood'
-                                    placeholder="Enter name"
+                                    placeholder="Nhập tên thực phẩm"
                                     style={{ marginTop: '20px' }}
                                     {...register("nameFood", {
                                         required: true,
@@ -173,7 +173,7 @@ export default function ModalAddFood(props) {
                                 <input type="text"
                                     className="form-control input-small"
                                     name='priceFood'
-                                    placeholder="Enter price"
+                                    placeholder="Nhập đơn giá"
                                     style={{ marginTop: '20px' }}
                                     {...register("priceFood", {
                                         required: true,
@@ -215,7 +215,7 @@ export default function ModalAddFood(props) {
                         }
                         {!allValues.isShowLoading &&
                             <>
-                                <span className="visually">Submit</span>
+                                <span className="visually">Thêm</span>
                             </>
                         }
                     </Button>

@@ -93,7 +93,7 @@ function ListCombo() {
 
             let res = await deleteComboService(id);
             if (res && res.errCode === 0) {
-                toast.success("Delete combo success !!")
+                toast.success("Xóa combo thành công !!")
                 await fetchDataCombo();
             } else {
                 toast.error(res.errMessage)
@@ -171,7 +171,7 @@ function ListCombo() {
 
                                         actions={[
                                             {
-                                                icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Add combo</button>,
+                                                icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm combo</button>,
                                                 onClick: async (event, rowData) => {
                                                     history.push('/add-new-combo')
                                                 },
@@ -188,13 +188,13 @@ function ListCombo() {
                                                 icon: 'delete',
                                                 tooltip: 'Delete food',
                                                 onClick: (event, rowData) => Swal.fire({
-                                                    title: 'Are you sure?',
-                                                    text: "You won't be able to revert this!",
+                                                    title: 'Bạn có chắc ?',
+                                                    text: "Bạn sẽ không khôi phục được nó!",
                                                     icon: 'warning',
                                                     showCancelButton: true,
                                                     confirmButtonColor: '#3085d6',
                                                     cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Yes, delete it!'
+                                                    confirmButtonText: 'OK !'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         handleOnDeleteCombo(rowData.id)
