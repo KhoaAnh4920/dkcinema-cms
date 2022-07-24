@@ -82,8 +82,38 @@ export default function AddSchedule() {
 
         if (stateName === 'selectedRoom') {
             let listSchedule = await getAllSchedule(obj);
+
+            if (listSchedule && listSchedule.data) {
+                listSchedule = listSchedule.data.reverse();
+                console.log('listSchedule: ', listSchedule)
+                listSchedule.map((item, index) => {
+                    if (index < (listSchedule.length - 1)) {
+                        let newDateEndTime = new Date(item.endTime);
+                        console.log('newDateEndTime: ', newDateEndTime)
+
+                        let test2 = moment(newDateEndTime).format("HH:mm:ss a");
+                        let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
+
+                        console.log("end: ", test2)
+                        console.log('startTime: ', startTime);
+
+                        var startTime2 = moment(test2, 'HH:mm:ss a');
+                        var endTime2 = moment(startTime, 'HH:mm:ss a');
+
+                        let duration = endTime2.diff(startTime2, 'minutes');
+
+                        item.duration = duration;
+
+                        return item;
+                    }
+                })
+            }
+
+
             console.log("Check res: ", listSchedule);
-            stateCopy['listSchedule'] = (listSchedule && listSchedule.data) ? listSchedule.data.reverse() : [];
+            stateCopy['listSchedule'] = (listSchedule) ? listSchedule : [];
+
+            console.log("Check res: ", stateCopy['listSchedule']);
         }
 
 
@@ -379,7 +409,6 @@ export default function AddSchedule() {
     const handleOnChangeListSchedule = async (date) => {
         let formatedDate = new Date(date[0]).getTime(); // convert timestamp //
 
-        allValues.isShowLoading = true;
 
         let obj = {};
         obj.date = formatedDate;
@@ -415,7 +444,7 @@ export default function AddSchedule() {
         }
 
 
-        setAllValues({ ...allValues, isShowLoading: false, dateSchedule: date[0], listSchedule: listSchedule })
+        setAllValues({ ...allValues, dateSchedule: date[0], listSchedule: listSchedule })
 
     }
 
