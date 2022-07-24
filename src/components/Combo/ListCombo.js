@@ -211,7 +211,7 @@ function ListCombo() {
 
                                     />
                                 </div>
-                                <div className="col-lg-5 mb-4">
+                                <div className="col-lg-5 mb-4" style={{ zIndex: 1 }}>
 
                                     <MaterialTable
                                         title="Thực phẩm"

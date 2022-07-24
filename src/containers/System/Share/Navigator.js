@@ -16,6 +16,9 @@ class MenuGroup extends Component {
             <li className="nav-item">
                 <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target={'#' + id} aria-expanded="true"
                     aria-controls="collapseTableUser">
+                    {id === 'tableDashboard' &&
+                        <i className="fas fa-fw fa-tachometer-alt"></i>
+                    }
                     {id === 'tableUser' &&
                         <i className="fas fa-user"></i>
                     }
@@ -272,12 +275,12 @@ class Navigator extends Component {
                         {/* <div className="sidebar-brand-text mx-3">RuangAdmin</div> */}
                     </a>
                     <hr className="sidebar-divider my-0" />
-                    <li className="nav-item active">
+                    {/* <li className="nav-item active">
                         <a className="nav-link" href="index.html">
                             <i className="fas fa-fw fa-tachometer-alt" />
                             <span>Dashboard</span></a>
-                    </li>
-                    <hr className="sidebar-divider" />
+                    </li> */}
+                    <p style={{ width: '100%', height: '10px' }}></p>
                     <div className="sidebar-heading">
                         Features
                     </div>

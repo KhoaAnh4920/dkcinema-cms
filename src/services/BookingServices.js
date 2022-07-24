@@ -27,6 +27,10 @@ const updateStatusComboBook = (data) => {
     return axios.put('/status/commboBooking', data)
 }
 
+const countSalesMonth = () => {
+    return axios.get(`/count-sales-all-movieTheater`)
+}
+
 
 export {
     getAllBooking,
@@ -34,5 +38,6 @@ export {
     getComboBooking,
     getBookingConfirm,
     getTicketBooking,
-    updateStatusComboBook
+    updateStatusComboBook,
+    countSalesMonth
 };

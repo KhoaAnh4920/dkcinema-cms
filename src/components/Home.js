@@ -10,49 +10,14 @@ import LineChart from '../containers/System/Share/LineChart';
 import { UserData } from "../containers/System/Share/Data";
 import { userState } from "../redux/userSlice";
 import { useSelector } from "react-redux";
-import { getAllMovieTheater, getTheaterSales } from '../services/MovieTheater';
+import { getAllMovieTheater, getTheaterSales, getEditMovieTheater, countRoomMovieTheater } from '../services/MovieTheater';
 import BarChart from "../containers/System/Share/BarChart";
 import { countTicket, getAllFilmsByStatus } from '../services/FilmsServices';
+import { getUserByRole } from '../services/UserService';
+import { countSalesMonth } from '../services/BookingServices';
+import moment from 'moment';
 
-// ChartJS.register(
-//     CategoryScale,
-//     LinearScale,
-//     BarElement,
-//     Title,
-//     Tooltip,
-//     Legend
-// );
 
-// export const options = {
-//     responsive: true,
-//     plugins: {
-//         legend: {
-//             position: 'top',
-//         },
-//         title: {
-//             display: true,
-//             text: 'Chart.js Bar Chart',
-//         },
-//     },
-// };
-
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-// export const data = {
-//     labels,
-//     datasets: [
-//         {
-//             label: 'Dataset 1',
-//             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//             backgroundColor: 'rgba(255, 99, 132, 0.5)',
-//         },
-//         {
-//             label: 'Dataset 2',
-//             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-//             backgroundColor: 'rgba(53, 162, 235, 0.5)',
-//         },
-//     ],
-// };
 
 export const options = {
     responsive: true,
@@ -97,7 +62,12 @@ function Home() {
     const [allValues, setAllValues] = useState({
         roleId: null,
         isShowLoading: true,
-        movieTheaterId: null
+        movieTheaterId: null,
+        dataSales: 0,
+        nameTheater: '',
+        amountRoom: 0,
+        amoutCustomer: 0,
+        amountPrice: 0
     });
 
 
@@ -122,21 +92,42 @@ function Home() {
     useEffect(() => {
         async function fetchAllData() {
 
+            let nameTheater = '';
+            if (selectUser.adminInfo.movietheaterid) {
+                let dataTheater = await getEditMovieTheater(selectUser.adminInfo.movietheaterid);
+                let amountRoom = await countRoomMovieTheater(selectUser.adminInfo.movietheaterid);
+                let countCustomer = await getUserByRole(4);
+                nameTheater = (dataTheater && dataTheater.data && dataTheater.data.tenRap) ? dataTheater.data.tenRap : ''
+
+                // console.log('amountRoom: ', amountRoom)
+
+                setAllValues((prevState) => ({
+                    ...prevState,
+                    nameTheater,
+                    amountRoom: (amountRoom && amountRoom.data) ? amountRoom.data : 0,
+                    movietheaterid: selectUser.adminInfo.movietheaterid,
+                    amoutCustomer: (countCustomer && countCustomer.data) ? countCustomer.data.length : 0,
+                }));
+            }
+
             // Admin //
             if (selectUser.adminInfo.roleId === 1) {
                 // Fecth all movieTheater // 
                 let dataMovieTheater = await getAllMovieTheater();
 
                 let amountTicket = await countTicket();
+                let dataSales = await countSalesMonth();
+                let countCustomer = await getUserByRole(4);
+
 
                 if (amountTicket && amountTicket.dataMovie && dataMovieTheater && dataMovieTheater.movie) {
-
-
                     setAllValues((prevState) => ({
                         ...prevState,
                         roleId: selectUser.adminInfo.roleId,
                         listTheater: dataMovieTheater.movie,
                         dataTicket: amountTicket.data,
+                        dataSales: (dataSales && dataSales.dataSales && dataSales.dataSales[0].PriceCount),
+                        amoutCustomer: (countCustomer && countCustomer.data) ? countCustomer.data.length : 0,
                         isShowLoading: false,
                     }));
 
@@ -162,8 +153,9 @@ function Home() {
 
 
             } else {
-                console.log('selectUser.adminInfo.movietheaterid: ', selectUser.adminInfo.movietheaterid);
+                // console.log('selectUser.adminInfo.movietheaterid: ', selectUser.adminInfo.movietheaterid);
                 // let dataMovie = await getAllFilmsByStatus(1);
+
                 handleClickTheater(selectUser.adminInfo.movietheaterid)
             }
 
@@ -186,16 +178,17 @@ function Home() {
             movieTheaterId: id
         })
 
+
+
         if (dataSales && dataSales.data) {
-            console.log('dataSales: ', dataSales)
+
             setAllValues((prevState) => ({
                 ...prevState,
                 isShowLoading: false,
-                movieTheaterId: id
+                movieTheaterId: id,
+                amountPrice: (dataSales.data[dataSales.data.length - 1] && dataSales.data[dataSales.data.length - 1].price) ? dataSales.data[dataSales.data.length - 1].price : 0
             }));
 
-
-            console.log(allValues);
 
             setUserData({
                 labels: dataSales.data.map((data) => data.monthyear),
@@ -238,7 +231,14 @@ function Home() {
                         {/* Container Fluid*/}
                         <div className="container-fluid" id="container-wrapper">
                             <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 className="h3 mb-0 text-gray-800">DKCinema Dashboard</h1>
+                                {!allValues.nameTheater &&
+                                    <h1 className="h3 mb-0 text-gray-800">DKCinema Dashboard</h1>
+                                }
+
+                                {allValues.nameTheater &&
+                                    <h1 className="h3 mb-0 text-gray-800">{allValues.nameTheater}</h1>
+                                }
+                                {/* {allValues.movieTheate} */}
                                 <ol className="breadcrumb">
                                     <li className="breadcrumb-item"><a href="./">Home</a></li>
                                     <li className="breadcrumb-item active" aria-current="page">Dashboard</li>
@@ -251,7 +251,7 @@ function Home() {
                                         <div className="card-body">
                                             <div className="row align-items-center">
                                                 <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Phim đang chiếu</div>
+                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Tổng phim đang chiếu</div>
                                                     <div className="h5 mb-0 font-weight-bold text-gray-800" >{allValues.totalFilms} phim</div>
                                                 </div>
                                                 <div className="col-auto">
@@ -268,7 +268,7 @@ function Home() {
                                             <div className="row no-gutters align-items-center">
                                                 <div className="col mr-2">
                                                     <div className="text-xs font-weight-bold text-uppercase mb-1">Số Lượng Khách hàng</div>
-                                                    <div className="h5 mb-0 font-weight-bold text-gray-800"> 20 khách hàng</div>
+                                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{allValues.amoutCustomer} khách hàng</div>
                                                 </div>
                                                 <div className="col-auto">
                                                     <i className="fas fa-guitar fa-2x text-success" />
@@ -278,37 +278,80 @@ function Home() {
                                     </div>
                                 </div>
                                 {/* New User Card Example */}
-                                <div className="col-xl-3 col-md-6 mb-4">
-                                    <div className="card h-100">
-                                        <div className="card-body">
-                                            <div className="row no-gutters align-items-center">
-                                                <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng rạp</div>
-                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">{(allValues.listTheater && allValues.listTheater.length) ? allValues.listTheater.length : 0} rạp</div>
-                                                </div>
-                                                <div className="col-auto">
-                                                    <i className="fas fa-play fa-2x text-info" />
+                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
+                                    <div className="col-xl-3 col-md-6 mb-4">
+                                        <div className="card h-100">
+                                            <div className="card-body">
+                                                <div className="row no-gutters align-items-center">
+                                                    <div className="col mr-2">
+                                                        <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng phòng chiếu</div>
+                                                        <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">{allValues.amountRoom} phòng</div>
+                                                    </div>
+                                                    <div className="col-auto">
+                                                        <i className="fas fa-play fa-2x text-info" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
+
+                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid === null &&
+                                    <div className="col-xl-3 col-md-6 mb-4">
+                                        <div className="card h-100">
+                                            <div className="card-body">
+                                                <div className="row no-gutters align-items-center">
+                                                    <div className="col mr-2">
+                                                        <div className="text-xs font-weight-bold text-uppercase mb-1">Số lượng rạp</div>
+                                                        <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">{(allValues.listTheater && allValues.listTheater.length) ? allValues.listTheater.length : 0} rạp</div>
+                                                    </div>
+                                                    <div className="col-auto">
+                                                        <i className="fas fa-play fa-2x text-info" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
                                 {/* Pending Requests Card Example */}
-                                <div className="col-xl-3 col-md-6 mb-4">
-                                    <div className="card h-100">
-                                        <div className="card-body">
-                                            <div className="row no-gutters align-items-center">
-                                                <div className="col mr-2">
-                                                    <div className="text-xs font-weight-bold text-uppercase mb-1">Tổng doanh thu</div>
-                                                    <div className="h5 mb-0 font-weight-bold text-gray-800">3.000.000 VNĐ</div>
-                                                </div>
-                                                <div className="col-auto">
-                                                    <i className="fas fa-users fa-2x text-info" />
+
+                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
+                                    <div className="col-xl-3 col-md-6 mb-4">
+                                        <div className="card h-100">
+                                            <div className="card-body">
+                                                <div className="row no-gutters align-items-center">
+                                                    <div className="col mr-2">
+                                                        <div className="text-xs font-weight-bold text-uppercase mb-1">Doanh thu {moment().format('MM/YYYY')}</div>
+                                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{allValues.amountPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</div>
+                                                    </div>
+                                                    <div className="col-auto">
+                                                        <i className="fas fa-users fa-2x text-info" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
+
+                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid === null &&
+                                    <div className="col-xl-3 col-md-6 mb-4">
+                                        <div className="card h-100">
+                                            <div className="card-body">
+                                                <div className="row no-gutters align-items-center">
+                                                    <div className="col mr-2">
+                                                        <div className="text-xs font-weight-bold text-uppercase mb-1">Doanh thu {moment().format('MM/YYYY')}</div>
+                                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{allValues.dataSales.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}</div>
+                                                    </div>
+                                                    <div className="col-auto">
+                                                        <i className="fas fa-users fa-2x text-info" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
 
                                 {selectUser.adminInfo && selectUser.adminInfo.roleId === 1 &&
                                     <>
@@ -400,17 +443,25 @@ function Home() {
                                                 }}
                                             >
 
-                                                <div className='col-12 title-chart'>
-                                                    <p>Số lượng vé của từng phim</p>
 
-                                                </div>
                                                 {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 && allValues.movieTheaterId === null) && Object.keys(userData).length !== 0 &&
-                                                    <BarChart options={options} chartData={userData} />
+                                                    <>
+
+                                                        <BarChart options={options} chartData={userData} />
+                                                    </>
+
                                                 }
 
 
                                                 {(selectUser.adminInfo && selectUser.adminInfo.roleId === 1 || allValues.movieTheaterId !== null) && Object.keys(userData).length !== 0 &&
-                                                    <LineChart chartData={userData} />
+                                                    <>
+                                                        <div className='col-12 title-chart'>
+                                                            <p>Doanh thu 6 tháng gần nhất</p>
+
+                                                        </div>
+                                                        <LineChart chartData={userData} />
+                                                    </>
+
                                                 }
                                             </LoadingOverlay>
 

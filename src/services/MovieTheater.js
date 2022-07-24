@@ -36,6 +36,10 @@ const deleteMovieTheater = (id) => {
     return axios.delete(`/movieTheater/${id}`)
 }
 
+const countRoomMovieTheater = (id) => {
+    return axios.get(`/count-room-of-movieTheater`, { params: { movieTheaterId: id } })
+}
+
 
 export {
     getAllMovieTheater,
@@ -45,5 +49,6 @@ export {
     removeImageMovieTheater,
     checkMerchantMovieTheater,
     getTheaterSales,
-    deleteMovieTheater
+    deleteMovieTheater,
+    countRoomMovieTheater
 };

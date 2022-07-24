@@ -2,6 +2,7 @@
     "menu": {
         "admin": {
             "header": "System",
+            "dashboard-management": "Dashboard Management",
             "user-management": "User Management",
             "staff-management": "Staff Management",
             "movieTheater-management": "Movie Theater Management",
@@ -17,6 +18,9 @@
             "bill-management": "Bill Management",
             "comment-management": "Comment Management",
             "feedback-management": "Feedback Management"
+        },
+        "dashboard-management": {
+            "dashboard": "Dashboard Management"
         },
         "user-management": {
             "list-users": "User Management"

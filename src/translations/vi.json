@@ -2,6 +2,7 @@
     "menu": {
         "admin": {
             "header": "Hệ thống",
+            "dashboard-management": "Thống kê",
             "user-management": "Quản lý người dùng",
             "staff-management": "Quản lý nhân viên",
             "movieTheater-management": "Quản lý rạp",
@@ -17,6 +18,9 @@
             "bill-management": "Quản lý hóa đơn",
             "comment-management": "Quản lý comment",
             "feedback-management": "Quản lý phản hồi"
+        },
+        "dashboard-management": {
+            "dashboard": "Thống kê"
         },
         "user-management": {
             "list-users": "Quản lý người dùng"

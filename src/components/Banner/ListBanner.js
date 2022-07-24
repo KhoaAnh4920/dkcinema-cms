@@ -131,7 +131,7 @@ function ListBanner() {
                                 })
                             }}
                         >
-                            <div className="col-lg-12 mb-4">
+                            <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
 
                                 <MaterialTable
                                     title="Danh sách banner"

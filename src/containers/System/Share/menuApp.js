@@ -1,5 +1,14 @@
 export const adminMenu = [
     {
+        name: 'menu.admin.dashboard-management',
+        id: 'tableDashboard',
+        menus: [
+            {
+                name: 'menu.dashboard-management.dashboard', link: '/',
+            },
+        ]
+    },
+    {
         name: 'menu.admin.user-management',
         id: 'tableUser',
         menus: [
@@ -93,6 +102,15 @@ export const adminMenu = [
 
 
 export const merchantMenu = [
+    {
+        name: 'menu.admin.dashboard-management',
+        id: 'tableDashboard',
+        menus: [
+            {
+                name: 'menu.dashboard-management.dashboard', link: '/',
+            },
+        ]
+    },
     {
         name: 'menu.admin.staff-management',
         id: 'tableStaff',

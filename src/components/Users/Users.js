@@ -189,7 +189,7 @@ function Users() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <div className="col-lg-12 mb-4">
+                        <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
                             <LoadingOverlay
                                 active={isShowLoading}
                                 spinner={<BeatLoader color='#6777ef' size={20} />}

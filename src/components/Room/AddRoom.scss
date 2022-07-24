@@ -84,6 +84,11 @@
                                     cursor: pointer;
                                     background-color: orange;
                                 }
+
+                                &.active {
+                                    cursor: pointer;
+                                    background-color: orange;
+                                }
                             }
                         }
                     }
