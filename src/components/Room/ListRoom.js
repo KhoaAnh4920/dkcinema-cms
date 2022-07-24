@@ -72,9 +72,7 @@ function ListRoom() {
 
     const handleOnDeleteRoom = async (id) => {
         try {
-            // this.setState({
-            //     isShowLoading: true
-            // })
+            setShowLoading(true);
 
             let res = await deleteRoomService(id);
             if (res && res.errCode === 0) {
@@ -84,11 +82,10 @@ function ListRoom() {
             } else {
                 alert(res.errMessage)
             }
-            // this.setState({
-            //     isShowLoading: false
-            // })
+            setShowLoading(false);
         } catch (e) {
             console.log(e);
+            setShowLoading(false);
         }
     }
 

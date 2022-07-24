@@ -277,7 +277,7 @@ export default function AddSchedule() {
 
         let formatedPremiereDate = new Date(allValues.premiereDate).getTime(); // convert timestamp //
         let formatedStartTime = new Date(allValues.startTime).getTime(); // convert timestamp //
-        let formatedEndTime = new Date(allValues.startTime).getTime(); // convert timestamp //
+        let formatedEndTime = new Date(allValues.endTime).getTime(); // convert timestamp //
         // console.log("Check formatedPremiereDate: ", formatedPremiereDate);
         // console.log("Check formatedStartTime: ", formatedStartTime);
         // console.log("Check formatedEndTime: ", formatedEndTime);
