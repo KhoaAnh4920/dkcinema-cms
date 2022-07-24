@@ -382,10 +382,7 @@ export default function AddFilms() {
                                                             className="form-control input-sm"
                                                             name='transName'
                                                             placeholder="Nhập tên phiên dịch"
-                                                            {...register("transName", {
-                                                                required: true,
-                                                                onChange: changeHandler
-                                                            })}
+                                                            onChange={changeHandler}
                                                         />
                                                     </div>
 
