@@ -553,10 +553,7 @@ export default function EditFilms() {
                                                             className="form-control input-sm"
                                                             name='transName'
                                                             placeholder="Nhập tên phiên dịch"
-                                                            {...register("transName", {
-                                                                required: true,
-                                                                onChange: changeHandler
-                                                            })}
+
                                                         />
                                                     </div>
 
@@ -654,7 +651,7 @@ export default function EditFilms() {
                                                 {Object.keys(errors).length !== 0 && (
                                                     <ul className="error-container">
                                                         {errors.name?.type === "required" && <li>Name Theater is required</li>}
-                                                        {errors.transName?.type === "required" && <li>TransName is required</li>}
+
                                                         {errors.country?.type === "required" && <li>Country is required</li>}
                                                         {errors.duration?.type === "required" && <li>Duration is required</li>}
                                                         {errors.language?.type === "required" && <li>Language is required</li>}
