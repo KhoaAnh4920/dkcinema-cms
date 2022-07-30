@@ -7,6 +7,9 @@ import LoadingOverlay from 'react-loading-overlay';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Footer from '../containers/System/Share/Footer';
 import LineChart from '../containers/System/Share/LineChart';
+import ApexLine from '../containers/System/Share/ApexLine';
+
+
 import { UserData } from "../containers/System/Share/Data";
 import { userState } from "../redux/userSlice";
 import { useSelector } from "react-redux";
@@ -245,8 +248,8 @@ function Home() {
                                 </ol>
                             </div>
                             <div className="row mb-3">
-                                {/* Earnings (Monthly) Card Example */}
-                                <div className="col-xl-3 col-md-6 mb-4">
+
+                                {/* <div className="col-xl-3 col-md-6 mb-4">
                                     <div className="card h-100">
                                         <div className="card-body">
                                             <div className="row align-items-center">
@@ -261,7 +264,7 @@ function Home() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* Earnings (Annual) Card Example */}
+
                                 <div className="col-xl-3 col-md-6 mb-4">
                                     <div className="card h-100">
                                         <div className="card-body">
@@ -276,9 +279,9 @@ function Home() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {/* New User Card Example */}
-                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
+                                </div> */}
+
+                                {/* {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
                                     <div className="col-xl-3 col-md-6 mb-4">
                                         <div className="card h-100">
                                             <div className="card-body">
@@ -312,11 +315,11 @@ function Home() {
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                } */}
 
-                                {/* Pending Requests Card Example */}
 
-                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
+
+                                {/* {selectUser.adminInfo && selectUser.adminInfo.movietheaterid !== null &&
                                     <div className="col-xl-3 col-md-6 mb-4">
                                         <div className="card h-100">
                                             <div className="card-body">
@@ -332,9 +335,9 @@ function Home() {
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                } */}
 
-                                {selectUser.adminInfo && selectUser.adminInfo.movietheaterid === null &&
+                                {/* {selectUser.adminInfo && selectUser.adminInfo.movietheaterid === null &&
                                     <div className="col-xl-3 col-md-6 mb-4">
                                         <div className="card h-100">
                                             <div className="card-body">
@@ -350,10 +353,10 @@ function Home() {
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                } */}
 
 
-                                {selectUser.adminInfo && selectUser.adminInfo.roleId === 1 &&
+                                {/* {selectUser.adminInfo && selectUser.adminInfo.roleId === 1 &&
                                     <>
 
                                         <div className="col-xl-4 col-lg-5">
@@ -468,8 +471,17 @@ function Home() {
 
                                         </div>
                                     </>
-                                }
+                                } */}
 
+                            </div>
+                            <div className='row'>
+                                <div className='col-12'>
+                                    <div className='row'>
+                                        <div className='col-4'>
+                                            <ApexLine />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             {/*Row*/}
                             {/* Modal Logout */}
