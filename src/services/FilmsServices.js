@@ -42,6 +42,14 @@ const countTicket = () => {
     return axios.get(`/count-ticket-of-movie`);
 }
 
+const countBookingTypeMovie = () => {
+    return axios.get(`/count-booking-type-of-movie`);
+}
+
+const getMovieRevenue = (type) => {
+    return axios.get(`/get-movie-revenue`, { params: { type: type } });
+}
+
 
 export {
     getAllFilms,
@@ -53,5 +61,7 @@ export {
     updateStatusFilms,
     deleteMovieService,
     getAllFilmsByStatus,
-    countTicket
+    countTicket,
+    getMovieRevenue,
+    countBookingTypeMovie
 };

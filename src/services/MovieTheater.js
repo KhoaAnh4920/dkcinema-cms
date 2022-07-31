@@ -41,6 +41,18 @@ const countRoomMovieTheater = (id) => {
 }
 
 
+const counTicketMovieTheater = (id, time) => {
+    return axios.get(`/count-ticket-by-movieTheater`, { params: { movieTheaterId: id, time: time } })
+}
+
+
+const getEachTheaterRevenue = (id, type) => {
+    return axios.get(`/get-each-theater-revenue`, { params: { movieTheaterId: id, type: type } })
+}
+
+
+
+
 export {
     getAllMovieTheater,
     createNewMovieTheater,
@@ -50,5 +62,7 @@ export {
     checkMerchantMovieTheater,
     getTheaterSales,
     deleteMovieTheater,
-    countRoomMovieTheater
+    countRoomMovieTheater,
+    counTicketMovieTheater,
+    getEachTheaterRevenue
 };
