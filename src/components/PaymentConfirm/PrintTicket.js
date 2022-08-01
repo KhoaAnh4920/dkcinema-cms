@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { getAllRoom, deleteRoomService } from '../../services/RoomService';
-import MaterialTable from 'material-table';
-import Swal from 'sweetalert2';
+// import { getAllRoom, deleteRoomService } from '../../services/RoomService';
+// import MaterialTable from 'material-table';
+// import Swal from 'sweetalert2';
 import Footer from '../../containers/System/Share/Footer';
 import './PrintTicket.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
@@ -21,16 +21,17 @@ import { Pagination } from 'antd';
 import Spinner from 'react-bootstrap/Spinner';
 import { Button } from 'react-bootstrap';
 import QRCode from 'qrcode';
-
+import { testFunction } from '../Users/useLocationForm';
+import useLocationForm from "../Users/useLocationForm";
 
 
 
 function PrintTicket() {
     const { id } = useParams();
-    const [listRoom, setRoomData] = useState([]);
-    const [movieTheaterId, setMovieTheaterId] = useState();
-    const [checked, setChecked] = useState(false);
-    const [loading, setLoading] = useState(false);
+    // const [listRoom, setRoomData] = useState([]);
+    // const [movieTheaterId, setMovieTheaterId] = useState();
+    // const [checked, setChecked] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [allValues, setAllValues] = useState({
         isShowLoading: false,
         dateCreated: new Date(),
@@ -44,7 +45,8 @@ function PrintTicket() {
         endTime: '',
         selectedMovie: {},
         listTicket: [],
-        isLoadingButton: false
+        isLoadingButton: false,
+        addressTheater: ''
     });
     const [pageCurrent, setPageCurrent] = useState(1);
     let history = useHistory();
@@ -64,15 +66,28 @@ function PrintTicket() {
             nameSeet += alphabet[+posOfColumn];
             nameSeet = nameSeet + (+pos + 1);
 
-            console.log('ticketData: ', ticketData)
+            // console.log('ticketData: ', ticketData)
 
             let imgQRCode = await QRCode.toDataURL(`${ticketData.data[0].id}`);
+
+            let theaterData = ticketData.data[0].TicketShowtime.RoomShowTime.MovieTheaterRoom;
+
+            const location = await testFunctionParent(theaterData.cityCode, theaterData.districtCode, theaterData.wardCode);
+
+            // console.log('location: ', location)
+
+            let address = theaterData.address + ', ' + location.selectedWard.label + ', ' + location.selectedDistrict.label + ', ' + location.selectedCity.label;
+
+            //  console.log('address: ', address);
+
+            //     item.address = item.address + ', ' + location.selectedWard.label + ', ' + location.selectedDistrict.label + ', ' + location.selectedCity.label;
 
 
             setAllValues((prevState) => ({
                 ...prevState,
                 listTicket: ticketData.data || [],
                 totalData: ticketData.totalData,
+                addressTheater: address,
                 nameSeet: nameSeet,
                 imgQRCode: imgQRCode,
                 isShowLoading: false,
@@ -97,6 +112,16 @@ function PrintTicket() {
     }
 
 
+    async function testFunctionParent(cityCode, districtCode, wardCode) {
+        const location = await testFunction(cityCode, districtCode, wardCode);
+
+        if (location)
+            return location;
+        return null;
+
+    }
+
+
 
 
     useEffect(() => {
@@ -105,7 +130,7 @@ function PrintTicket() {
 
 
     useEffect(() => {
-        console.log('selectUser: ', selectUser)
+        //  console.log('selectUser: ', selectUser)
         if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
 
             fetchAllData(id, 1, 1)
@@ -123,81 +148,8 @@ function PrintTicket() {
 
 
 
-    const columns = [
-        { title: 'ID', field: 'id', key: 'bookId' },
-        { title: 'Tên khách hàng', field: 'nameCus', key: 'nameCus' },
-        { title: 'Số điện thoại', field: 'phoneNumber', key: 'phoneNumber' },
-        { title: 'Ngày giờ đặt', field: 'createdAt', key: 'createdAt', render: rowData => <><span>{moment(rowData.createdAt).format("DD/MM/YYYY HH:mm")}</span></> },
-        {
-            title: 'Status', field: 'status', key: 'status', render: rowData =>
-
-                <>
-                    {rowData.status == 1 && <span className="badge badge-success">Đã thanh toán</span>}
-                    {rowData.status == -1 && <span className="badge badge-danger">Thanh toán thất bại</span>}
-                    {rowData.status == 0 && <span className="badge badge-danger">Chưa thanh toán</span>}
-                </>
-        },
-    ]
 
 
-    const handleChangeSelect = async (selectedOption, name) => {
-        let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
-        let stateCopy = { ...allValues };
-        stateCopy[stateName] = selectedOption;
-
-
-        setAllValues({ ...stateCopy })
-    }
-
-    const handleOnChangeDatePicker = (date) => {
-        setAllValues({ ...allValues, dateCreated: date[0] })
-    }
-
-    const customStyles = {
-        // control: base => ({
-        //     ...base,
-        //     height: 30,
-        //     minHeight: 30,
-        // }),
-        // dropdownIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 5,
-        //     paddingBottom: 10,
-        // }),
-        // clearIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 7,
-        //     paddingBottom: 7,
-        // }),
-    };
-
-    const handleSubmitFilter = () => {
-        setAllValues((prevState) => ({
-            ...prevState,
-            isShowLoading: false,
-        }))
-
-        let formatedDate = new Date(allValues.dateCreated).getTime(); // convert timestamp //
-
-        let obj = {};
-        obj.date = formatedDate;
-        obj.roomId = allValues.selectedRoom.value;
-        obj.movieId = allValues.selectedMovie.value;
-        obj.movieTheaterId = allValues.movieTheaterId;
-
-    }
-
-    const handleClearFilter = () => {
-        setAllValues((prevState) => ({
-            ...prevState,
-            selectedMovie: {},
-            selectedRoom: {}
-        }))
-    }
-
-    const changeHandler = e => {
-        setAllValues({ ...allValues, [e.target.name]: e.target.value })
-    }
 
 
     const handlePrintTicket = async () => {
@@ -266,7 +218,7 @@ function PrintTicket() {
                                                         <span style={{ fontSize: '18px', fontWeight: 'bold' }}>VÉ XEM PHIM</span>
                                                         <span style={{ textDecoration: 'underline' }}>Lien 1: Nhan vien</span>
                                                     </div>
-                                                    <p className='address-ticket'>180 Cao Lỗ, Phường 4, Quận 8, Hồ Chí Minh</p>
+                                                    <p className='address-ticket'>{allValues.addressTheater}</p>
 
 
                                                 </div>
@@ -322,7 +274,7 @@ function PrintTicket() {
                                                         <span style={{ fontSize: '18px', fontWeight: 'bold' }}>VÉ XEM PHIM</span>
                                                         <span style={{ textDecoration: 'underline' }}>Lien 2: Khach hang</span>
                                                     </div>
-                                                    <p className='address-ticket'>180 Cao Lỗ, Phường 4, Quận 8, Hồ Chí Minh</p>
+                                                    <p className='address-ticket'>{allValues.addressTheater}</p>
 
 
                                                 </div>

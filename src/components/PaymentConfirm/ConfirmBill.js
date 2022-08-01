@@ -22,10 +22,10 @@ import QrReader from 'react-qr-reader';
 
 function ConfirmBill() {
 
-    const [listRoom, setRoomData] = useState([]);
-    const [movieTheaterId, setMovieTheaterId] = useState();
-    const [checked, setChecked] = useState(false);
-    const [loading, setLoading] = useState(false);
+    // const [listRoom, setRoomData] = useState([]);
+    // const [movieTheaterId, setMovieTheaterId] = useState();
+    // const [checked, setChecked] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [scanResultWebCam, setScanResultWebCam] = useState('');
     const [allValues, setAllValues] = useState({
         isShowLoading: true,
@@ -45,24 +45,6 @@ function ConfirmBill() {
     let history = useHistory();
     let selectUser = useSelector(userState);
 
-
-
-    const buildDataInputSelect = (inputData, type) => {
-        let result = [];
-        if (inputData && inputData.length > 0) {
-            inputData.map((item, index) => {
-                let object = {};
-
-                object.label = item.name;
-                object.value = item.id;
-                if (type && type === 'MOVIE')
-                    object.duration = item.duration
-                result.push(object);
-            })
-
-        }
-        return result;
-    }
 
 
 
@@ -113,7 +95,7 @@ function ConfirmBill() {
 
 
     useEffect(() => {
-        console.log('selectUser: ', selectUser)
+        // console.log('selectUser: ', selectUser)
         if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
             let dateToday = new Date();
             fetchBookingConfirm(selectUser.adminInfo.movietheaterid, dateToday.getTime())
@@ -173,7 +155,7 @@ function ConfirmBill() {
             ...prevState,
             isLoadingButtonSubmit: true,
         }))
-        console.log(allValues);
+        //  console.log(allValues);
         let formatedDate = new Date(allValues.dateCreated).getTime(); // convert timestamp //
 
         let obj = {};
@@ -202,7 +184,7 @@ function ConfirmBill() {
 
         }
 
-        console.log('dataBooking: ', dataBooking);
+        // console.log('dataBooking: ', dataBooking);
 
 
     }
@@ -379,7 +361,7 @@ function ConfirmBill() {
                                             icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Làm mới</button>,
                                             onClick: async (event, rowData) => {
                                                 let movietheaterid = (selectUser && selectUser.adminInfo && selectUser.adminInfo.movietheaterid) ? selectUser.adminInfo.movietheaterid : null;
-                                                console.log('movietheaterid: ', movietheaterid)
+                                                // console.log('movietheaterid: ', movietheaterid)
                                                 fetchBookingConfirm(movietheaterid)
                                             },
                                             isFreeAction: true,
@@ -388,7 +370,7 @@ function ConfirmBill() {
 
                                             icon: () => <i className="fas fa-print" style={{ 'fontSize': '16px' }}> <span></span></i>,
                                             onClick: async (event, rowData) => {
-                                                console.log(rowData)
+                                                //  console.log(rowData)
                                                 if (rowData.status === 0)
                                                     toast.error("Cannot print this ticket")
                                                 history.push(`/print-ticket/${rowData.id}`);

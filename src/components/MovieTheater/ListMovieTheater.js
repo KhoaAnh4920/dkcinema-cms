@@ -55,17 +55,6 @@ function ListMovieTheater() {
             setShowLoading(false);
         }
 
-
-
-        // if (filmsData && filmsData.dataMovie) {
-        //     let response = filmsData.dataMovie.map(item => {
-        //         item.poster = item.ImageOfMovie[0].url;
-        //         item.releaseTime = moment(item.releaseTime).format("DD/MM/YYYY");
-        //         return item;
-        //     })
-        //     setFilmsData(response);
-        //     setShowLoading(false);
-        // }
     }
 
     async function testFunctionParent(cityCode, districtCode, wardCode) {
@@ -121,27 +110,6 @@ function ListMovieTheater() {
 
                 { /* EXAMPLE MAP INTERGRATE*/}
 
-
-                {/* <div className='row_chair col-lg-12'>
-                        <div className='chair'>
-                            <div className='one_row'>
-                                {
-                                    dataChair.map((item, index) => {
-                                        return <p>{item.id}</p>
-                                    })
-                                }
-                            </div>
-                            <div className='one_row'>
-                                {
-                                    dataChair2.map((item, index) => {
-                                        return <p>{item.id}</p>
-                                    })
-                                }
-                            </div>
-
-                        </div>
-
-                    </div> */}
 
                 {/* Sidebar */}
                 <div id="content-wrapper" className="d-flex flex-column">

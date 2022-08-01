@@ -56,7 +56,7 @@ export default function DetailTicket() {
             let dataBooking = await getDetailBooking(id);
             let dataCombo = await getComboBooking(id);
 
-            console.log('dataBooking: ', dataBooking);
+            //console.log('dataBooking: ', dataBooking);
 
 
             setAllValues({
