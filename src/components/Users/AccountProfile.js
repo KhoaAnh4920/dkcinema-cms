@@ -46,13 +46,10 @@ function AccountProfile() {
         districtCode: {},
         cityCode: {},
         wardCode: {},
-        address: '',
-        selectedMovieTheater: '',
-        isShowMovieTheater: true,
         errors: {},
         isShowLoading: false,
         imagePreviewUrl: 'https://res.cloudinary.com/cdmedia/image/upload/v1646921892/image/avatar/Unknown_b4jgka.png',
-        activeTab: 'Tab1'
+        movietheaterid: null
     });
 
     const customStyles = {
@@ -211,7 +208,7 @@ function AccountProfile() {
                 isShowLoading: false
             }));
 
-            console.log(allValues);
+            // console.log(allValues);
         }
         async function testFunctionParent(cityCode, districtCode, wardCode) {
             const location = await testFunction(cityCode, districtCode, wardCode);
@@ -266,7 +263,7 @@ function AccountProfile() {
             ...allValues,
             isShowLoading: true
         })
-        console.log('allValuesInput: ', allValuesInput)
+        //  console.log('allValuesInput: ', allValuesInput)
 
         let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
 
@@ -282,7 +279,8 @@ function AccountProfile() {
             districtCode: (selectedDistrict && selectedDistrict.value) ? selectedDistrict.value : null,
             wardCode: (selectedWard && selectedWard.value) ? selectedWard.value : null,
             roleId: allValues.roleId,
-            id: allValues.id
+            id: allValues.id,
+            movietheaterid: allValues.movietheaterid
         })
 
         if (res && res.errCode == 0) {
@@ -298,7 +296,7 @@ function AccountProfile() {
                 // isActive: true,
                 id: allValues.id,
                 accessToken: selectUser.adminInfo.accessToken,
-
+                movietheaterid: allValues.movietheaterid
             }));
         } else {
             // history.push("/users-management")

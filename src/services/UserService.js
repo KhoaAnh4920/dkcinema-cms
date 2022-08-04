@@ -7,7 +7,7 @@ const hanedleLoginUser = (userEmail, userPassword) => {
 }
 
 const getAllUser = () => {
-    console.log("authHeader: ", authHeader());
+    //  console.log("authHeader: ", authHeader());
     return axios.get(`/get-list-users`, { headers: authHeader() })
 }
 

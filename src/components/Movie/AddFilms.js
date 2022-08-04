@@ -96,7 +96,7 @@ export default function AddFilms() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+        // console.log(fileList);
         if (fileList.length > 2) {
             toast.error("Maximum 2 poster");
             return;
@@ -111,7 +111,7 @@ export default function AddFilms() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+                    //  console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else
@@ -119,7 +119,7 @@ export default function AddFilms() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //  console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Please choose image");
                 return;
@@ -127,7 +127,7 @@ export default function AddFilms() {
         }
 
 
-        console.log(fileList);
+        //  console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -135,7 +135,7 @@ export default function AddFilms() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        // console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -145,11 +145,11 @@ export default function AddFilms() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                //   console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        //  console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 
@@ -166,7 +166,10 @@ export default function AddFilms() {
 
         async function fetchDataTypeMovie() {
             // You can await here
-            let dateToday = moment().format('dddd, MMMM Do, YYYY');
+            let formatDate = moment().format("DD/MM/YYYY")
+            let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+            let dateToday = now + ', ' + formatDate
+
             const typeData = await getAllTypeFilms();
 
 
@@ -182,7 +185,7 @@ export default function AddFilms() {
 
         let test = youtube_parser('https://youtu.be/UBgPypHGAqE');
 
-        console.log('Link cắt: ', test);
+        // console.log('Link cắt: ', test);
 
         fetchDataTypeMovie();
     }, []);
@@ -266,7 +269,7 @@ export default function AddFilms() {
         const { value, checked } = e.target;
         const { typeMovie } = typeCheck;
 
-        console.log(`${value} is ${checked}`);
+        //   console.log(`${value} is ${checked}`);
 
         // Case 1 : The user checks the box
         if (checked) {
@@ -274,7 +277,7 @@ export default function AddFilms() {
                 typeMovie: [...typeMovie, value],
                 response: [...typeMovie, value],
             });
-            console.log(typeCheck);
+            //   console.log(typeCheck);
         }
 
         // Case 2  : The user unchecks the box

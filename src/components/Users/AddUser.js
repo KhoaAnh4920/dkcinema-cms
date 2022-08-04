@@ -146,10 +146,10 @@ export default function AddUser() {
         }));
 
         let isValid = checkValidateInput();
-        console.log("Check state: ", allValues);
+        //   console.log("Check state: ", allValues);
         if (isValid) {
             let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
-            console.log("Check formatedDate: ", formatedDate);
+            //       console.log("Check formatedDate: ", formatedDate);
 
             let res = await createNewUserService({
                 email: allValues.email,

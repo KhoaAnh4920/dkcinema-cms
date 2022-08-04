@@ -34,7 +34,7 @@ function DetailComment() {
         const commentData = await getDetailComment({
             newsId: id
         });
-        console.log("commentData: ", commentData);
+        //   console.log("commentData: ", commentData);
         if (commentData && commentData.data) {
 
 
@@ -53,23 +53,6 @@ function DetailComment() {
     }, []);
 
 
-    const handleChange = async (data) => {
-
-        console.log('data: ', data);
-
-        setShowLoading(true);
-
-        let res = await updateStatusNews({
-            id: data.id,
-            status: !data.status
-        })
-
-        if (res && res.errCode === 0) {
-            toast.success("Thay đổi trạng thái thành công")
-            await fetchDetailComment();
-        }
-
-    };
 
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },

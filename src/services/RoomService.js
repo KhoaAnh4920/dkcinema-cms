@@ -7,7 +7,7 @@ const getAllRoom = (movieTheaterId) => {
 }
 
 const createNewRoom = (data) => {
-    console.log("Check data: ", data);
+    //   console.log("Check data: ", data);
     return axios.post('/room', data)
 }
 

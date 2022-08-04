@@ -85,17 +85,17 @@ export default function AddSchedule() {
 
             if (listSchedule && listSchedule.data) {
                 listSchedule = listSchedule.data.reverse();
-                console.log('listSchedule: ', listSchedule)
+                // console.log('listSchedule: ', listSchedule)
                 listSchedule.map((item, index) => {
                     if (index < (listSchedule.length - 1)) {
                         let newDateEndTime = new Date(item.endTime);
-                        console.log('newDateEndTime: ', newDateEndTime)
+                        // console.log('newDateEndTime: ', newDateEndTime)
 
                         let test2 = moment(newDateEndTime).format("HH:mm:ss a");
                         let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
 
-                        console.log("end: ", test2)
-                        console.log('startTime: ', startTime);
+                        // console.log("end: ", test2)
+                        // console.log('startTime: ', startTime);
 
                         var startTime2 = moment(test2, 'HH:mm:ss a');
                         var endTime2 = moment(startTime, 'HH:mm:ss a');
@@ -110,10 +110,10 @@ export default function AddSchedule() {
             }
 
 
-            console.log("Check res: ", listSchedule);
+            //  console.log("Check res: ", listSchedule);
             stateCopy['listSchedule'] = (listSchedule) ? listSchedule : [];
 
-            console.log("Check res: ", stateCopy['listSchedule']);
+            // console.log("Check res: ", stateCopy['listSchedule']);
         }
 
 
@@ -140,7 +140,7 @@ export default function AddSchedule() {
             endTime: (addEndTime && addEndTime._d) ? addEndTime._d : null
         }))
 
-        console.log("Check allvalues: ", allValues.startTime);
+        // console.log("Check allvalues: ", allValues.startTime);
 
 
     };
@@ -210,17 +210,17 @@ export default function AddSchedule() {
 
             if (listSchedule && listSchedule.data) {
                 listSchedule = listSchedule.data.reverse();
-                console.log('listSchedule: ', listSchedule)
+                //  console.log('listSchedule: ', listSchedule)
                 listSchedule.map((item, index) => {
                     if (index < (listSchedule.length - 1)) {
                         let newDateEndTime = new Date(item.endTime);
-                        console.log('newDateEndTime: ', newDateEndTime)
+                        //  console.log('newDateEndTime: ', newDateEndTime)
 
                         let test2 = moment(newDateEndTime).format("HH:mm:ss a");
                         let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
 
-                        console.log("end: ", test2)
-                        console.log('startTime: ', startTime);
+                        // console.log("end: ", test2)
+                        // console.log('startTime: ', startTime);
 
                         var startTime2 = moment(test2, 'HH:mm:ss a');
                         var endTime2 = moment(startTime, 'HH:mm:ss a');
@@ -250,7 +250,10 @@ export default function AddSchedule() {
 
 
     useEffect(() => {
-        let dateToday = moment().format('dddd, MMMM Do, YYYY');
+
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -275,22 +278,26 @@ export default function AddSchedule() {
 
 
 
+    const targetHeight = 32;
+
     const customStyles = {
-        // control: base => ({
-        //     ...base,
-        //     height: 30,
-        //     minHeight: 30,
-        // }),
-        // dropdownIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 5,
-        //     paddingBottom: 10,
-        // }),
-        // clearIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 7,
-        //     paddingBottom: 7,
-        // }),
+        control: (base) => ({
+            ...base,
+            minHeight: 'initial',
+        }),
+        valueContainer: (base) => ({
+            ...base,
+            height: `${targetHeight - 1 - 1}px`,
+            padding: '0 8px',
+        }),
+        clearIndicator: (base) => ({
+            ...base,
+            padding: `${(targetHeight - 20 - 1 - 1) / 2}px`,
+        }),
+        dropdownIndicator: (base) => ({
+            ...base,
+            padding: `${(targetHeight - 20 - 1 - 1) / 2}px`,
+        }),
     };
 
 
@@ -308,9 +315,7 @@ export default function AddSchedule() {
         let formatedPremiereDate = new Date(allValues.premiereDate).getTime(); // convert timestamp //
         let formatedStartTime = new Date(allValues.startTime).getTime(); // convert timestamp //
         let formatedEndTime = new Date(allValues.endTime).getTime(); // convert timestamp //
-        // console.log("Check formatedPremiereDate: ", formatedPremiereDate);
-        // console.log("Check formatedStartTime: ", formatedStartTime);
-        // console.log("Check formatedEndTime: ", formatedEndTime);
+
 
         let checkTime = moment(allValues.startTime).format('HH');
 
@@ -361,17 +366,17 @@ export default function AddSchedule() {
 
                 if (listSchedule && listSchedule.data) {
                     listSchedule = listSchedule.data.reverse();
-                    console.log('listSchedule: ', listSchedule)
+                    //console.log('listSchedule: ', listSchedule)
                     listSchedule.map((item, index) => {
                         if (index < (listSchedule.length - 1)) {
                             let newDateEndTime = new Date(item.endTime);
-                            console.log('newDateEndTime: ', newDateEndTime)
+                            // console.log('newDateEndTime: ', newDateEndTime)
 
                             let test2 = moment(newDateEndTime).format("HH:mm:ss a");
                             let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
 
-                            console.log("end: ", test2)
-                            console.log('startTime: ', startTime);
+                            //  console.log("end: ", test2)
+                            //  console.log('startTime: ', startTime);
 
                             var startTime2 = moment(test2, 'HH:mm:ss a');
                             var endTime2 = moment(startTime, 'HH:mm:ss a');
@@ -419,17 +424,17 @@ export default function AddSchedule() {
 
         if (listSchedule && listSchedule.data) {
             listSchedule = listSchedule.data.reverse();
-            console.log('listSchedule: ', listSchedule)
+            //  console.log('listSchedule: ', listSchedule)
             listSchedule.map((item, index) => {
                 if (index < (listSchedule.length - 1)) {
                     let newDateEndTime = new Date(item.endTime);
-                    console.log('newDateEndTime: ', newDateEndTime)
+                    //  console.log('newDateEndTime: ', newDateEndTime)
 
                     let test2 = moment(newDateEndTime).format("HH:mm:ss a");
                     let startTime = moment(listSchedule[index + 1].startTime).format("HH:mm:ss a");
 
-                    console.log("end: ", test2)
-                    console.log('startTime: ', startTime);
+                    // console.log("end: ", test2)
+                    //  console.log('startTime: ', startTime);
 
                     var startTime2 = moment(test2, 'HH:mm:ss a');
                     var endTime2 = moment(startTime, 'HH:mm:ss a');
@@ -466,7 +471,6 @@ export default function AddSchedule() {
     return (
 
         <>
-
             <div id="wrapper">
                 {/* Sidebar */}
 
@@ -567,7 +571,7 @@ export default function AddSchedule() {
                                                                 }
                                                                 {allValues && allValues.listSchedule && allValues.listSchedule.length === 0 &&
                                                                     <div className='data-movie-content'>
-                                                                        <div className='movie-content'>
+                                                                        <div className='movie-content none'>
                                                                             <p>Không có suất chiếu mới nào !!</p>
                                                                         </div>
                                                                     </div>
@@ -632,7 +636,7 @@ export default function AddSchedule() {
                                                                     <DatePicker
                                                                         onChange={handleOnChangePremiereTime}
                                                                         className="form-control col-8"
-                                                                        // minDate={new Date().fp_incr(1)}
+                                                                        minDate={new Date().fp_incr(1)}
                                                                         value={allValues.premiereDate}
                                                                     />
                                                                     {/* <span className='error-code-input'>{allValues.errors["birthday"]}</span> */}

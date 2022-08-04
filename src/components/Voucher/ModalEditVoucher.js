@@ -102,7 +102,7 @@ export default function ModalEditVoucher(props) {
             if (props.dataVoucher) {
                 let dataVoucher = props.dataVoucher;
 
-                console.log('dataVoucher: ', dataVoucher)
+                //   console.log('dataVoucher: ', dataVoucher)
 
 
                 let defaultValues = {};

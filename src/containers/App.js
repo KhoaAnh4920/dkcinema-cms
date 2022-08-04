@@ -6,10 +6,10 @@ import Login from '../components/Auth/Login';
 import Users from '../components/Users/Users';
 import { ToastContainer } from 'react-toastify';
 import { path } from '../utils/constant';
-import AddUser from '../components/Users/AddUser';
-import EditUser from '../components/Users/EditUser';
+// import AddUser from '../components/Users/AddUser';
+// import EditUser from '../components/Users/EditUser';
 import 'react-toastify/dist/ReactToastify.css';
-import TestModal from '../components/Users/TestModal';
+// import TestModal from '../components/Users/TestModal';
 import ListFilms from '../components/Movie/ListFilms';
 import AddFilms from '../components/Movie/AddFilms';
 import DetailFilm from '../components/Movie/DetailFilm';
@@ -62,9 +62,9 @@ function App() {
             <Route path="/admin-login" component={Login} />
             <Route path="/users-management" component={Users} />
             <Route path="/staff-management" component={ListStaff} />
-            <Route path="/add-users" component={AddUser} />
-            <Route path="/edit-user/:id" component={EditUser} />
-            <Route path="/test-modal" component={TestModal} />
+            {/* <Route path="/add-users" component={AddUser} />
+            <Route path="/edit-user/:id" component={EditUser} /> */}
+            {/* <Route path="/test-modal" component={TestModal} /> */}
             <Route path="/films-management" component={ListFilms} />
             <Route path="/add-new-films" component={AddFilms} />
             <Route path="/detail-film/:id" component={DetailFilm} />

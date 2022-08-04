@@ -80,7 +80,7 @@ export default function EditRoom() {
         stateCopy[stateName] = selectedOption;
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
+        // console.log("Check state: ", allValues);
     }
 
     async function fetchDataRoom() {
@@ -195,6 +195,10 @@ export default function EditRoom() {
             toast.error("Số lượng ghế trong hàng vượt quá số hàng");
             return;
         }
+        if (!allValues.selectedColumn) {
+            toast.error("Đã đạt tối đa số lượng ghế. Không thể thêm");
+            return;
+        }
 
         let objSeet = {};
         let posOfColumn = allValues.selectedColumn.value;
@@ -274,23 +278,23 @@ export default function EditRoom() {
 
     const handleClickSeet = (item1, item2) => {
 
-        console.log(allValues.listSeet)
-        console.log(allValues.seetCopy)
-        console.log(allValues.newListSeetUpdate)
+        // console.log(allValues.listSeet)
+        // console.log(allValues.seetCopy)
+        // console.log(allValues.newListSeetUpdate)
 
         let listSeet = JSON.parse(JSON.stringify(allValues.listSeet));
         let copyList = JSON.parse(JSON.stringify(allValues.seetCopy));
         let newListSeetUpdate = JSON.parse(JSON.stringify(allValues.newListSeetUpdate));
 
-        console.log("newListSeetUpdate: ", newListSeetUpdate);
+        //  console.log("newListSeetUpdate: ", newListSeetUpdate);
 
-        console.log("item1: ", item1);
+        //  console.log("item1: ", item1);
 
 
         let objIndexList = listSeet.findIndex((obj => obj.posOfColumn == item1.posOfColumn));
         let objIndexNewList = newListSeetUpdate.findIndex((obj => obj.posOfColumn == item1.posOfColumn));
 
-        console.log("objIndexNewList: ", objIndexNewList);
+        //  console.log("objIndexNewList: ", objIndexNewList);
 
 
         let objIndexDetail = listSeet[objIndexList].posOfRow.findIndex((obj => obj.pos === item2.pos));
@@ -304,13 +308,13 @@ export default function EditRoom() {
             obj.posOfColumn = listSeet[objIndexList].posOfColumn;
             obj.posOfRow = listSeet[objIndexList].posOfRow[objIndexDetail];
 
-            console.log("listSeetChangeType: ", allValues.listSeetChangeType);
+            //  console.log("listSeetChangeType: ", allValues.listSeetChangeType);
             let resResult = allValues.listSeetChangeType;
 
             if (objIndexNewList !== -1) { // Co trong new //
                 let objIndexDetailNew = newListSeetUpdate[objIndexNewList].posOfRow.findIndex((obj => obj.pos === item2.pos));
-                console.log("objIndexNewList: ", objIndexNewList);
-                console.log('objIndexNewList[objIndexList].posOfRow[objIndexDetailNew]: ', newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew])
+                // console.log("objIndexNewList: ", objIndexNewList);
+                // console.log('objIndexNewList[objIndexList].posOfRow[objIndexDetailNew]: ', newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew])
                 if (newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew].typeId === 1)
                     newListSeetUpdate[objIndexNewList].posOfRow[objIndexDetailNew].typeId = 2;
                 else
@@ -322,9 +326,9 @@ export default function EditRoom() {
             }
 
 
-            console.log('resResult: ', resResult);
+            // console.log('resResult: ', resResult);
 
-            console.log("newListSeetUpdate: ", newListSeetUpdate);
+            // console.log("newListSeetUpdate: ", newListSeetUpdate);
 
             setAllValues((prevState) => ({
                 ...prevState,

@@ -10,7 +10,7 @@ export default function TestModal(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    console.log('props.modalIdForm: ', props)
+    // console.log('props.modalIdForm: ', props)
     return (
         <>
             {/* <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Modal Large</button> */}

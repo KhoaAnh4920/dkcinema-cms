@@ -26,7 +26,7 @@ function ListBanner() {
 
         // You can await here
         const bannerData = await getAllBanner();
-        console.log("bannerData: ", bannerData);
+        // console.log("bannerData: ", bannerData);
         if (bannerData && bannerData.data) {
 
 
@@ -47,7 +47,7 @@ function ListBanner() {
 
     const handleChange = async (data) => {
 
-        console.log('data: ', data);
+        //  console.log('data: ', data);
 
         setShowLoading(true);
 
@@ -64,8 +64,7 @@ function ListBanner() {
     };
 
     const columns = [
-        // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Ảnh', field: 'url', render: rowData => <img src={rowData.url} style={{ width: 500, height: 200 }} /> },
         { title: 'Tên', field: 'name' },
         {

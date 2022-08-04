@@ -43,7 +43,7 @@ function ListCombo() {
         let dataRes = await getAllCombo();
 
 
-        console.log("Check data: ", dataRes.dataCombo);
+        // console.log("Check data: ", dataRes.dataCombo);
 
 
         setAllValues((prevState) => ({
@@ -125,114 +125,114 @@ function ListCombo() {
                         <Header />
                         {/* Topbar */}
 
-                        <LoadingOverlay
-                            active={allValues.isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
-                            <div className='row' style={{ padding: '10px' }}>
+                        <div className="container-fluid" id="container-wrapper">
 
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
+                                <div className='row' style={{ padding: '10px' }}>
+                                    <div className="col-lg-7 mb-4">
+                                        <MaterialTable
+                                            title="Danh sách Combo"
+                                            columns={columns}
+                                            data={allValues.listCombo}
 
-                                <div className="col-lg-7 mb-4">
+                                            onRowClick={async (event, rowData) => {
+                                                // Copy row data and set checked state
 
+                                                let item = await getItemCombo(rowData.id);
 
-                                    <MaterialTable
-                                        title="Danh sách Combo"
-                                        columns={columns}
-                                        data={allValues.listCombo}
+                                                // console.log("Check item: ", item);
 
-                                        onRowClick={async (event, rowData) => {
-                                            // Copy row data and set checked state
-
-                                            let item = await getItemCombo(rowData.id);
-
-                                            // console.log("Check item: ", item);
-
-                                            let res = []
-                                            if (item && item.data && item.data.length > 0) {
-                                                res = item.data.map(item => {
-                                                    item.nameFood = item.Food.name;
-                                                    return item;
-                                                })
-                                            }
-
-                                            setAllValues((prevState) => ({
-                                                ...prevState,
-                                                isShowLoading: false,
-                                                listItem: res
-                                            }))
-
-                                        }}
-
-                                        actions={[
-                                            {
-                                                icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm combo</button>,
-                                                onClick: async (event, rowData) => {
-                                                    history.push('/add-new-combo')
-                                                },
-                                                isFreeAction: true,
-                                            },
-                                            {
-                                                icon: 'edit',
-                                                // tooltip: 'Edit Film',
-                                                onClick: async (event, rowData) => {
-                                                    history.push(`/edit-combo/${rowData.id}`);
+                                                let res = []
+                                                if (item && item.data && item.data.length > 0) {
+                                                    res = item.data.map(item => {
+                                                        item.nameFood = item.Food.name;
+                                                        return item;
+                                                    })
                                                 }
-                                            },
-                                            {
-                                                icon: 'delete',
-                                                tooltip: 'Delete food',
-                                                onClick: (event, rowData) => Swal.fire({
-                                                    title: 'Bạn có chắc ?',
-                                                    text: "Bạn sẽ không khôi phục được nó!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'OK !'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        handleOnDeleteCombo(rowData.id)
+
+                                                setAllValues((prevState) => ({
+                                                    ...prevState,
+                                                    isShowLoading: false,
+                                                    listItem: res
+                                                }))
+
+                                            }}
+
+                                            actions={[
+                                                {
+                                                    icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree" style={{ fontSize: '13px' }}>Thêm combo</button>,
+                                                    onClick: async (event, rowData) => {
+                                                        history.push('/add-new-combo')
+                                                    },
+                                                    isFreeAction: true,
+                                                },
+                                                {
+                                                    icon: 'edit',
+                                                    // tooltip: 'Edit Film',
+                                                    onClick: async (event, rowData) => {
+                                                        history.push(`/edit-combo/${rowData.id}`);
                                                     }
-                                                })
-                                            }
-                                        ]}
-                                        options={{
-                                            actionsColumnIndex: -1,
-                                            headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
-                                            paginationType: "stepped"
+                                                },
+                                                {
+                                                    icon: 'delete',
+                                                    tooltip: 'Delete food',
+                                                    onClick: (event, rowData) => Swal.fire({
+                                                        title: 'Bạn có chắc ?',
+                                                        text: "Bạn sẽ không khôi phục được nó!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'OK !'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            handleOnDeleteCombo(rowData.id)
+                                                        }
+                                                    })
+                                                }
+                                            ]}
+                                            options={{
+                                                actionsColumnIndex: -1,
+                                                headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
+                                                paginationType: "stepped"
 
-                                        }}
+                                            }}
 
-                                    />
+                                        />
+                                    </div>
+                                    <div className="col-lg-5 mb-4" style={{ zIndex: 1 }}>
+
+                                        <MaterialTable
+                                            title="Thực phẩm"
+                                            columns={columnsItemFood}
+                                            data={allValues.listItem}
+
+                                            options={{
+                                                actionsColumnIndex: -1,
+                                                headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
+                                                paginationType: "stepped"
+
+                                            }}
+
+                                        />
+                                    </div>
+
+
                                 </div>
-                                <div className="col-lg-5 mb-4" style={{ zIndex: 1 }}>
-
-                                    <MaterialTable
-                                        title="Thực phẩm"
-                                        columns={columnsItemFood}
-                                        data={allValues.listItem}
-
-                                        options={{
-                                            actionsColumnIndex: -1,
-                                            headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
-                                            paginationType: "stepped"
-
-                                        }}
-
-                                    />
-                                </div>
 
 
-                            </div>
+                            </LoadingOverlay>
 
-
-                        </LoadingOverlay>
+                        </div>
                     </div>
                     {/* Footer */}
                     <Footer />

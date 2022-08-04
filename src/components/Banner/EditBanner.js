@@ -104,7 +104,7 @@ export default function EditBanner() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+                    // console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else
@@ -112,7 +112,7 @@ export default function EditBanner() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //   console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Hãy chọn ảnh !!!");
                 return;
@@ -126,7 +126,7 @@ export default function EditBanner() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        // console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -136,11 +136,11 @@ export default function EditBanner() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                //    console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        //   console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 

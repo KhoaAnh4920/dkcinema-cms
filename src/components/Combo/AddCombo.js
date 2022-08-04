@@ -60,10 +60,16 @@ function AddCombo() {
             })
         }
 
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
+
+
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: false,
             listFood: listFood,
+            dateToday: dateToday
         }))
 
     }
@@ -122,7 +128,7 @@ function AddCombo() {
             result.push(obj);
         }))
 
-        console.log('result: ', result)
+        //  console.log('result: ', result)
 
         if (result.length === 0) {
             toast.error("Please upload image")
@@ -172,7 +178,7 @@ function AddCombo() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+        // console.log(fileList);
         if (fileList.length > 1) {
             toast.error("Maximum 1 image");
             return;
@@ -191,7 +197,7 @@ function AddCombo() {
                 return;
             }
         }
-        console.log(fileList);
+        //  console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -223,7 +229,7 @@ function AddCombo() {
 
 
     const columnsItemFood = [
-        { title: 'ID', field: 'id', key: 'FoodId' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tên thực phẩm', field: 'name', key: 'NameFood' },
         {
             title: 'Số lượng', field: 'amount', key: 'amoutFood', render: rowData =>
@@ -234,7 +240,7 @@ function AddCombo() {
                                 <i className="fa fa-minus"></i>
                             </button>
                         </div>
-                        <input className="form-control quantity" min="0" name="quantity" value="0" id={rowData.id} type="number" />
+                        <input className="form-control quantity" min="0" name="quantity" defaultValue="0" id={rowData.id} type="number" />
                         <div className="input-group-append">
                             <button className="btn btn-outline-secondary btn-plus" onClick={(e) => test(e)}>
                                 <i className="fa fa-plus"></i>
@@ -273,123 +279,124 @@ function AddCombo() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                        <div className="container-fluid" id="container-wrapper">
+                            <div className="d-sm-flex align-items-center justify-content-between mb-4">
 
-                            <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
-                                <li className="breadcrumb-item"><Link to={`/combo-management`}>Quản lý combo</Link></li>
-                                <li className="breadcrumb-item active" aria-current="page">Thêm combo</li>
-                            </ol>
-                            <span className='date-today'>{allValues.dateToday}</span>
-                            {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
-                        </div>
-
-                        <LoadingOverlay
-                            active={allValues.isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
-                            <div className='row' style={{ padding: '10px' }}>
-
-                                <div className="col-lg-6 mb-4">
-
-                                    <MaterialTable
-                                        title="Danh sách thực phẩm"
-                                        columns={columnsItemFood}
-                                        data={allValues.listFood}
-
-                                        options={{
-                                            actionsColumnIndex: -1,
-                                            headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
-                                            paginationType: "stepped"
-
-                                        }}
-
-                                    />
-                                </div>
-                                <div className="col-lg-6 mb-4 card">
-                                    <div className='form-add-combo'>
-                                        <h5>Combo Mới</h5>
-                                        <div className='vertical-input'>
-                                            <Upload
-                                                action={""}
-                                                listType="picture-card"
-                                                fileList={valImg.fileList}
-                                                onPreview={handlePreview}
-                                                beforeUpload={() => {
-                                                    /* update state here */
-                                                    return false;
-                                                }}
-                                                onChange={handleChangeImage}
-                                            >
-                                                {
-                                                    valImg.fileList.length >= 8 ? null :
-                                                        <>
-                                                            <div>
-                                                                <PlusOutlined />
-                                                                <div style={{ marginTop: 8 }}>Tải ảnh</div>
-                                                            </div>
-                                                        </>}
-                                            </Upload>
-                                            <Modal
-                                                visible={valImg.previewVisible}
-                                                title={valImg.previewTitle}
-                                                footer={null}
-                                                onCancel={handleCancel}
-                                            >
-                                                <img alt="example" style={{ width: '100%' }} src={valImg.previewImage} />
-                                            </Modal>
-                                        </div>
-                                        <div className='vertical-input'>
-                                            <label htmlFor="exampleInputEmail1">Tên combo</label>
-                                            <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên combo" />
-                                        </div>
-                                        <div className='vertical-input'>
-                                            <label htmlFor="exampleInputEmail1">Đơn giá</label>
-                                            <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.price} name='price' onKeyPress={(event) => {
-                                                if (!/[0-9]/.test(event.key)) {
-                                                    event.preventDefault();
-                                                }
-                                            }} placeholder="Nhập giá" />
-                                        </div>
-                                        <div className='horizon-button' style={{ marginTop: '30px' }}>
-                                            {/* <Button variant="primary" className="submit-schedule-data">
-                                                <span className="visually">Submit</span>
-                                            </Button> */}
-                                            <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={handleSaveCombo} >
-                                                {allValues.isLoadingButton &&
-                                                    <>
-                                                        <Spinner
-                                                            as="span"
-                                                            animation="border"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                        />
-                                                        <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
-                                                    </>
-
-                                                }
-                                                {!allValues.isLoadingButton &&
-                                                    <>
-                                                        <span className="visually">Thêm</span>
-                                                    </>
-                                                }
-                                            </Button>
-                                        </div>
-                                    </div>
-
-
-                                </div>
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to={`/`}>Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to={`/combo-management`}>Quản lý combo</Link></li>
+                                    <li className="breadcrumb-item active" aria-current="page">Thêm combo</li>
+                                </ol>
+                                <span className='date-today'>{allValues.dateToday}</span>
+                                {/* <i className="fa fa-arrow-left previous-page" aria-hidden="true" onClick={() => history.goBack()}></i> */}
                             </div>
 
-                        </LoadingOverlay>
+                            <LoadingOverlay
+                                active={allValues.isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
+                                <div className='row' style={{ padding: '10px' }}>
 
+                                    <div className="col-lg-6 mb-4">
+
+                                        <MaterialTable
+                                            title="Danh sách thực phẩm"
+                                            columns={columnsItemFood}
+                                            data={allValues.listFood}
+
+                                            options={{
+                                                actionsColumnIndex: -1,
+                                                headerStyle: { color: "#6e707e", backgroundColor: "#eaecf4", fontSize: '15px', fontWeight: 700 },
+                                                paginationType: "stepped"
+
+                                            }}
+
+                                        />
+                                    </div>
+                                    <div className="col-lg-6 mb-4 card">
+                                        <div className='form-add-combo'>
+                                            <h5>Combo Mới</h5>
+                                            <div className='vertical-input'>
+                                                <Upload
+                                                    action={""}
+                                                    listType="picture-card"
+                                                    fileList={valImg.fileList}
+                                                    onPreview={handlePreview}
+                                                    beforeUpload={() => {
+                                                        /* update state here */
+                                                        return false;
+                                                    }}
+                                                    onChange={handleChangeImage}
+                                                >
+                                                    {
+                                                        valImg.fileList.length >= 8 ? null :
+                                                            <>
+                                                                <div>
+                                                                    <PlusOutlined />
+                                                                    <div style={{ marginTop: 8 }}>Tải ảnh</div>
+                                                                </div>
+                                                            </>}
+                                                </Upload>
+                                                <Modal
+                                                    visible={valImg.previewVisible}
+                                                    title={valImg.previewTitle}
+                                                    footer={null}
+                                                    onCancel={handleCancel}
+                                                >
+                                                    <img alt="example" style={{ width: '100%' }} src={valImg.previewImage} />
+                                                </Modal>
+                                            </div>
+                                            <div className='vertical-input'>
+                                                <label htmlFor="exampleInputEmail1">Tên combo</label>
+                                                <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.name} name='name' placeholder="Nhập tên combo" />
+                                            </div>
+                                            <div className='vertical-input'>
+                                                <label htmlFor="exampleInputEmail1">Đơn giá</label>
+                                                <input type="text" className="form-control input-sm" onChange={changeHandler} value={allValues.price} name='price' onKeyPress={(event) => {
+                                                    if (!/[0-9]/.test(event.key)) {
+                                                        event.preventDefault();
+                                                    }
+                                                }} placeholder="Nhập giá" />
+                                            </div>
+                                            <div className='horizon-button' style={{ marginTop: '30px' }}>
+                                                {/* <Button variant="primary" className="submit-schedule-data">
+                                                <span className="visually">Submit</span>
+                                            </Button> */}
+                                                <Button variant="primary" {...allValues.isLoadingButton && 'disabled'} onClick={handleSaveCombo} >
+                                                    {allValues.isLoadingButton &&
+                                                        <>
+                                                            <Spinner
+                                                                as="span"
+                                                                animation="border"
+                                                                size="sm"
+                                                                role="status"
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span className="visually" style={{ marginLeft: '10px' }}>Loading...</span>
+                                                        </>
+
+                                                    }
+                                                    {!allValues.isLoadingButton &&
+                                                        <>
+                                                            <span className="visually">Thêm</span>
+                                                        </>
+                                                    }
+                                                </Button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </LoadingOverlay>
+                        </div>
 
                     </div>
                     {/* Footer */}

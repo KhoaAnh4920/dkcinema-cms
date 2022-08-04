@@ -56,7 +56,9 @@ export default function DetailTicket() {
             let dataBooking = await getDetailBooking(id);
             let dataCombo = await getComboBooking(id);
 
-            //console.log('dataBooking: ', dataBooking);
+            let formatDate = moment().format("DD/MM/YYYY")
+            let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+            let dateToday = now + ', ' + formatDate
 
 
             setAllValues({
@@ -64,7 +66,8 @@ export default function DetailTicket() {
                 listBooking: dataBooking.data || [],
                 listBookingTicket: dataBooking.data.BookingTicket,
                 isShowLoading: false,
-                dataCombo: dataCombo.data || []
+                dataCombo: dataCombo.data || [],
+                dateToday
             })
 
             // }

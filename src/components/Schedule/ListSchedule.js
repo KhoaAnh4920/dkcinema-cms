@@ -85,7 +85,7 @@ function ListSchedule() {
         // You can await here
         const dataMovie = await getAllFilmsByStatus(status);
 
-        console.log("Check phim: ", dataMovie);
+        //  console.log("Check phim: ", dataMovie);
 
         let listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
 
@@ -102,7 +102,7 @@ function ListSchedule() {
         // You can await here
         let dataRes = await getAllSchedule(data);
 
-        console.log('dataRes: ', dataRes);
+        //   console.log('dataRes: ', dataRes);
 
         let timeNow = moment();
 
@@ -121,16 +121,16 @@ function ListSchedule() {
 
 
 
-                console.log((moment(item.premiereDate)));
+                //  console.log((moment(item.premiereDate)));
 
                 var duration = moment.duration(timeNow.diff(moment(item.premiereDate)));
 
-                console.log("Check duation: ", duration);
-                console.log("Check day: ", duration.asDays() / 10);
+                // console.log("Check duation: ", duration);
+                // console.log("Check day: ", duration.asDays() / 10);
 
-                console.log("Check day: ", Math.trunc(duration.asDays()));
-                console.log("Check asHours: ", Math.trunc(duration.asHours()));
-                console.log("Check asMinutes: ", Math.trunc(duration.asMinutes()));
+                // console.log("Check day: ", Math.trunc(duration.asDays()));
+                // console.log("Check asHours: ", Math.trunc(duration.asHours()));
+                // console.log("Check asMinutes: ", Math.trunc(duration.asMinutes()));
 
                 if (Math.trunc(duration.asDays()) < 0 || Math.trunc(duration.asHours()) < 0 || Math.trunc(duration.asMinutes()) < 0) {
                     item.status = 0
@@ -138,7 +138,6 @@ function ListSchedule() {
                     item.status = 2
                 }
                 else {
-                    console.log("Chay vo else");
                     // time hien tai is between start va end => dang chieu
                     // time hien tai < start => sap chieu
                     // else => da chieu
@@ -151,15 +150,15 @@ function ListSchedule() {
                     let m2 = moment(item.endTime).format("mm");
 
                     if ((h1 < h || h1 == h && m1 <= m) && (h < h2 || h == h2 && m <= m2)) {
-                        console.log("Dang chieu")
+                        // console.log("Dang chieu")
                         item.status = 1
                     }
                     else if (h < h1) {
-                        console.log("Sap chieu");
+                        //   console.log("Sap chieu");
                         item.status = 0
                     } else {
                         item.status = 2
-                        console.log("Da chieu")
+                        //   console.log("Da chieu")
                     }
 
                 }
@@ -184,13 +183,13 @@ function ListSchedule() {
 
     const fetchAllData = async (movieTheaterId, status) => {
 
-        console.log('movieTheaterId: ', movieTheaterId)
+        //  console.log('movieTheaterId: ', movieTheaterId)
         let roomData = await getAllRoom(movieTheaterId);
         const dataMovie = await getAllFilmsByStatus(status);
 
         // console.log("Check phim: ", dataMovie);
 
-        console.log('roomData: ', roomData);
+        //   console.log('roomData: ', roomData);
 
         let listMovie = [];
         if (dataMovie && dataMovie.data) {
@@ -228,11 +227,11 @@ function ListSchedule() {
                     if (Math.trunc(duration.asDays()) < 0 || Math.trunc(duration.asHours()) < 0 || Math.trunc(duration.asMinutes()) < 0) {
                         item.status = 0
                     } else if (Math.trunc(duration.asDays()) > 0) {
-                        console.log("Cung ngay da chieu");
+                        //  console.log("Cung ngay da chieu");
                         item.status = 2
                     }
                     else {
-                        console.log("Chay vo else");
+                        //   console.log("Chay vo else");
                         // time hien tai is between start va end => dang chieu
                         // time hien tai < start => sap chieu
                         // else => da chieu
@@ -245,15 +244,15 @@ function ListSchedule() {
                         let m2 = moment(item.endTime).format("mm");
 
                         if ((h1 < h || h1 == h && m1 <= m) && (h < h2 || h == h2 && m <= m2)) {
-                            console.log("Dang chieu")
+                            //    console.log("Dang chieu")
                             item.status = 1
                         }
                         else if (h < h1) {
-                            console.log("Sap chieu");
+                            //    console.log("Sap chieu");
                             item.status = 0
                         } else {
                             item.status = 2
-                            console.log("Da chieu")
+                            //    console.log("Da chieu")
                         }
 
                     }

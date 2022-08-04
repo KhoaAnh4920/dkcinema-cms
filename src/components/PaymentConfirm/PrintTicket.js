@@ -268,7 +268,7 @@ function PrintTicket() {
                                                 </div>
                                             </div>
                                             <div className='col-2'> </div>
-                                            <div className='form-group col-5 ticket-two'>
+                                            <div className='col-5 ticket-two'>
                                                 <div className='header-ticket'>
                                                     <div className='header-title'>
                                                         <span style={{ fontSize: '18px', fontWeight: 'bold' }}>VÉ XEM PHIM</span>

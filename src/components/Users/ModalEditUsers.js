@@ -190,7 +190,7 @@ export default function ModalEditUsers(props) {
 
 
 
-            console.log('selectedCity: ', state.selectedCity);
+            //  console.log('selectedCity: ', state.selectedCity);
 
             setAllValues((prevState) => ({
                 ...prevState

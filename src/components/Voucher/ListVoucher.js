@@ -73,7 +73,7 @@ function ListVoucher() {
 
     const saveNewVoucherFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //   console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDateStart = null;
@@ -107,7 +107,7 @@ function ListVoucher() {
 
     const handleChange = async (data) => {
 
-        console.log('data: ', data);
+        //  console.log('data: ', data);
 
         setShowLoading(true);
 
@@ -125,7 +125,7 @@ function ListVoucher() {
 
     const saveEditVoucherFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //   console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDateStart = null;
@@ -162,7 +162,7 @@ function ListVoucher() {
 
 
     const columns = [
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Mã Voucher', field: 'code' },
         { title: 'Tên', field: 'name' },
         {
@@ -176,8 +176,8 @@ function ListVoucher() {
         {
             title: 'Trạng thái', field: 'status', render: rowData => <>
                 <div className="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
-                    <label class="custom-control-label" for={rowData.id}></label>
+                    <input type="checkbox" className="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
+                    <label className="custom-control-label" for={rowData.id}></label>
                 </div>
             </>
         },
@@ -242,7 +242,7 @@ function ListVoucher() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm mới voucher</button>,
+                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm voucher</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalVoucher(true);
                                             },

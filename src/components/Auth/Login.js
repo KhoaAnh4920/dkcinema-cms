@@ -43,9 +43,9 @@ export default function Login() {
         setLoadingButton(true);
         try {
             let data = await hanedleLoginUser(email, password); // goi api login //
-            console.log("Check data.data: ", data.data);
+            // console.log("Check data.data: ", data.data);
             if (data && data.errorCode === 0) {
-                console.log('---login ok---');
+                // console.log('---login ok---');
 
                 //this.props.testRedux();
 
@@ -146,7 +146,7 @@ export default function Login() {
                                     (errors.password?.type === "required" && <span className='error-content'>Password is required</span>) ||
                                     (errors.password?.type === "minLength" && <span className='error-content'>Password must be 6 characters long</span>)
                                 )}
-                                <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Forgot password ?</span>
+                                {/* <span style={{ fontSize: '12px', marginTop: '5px', float: 'right' }}>Forgot password ?</span> */}
 
                             </div>
 

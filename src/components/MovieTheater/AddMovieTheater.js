@@ -69,6 +69,15 @@ export default function AddMovieTheater() {
     useEffect(() => {
 
 
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            dateToday: dateToday
+        }))
+
     }, []);
 
 
@@ -83,7 +92,7 @@ export default function AddMovieTheater() {
         let result = [];
 
         await Promise.all(valImg.fileList.map(async (item, index) => {
-            console.log("Check item: ", item.originFileObj);
+            // console.log("Check item: ", item.originFileObj);
             let obj = {};
             obj.image = await getBase64(item.originFileObj);
             obj.fileName = item.name;
@@ -190,7 +199,7 @@ export default function AddMovieTheater() {
 
         if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //  console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Please choose image");
                 return;

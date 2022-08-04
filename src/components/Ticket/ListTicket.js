@@ -93,7 +93,7 @@ function ListTicket() {
     const fetchAllData = async (movieTheaterId) => {
         let bookData = await getAllBooking(movieTheaterId);
 
-        console.log('bookData: ', bookData);
+        //   console.log('bookData: ', bookData);
         if (bookData && bookData.data) {
             setAllValues((prevState) => ({
                 ...prevState,
@@ -118,6 +118,8 @@ function ListTicket() {
 
 
     useEffect(() => {
+
+        //  console.log('selectUser.adminInfo.movietheaterid: ', selectUser.adminInfo.movietheaterid)
 
         if (selectUser.adminInfo && selectUser.adminInfo.movietheaterid) {
             fetchAllData(selectUser.adminInfo.movietheaterid)
@@ -156,11 +158,11 @@ function ListTicket() {
 
     const handleSubmitFilter = async () => {
 
-        console.log('key: ', allValues.key);
+        //   console.log('key: ', allValues.key);
 
         let check = isNaN(+allValues.key);
 
-        console.log(check)
+        //   console.log(check)
 
         let bookData = null;
         if (check) {
@@ -265,7 +267,7 @@ function ListTicket() {
                                     actions={[
                                         {
 
-                                            icon: () => <i class="fas fa-info-circle" style={{ 'fontSize': '16px' }}></i>,
+                                            icon: () => <i className="fas fa-info-circle" style={{ 'fontSize': '16px' }}></i>,
                                             onClick: async (event, rowData) => {
                                                 history.push(`/detail-ticket/${rowData.id}`);
                                             },

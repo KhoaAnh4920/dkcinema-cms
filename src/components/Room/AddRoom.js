@@ -85,7 +85,7 @@ export default function AddRoom() {
         stateCopy[stateName] = selectedOption;
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
+        // console.log("Check state: ", allValues);
     }
     //validate
     const {
@@ -96,6 +96,14 @@ export default function AddRoom() {
 
 
     useEffect(() => {
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            dateToday: dateToday
+        }))
 
     }, []);
 
@@ -115,8 +123,8 @@ export default function AddRoom() {
     const changeHandler = (e, type) => {
 
 
-        console.log(e.target.name)
-        console.log(type)
+        // console.log(e.target.name)
+        //  console.log(type)
 
         if (e.target.name === 'numberOfColumn' && e.target.value > 16) {
             toast.error("Hàng ghế tối đa 16 hàng")
@@ -239,7 +247,7 @@ export default function AddRoom() {
         let listSeet = JSON.parse(JSON.stringify(allValues.listSeet));
 
 
-        console.log("item1: ", item1);
+        //  console.log("item1: ", item1);
 
 
         let objIndexList = listSeet.findIndex((obj => obj.posOfColumn == item1.posOfColumn));

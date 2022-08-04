@@ -18,7 +18,7 @@ function Sidebar() {
 
             let role = selectUser.adminInfo.roleId;
 
-            console.log(role);
+            // console.log(role);
             if (role === 1) {
                 menuApp = adminMenu;
             }

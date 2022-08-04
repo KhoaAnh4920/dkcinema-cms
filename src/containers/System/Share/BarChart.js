@@ -20,8 +20,10 @@ export const options = {
   },
 };
 
-function BarChart({ chartData }) {
-  return <Bar options={options} data={chartData} />;
+function BarChart({ chartData, type }) {
+  if (!type)
+    return <Bar options={options} data={chartData} />;
+  return <Bar data={chartData} />;
 }
 
 export default BarChart;

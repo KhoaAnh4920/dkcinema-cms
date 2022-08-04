@@ -79,7 +79,7 @@ export default function AddBanner() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+        //  console.log(fileList);
         if (fileList.length > 1) {
             toast.error("Chỉ được tải lên một ảnh");
             return;
@@ -94,7 +94,7 @@ export default function AddBanner() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+                    //  console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else {
@@ -104,7 +104,7 @@ export default function AddBanner() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //  console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Hãy chọn ảnh");
                 return;
@@ -112,7 +112,7 @@ export default function AddBanner() {
         }
 
 
-        console.log(fileList);
+        //  console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -120,7 +120,7 @@ export default function AddBanner() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        //  console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -130,11 +130,11 @@ export default function AddBanner() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                //   console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        // console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 
@@ -142,7 +142,15 @@ export default function AddBanner() {
 
 
     useEffect(() => {
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
 
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            dateToday: dateToday,
+        }))
 
     }, []);
 

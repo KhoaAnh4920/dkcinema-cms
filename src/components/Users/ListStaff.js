@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
 
 
+
+
 function ListStaff() {
     let selectUser = useSelector(userState);
     const [listUser, setUserData] = useState([]);
@@ -38,11 +40,11 @@ function ListStaff() {
 
     async function fetchDataUser(movietheaterid) {
         // You can await here
-        console.log('movietheaterid: ', movietheaterid)
+        //   console.log('movietheaterid: ', movietheaterid)
         const userData = await getAllStaff({
             movieTheaterId: movietheaterid
         });
-        console.log("userData: ", userData);
+        //  console.log("userData: ", userData);
         if (userData && userData.data) {
             let response = userData.data.map((item, index) => {
 
@@ -130,11 +132,11 @@ function ListStaff() {
 
     const saveNewUserFromModal = async (data) => {
 
-        console.log('data: ', data);
+        // console.log('data: ', data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
-            console.log("Check formatedDate: ", formatedDate);
+            //   console.log("Check formatedDate: ", formatedDate);
 
             let res = await createNewUserService({
                 email: data.email,
@@ -167,7 +169,7 @@ function ListStaff() {
 
     const saveEditUserFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //    console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
@@ -218,7 +220,7 @@ function ListStaff() {
                         <Header />
                         {/* Topbar */}
 
-                        <div className="col-lg-12 mb-4">
+                        <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
                             <LoadingOverlay
                                 active={isShowLoading}
                                 spinner={<BeatLoader color='#6777ef' size={20} />}
@@ -236,7 +238,7 @@ function ListStaff() {
 
                                     actions={[
                                         {
-                                            icon: () => <button type="button" className="btn btn-info" data-toggle="modal" data-target="#myModalthree">Thêm nhân viên</button>,
+                                            icon: () => <button type="button" className="btn btn-info btn-add-staff" data-toggle="modal" data-target="#myModalthree">Thêm nhân viên</button>,
                                             onClick: async (event, rowData) => {
                                                 setOpenModalUser(true);
                                             },
@@ -253,7 +255,6 @@ function ListStaff() {
                                                     dataUser: (dataUser.errCode === 0) ? dataUser.data : {}
                                                 });
                                             }
-                                            // onClick: (event, rowData) => history.push(`/edit-user/${rowData.id}`)
 
                                         },
                                         // {

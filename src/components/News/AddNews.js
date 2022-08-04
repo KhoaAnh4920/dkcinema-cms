@@ -59,7 +59,7 @@ export default function AddNews() {
         status: 1,
         url: '',
         content: '',
-        typeNews: null,
+        typeNews: 1,
         errors: {},
         isLoadingButton: false
     });
@@ -112,7 +112,7 @@ export default function AddNews() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+        //  console.log(fileList);
         if (fileList.length > 1) {
             toast.error("Chỉ được chọn một ảnh");
             return;
@@ -127,7 +127,7 @@ export default function AddNews() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+                    //  console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else
@@ -135,7 +135,7 @@ export default function AddNews() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //  console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Hãy chọn ảnh !!");
                 return;
@@ -143,7 +143,7 @@ export default function AddNews() {
         }
 
 
-        console.log(fileList);
+        // console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -151,7 +151,7 @@ export default function AddNews() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        // console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -161,11 +161,11 @@ export default function AddNews() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                //  console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        // console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 
@@ -175,7 +175,17 @@ export default function AddNews() {
 
 
     useEffect(() => {
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
 
+
+
+        setAllValues((prevState) => ({
+            ...prevState,
+            dateToday: dateToday,
+
+        }));
 
     }, []);
 
@@ -220,7 +230,7 @@ export default function AddNews() {
         let result = [];
 
         await Promise.all(valImg.fileList.map(async (item, index) => {
-            console.log("Check item: ", item.originFileObj);
+            // console.log("Check item: ", item.originFileObj);
             let obj = {};
             obj.image = await getBase64(item.originFileObj);
             obj.fileName = item.name;
@@ -357,15 +367,15 @@ export default function AddNews() {
                                                     <label htmlFor="exampleInputEmail1">Thể loại</label>
                                                     <div className="col-sm-9 radio-type-post">
                                                         <div className="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio1" name="typeNews" value={1} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <input type="radio" id="customRadio1" name="typeNews" checked={(allValues.typeNews === 1) ? true : false} value={1} onChange={(e) => handleChange(e)} className="custom-control-input" />
                                                             <label className="custom-control-label" htmlFor="customRadio1">Review phim</label>
                                                         </div>
                                                         <div className="custom-control custom-radio">
-                                                            <input type="radio" id="customRadio2" name="typeNews" value={2} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <input type="radio" id="customRadio2" name="typeNews" value={2} checked={(allValues.typeNews === 2) ? true : false} onChange={(e) => handleChange(e)} className="custom-control-input" />
                                                             <label className="custom-control-label" htmlFor="customRadio2">Blog điện ảnh</label>
                                                         </div>
                                                         <div className="custom-control custom-radio">
-                                                            <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} onChange={(e) => handleChange(e)} className="custom-control-input" />
+                                                            <input type="radio" name="typeNews" id="customRadioDisabled1" value={3} checked={(allValues.typeNews === 3) ? true : false} onChange={(e) => handleChange(e)} className="custom-control-input" />
                                                             <label className="custom-control-label" htmlFor="customRadioDisabled1">Khuyến mãi</label>
                                                         </div>
                                                     </div>

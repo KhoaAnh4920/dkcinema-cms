@@ -102,7 +102,7 @@ export default function EditUser() {
                 const location = await testFunctionParent(dataUser.data.cityCode, dataUser.data.districtCode, dataUser.data.wardCode);
 
 
-                console.log("Check location: ", location);
+                //   console.log("Check location: ", location);
                 let listGender = buildDataInputSelect([], 'GENDERS');
                 let listRoles = [];
                 let dataRoles = await getAllRoles();
@@ -161,7 +161,7 @@ export default function EditUser() {
             // selectedCity,
             // selectedDistrict,
             // selectedWard,
-            console.log('allValues.location.cityOptions: ', allValues.location.cityOptions);
+            //  console.log('allValues.location.cityOptions: ', allValues.location.cityOptions);
             state.cityOptions = allValues.location.cityOptions;
             state.districtOptions = allValues.location.districtOptions;
             state.wardOptions = allValues.location.wardOptions;
@@ -171,7 +171,7 @@ export default function EditUser() {
 
 
 
-            console.log('selectedCity: ', state.selectedCity);
+            //   console.log('selectedCity: ', state.selectedCity);
 
             setAllValues((prevState) => ({
                 ...prevState
@@ -228,7 +228,7 @@ export default function EditUser() {
         }));
 
         let isValid = checkValidateInput();
-        console.log("Check state: ", allValues);
+        //  console.log("Check state: ", allValues);
         if (isValid) {
             let formatedDate = new Date(allValues.birthday).getTime(); // convert timestamp //
 
@@ -259,7 +259,7 @@ export default function EditUser() {
     }
 
     const handleOnChangeDatePicker = (date) => {
-        console.log(date[0]);
+        //  console.log(date[0]);
         setAllValues({ ...allValues, birthday: date[0] })
     }
 
@@ -419,7 +419,6 @@ export default function EditUser() {
 
                                             <div className="form-group">
                                                 <label htmlFor="exampleInputEmail1">City</label>
-                                                {console.log("Check in select: ", selectedCity)}
                                                 <Select
                                                     name="cityId"
                                                     key={`cityId_${selectedCity?.value}`}

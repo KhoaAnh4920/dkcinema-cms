@@ -26,7 +26,7 @@ function IntlProviderWrapper(props) {
     const language = useSelector(selectLanguage);
     let user = useSelector(selectUser);
 
-    console.log('language: ', language);
+    //  console.log('language: ', language);
 
     return (
         <>

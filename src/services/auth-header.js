@@ -4,7 +4,7 @@ export default function authHeader() {
 
     const dataLocal = JSON.parse(data.admin)
 
-    console.log("Check dataLocal: ", dataLocal);
+    //  console.log("Check dataLocal: ", dataLocal);
 
     if (dataLocal && dataLocal.adminInfo && dataLocal.adminInfo.accessToken) {
         return { Authorization: 'Bearer ' + dataLocal.adminInfo.accessToken };

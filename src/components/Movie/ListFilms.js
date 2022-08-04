@@ -32,20 +32,6 @@ function ListFilms() {
         roleId: 2
     });
 
-    // const handleChange = async (data) => {
-
-    //     let res = await updateStatusFilms({
-    //         id: data.id,
-    //         status: !data.isDelete
-    //     })
-
-    //     if (res && res.errCode === 0) {
-    //         await fetchDataMovie();
-    //     }
-
-    //     // setChecked(nextChecked);
-    // };
-
 
     async function fetchDataMovie() {
         setShowLoading(true);
@@ -86,7 +72,7 @@ function ListFilms() {
 
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tên phim', field: 'name', render: rowData => <Link to={`/detail-film/${rowData.id}`}>{rowData.name}</Link> },
         { title: 'Quốc gia', field: 'country' },
         { title: 'Thời lượng / phút', field: 'duration' },
@@ -101,14 +87,6 @@ function ListFilms() {
                 </>
 
         },
-        // {
-        //     title: 'Hiển thị', field: 'status', render: rowData => <>
-        //         <div className="custom-control custom-switch">
-        //             <input type="checkbox" class="custom-control-input" id={rowData.id} checked={!rowData.isDelete} onChange={() => handleChange(rowData)} />
-        //             <label class="custom-control-label" for={rowData.id}></label>
-        //         </div>
-        //     </>
-        // },
 
     ]
 

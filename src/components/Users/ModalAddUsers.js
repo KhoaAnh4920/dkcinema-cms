@@ -194,18 +194,18 @@ export default function ModalAddUsers(props) {
                 let result = [];
                 await Promise.all(allValues.copyListMovieTheater.map(async (item, index) => {
 
-                    console.log(item)
+                    //   console.log(item)
                     let data = await checkMerchantMovieTheater({
                         movieTheaterId: item.value,
                         roleId: 2
                     })
-                    console.log('data: ', data);
+                    //   console.log('data: ', data);
                     if (data && data.data) {
                         result.push(data.data);
                     }
                 }))
 
-                console.log('result: ', result);
+                //  console.log('result: ', result);
 
                 let listMovieTheater = buildDataInputSelect(result);
 
@@ -233,7 +233,7 @@ export default function ModalAddUsers(props) {
     }
 
     const changeHandler = e => {
-        console.log(e.target.value);
+        //   console.log(e.target.value);
         setAllValues({ ...allValues, [e.target.name]: e.target.value })
     }
 
@@ -245,7 +245,7 @@ export default function ModalAddUsers(props) {
         }));
 
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard, email: data.email, fullName: data.fullName, password: data.password, phone: data.phone, userName: data.userName };
-        console.log('allValuesInput: ', allValuesInput)
+        //   console.log('allValuesInput: ', allValuesInput)
 
         // if (!allValuesInput.selectedRoles)
         //     errors.selectedRoles.type = "required"

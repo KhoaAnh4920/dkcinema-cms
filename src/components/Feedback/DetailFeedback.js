@@ -37,9 +37,13 @@ function DetailFeedback() {
 
 
     const fetchDetailFeedback = async () => {
-        let dateToday = moment().format('dddd, MMMM Do, YYYY');
 
         let feedbackData = await getDetailFeedback(id);
+
+        let formatDate = moment().format("DD/MM/YYYY")
+        let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+        let dateToday = now + ', ' + formatDate
+
 
         if (feedbackData && feedbackData.data) {
             setAllValues((prevState) => ({

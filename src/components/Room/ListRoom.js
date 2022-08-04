@@ -32,7 +32,7 @@ function ListRoom() {
         // You can await here
         const roomData = await getAllRoom(movieTheaterId);
 
-        console.log("Check room: ", roomData);
+        // console.log("Check room: ", roomData);
 
         if (roomData && roomData.room) {
             setRoomData(roomData.room);
@@ -63,7 +63,7 @@ function ListRoom() {
 
 
     const columns = [
-        { title: 'ID', field: 'id', key: 'RoomId' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tên phòng chiếu', field: 'name', key: 'NameRoom' },
         { title: 'Số lượng ghế', field: 'NumberOfSeet', render: rowData => <span>{rowData.RoomSeet.length}</span> },
     ]
@@ -77,7 +77,7 @@ function ListRoom() {
             let res = await deleteRoomService(id);
             if (res && res.errCode === 0) {
                 toast.success("Xóa thành công")
-                console.log('movieTheaterId: ', selectUser.adminInfo.movietheaterid)
+                // console.log('movieTheaterId: ', selectUser.adminInfo.movietheaterid)
                 await fetchDataRoom(selectUser.adminInfo.movietheaterid);
             } else {
                 alert(res.errMessage)

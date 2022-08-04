@@ -59,7 +59,7 @@ export default function ModalEditFood(props) {
         async function fetchDataTypeFood() {
             let dataFood = props.dataFood;
 
-            console.log("Check dataFood: ", dataFood);
+            // console.log("Check dataFood: ", dataFood);
 
             if (dataFood) {
                 let dataType = await getAllTypeFood();
@@ -111,7 +111,7 @@ export default function ModalEditFood(props) {
         stateCopy[stateName] = selectedOption;
         setAllValues({ ...stateCopy })
 
-        console.log("Check state: ", allValues);
+        // console.log("Check state: ", allValues);
     }
 
 

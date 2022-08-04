@@ -181,7 +181,7 @@ export default function EditNews() {
                 image.addEventListener('load', () => {
                     const { width, height } = image;
                     // set image width and height to your state here
-                    console.log(width, height);
+                    //  console.log(width, height);
                     if (width >= height) {
                         fileList[fileList.length - 1].typeImage = 1; // Hình ngang 
                     } else
@@ -189,7 +189,7 @@ export default function EditNews() {
                 });
             });
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //  console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Hãy chọn ảnh");
                 return;
@@ -197,7 +197,7 @@ export default function EditNews() {
         }
 
 
-        console.log(fileList);
+        // console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList
@@ -205,7 +205,7 @@ export default function EditNews() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        //  console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -215,11 +215,11 @@ export default function EditNews() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                //   console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        //  console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 
@@ -325,7 +325,7 @@ export default function EditNews() {
             typeNews: +value
         }));
 
-        console.log('allvalue: ', allValues);
+        //  console.log('allvalue: ', allValues);
     }
 
     const handleChangeCKEdittor = (data) => {

@@ -20,7 +20,6 @@ import { Button } from 'react-bootstrap';
 
 function ListFeedback() {
 
-    const [listFeedback, setFeedbackData] = useState([]);
     const [isShowLoading, setShowLoading] = useState(true);
 
     const [allValues, setAllValues] = useState({
@@ -77,27 +76,8 @@ function ListFeedback() {
     }, []);
 
 
-    const handleChange = async (data) => {
-
-        console.log('data: ', data);
-
-        setShowLoading(true);
-
-        let res = await updateStatusNews({
-            id: data.id,
-            status: !data.status
-        })
-
-        if (res && res.errCode === 0) {
-            toast.success("Cập nhật trạng thái thành công")
-            await fetchFeedback();
-        }
-
-    };
-
     const columns = [
-        // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tên khách hàng', field: 'fullName' },
         { title: 'Số điện thoại', field: 'phone' },
         { title: 'Ngày gửi', field: 'createdAt', render: rowData => <span>{moment(rowData.createdAt).format('DD-MM-YYYY HH:mm')}</span> },
@@ -115,7 +95,7 @@ function ListFeedback() {
     }
 
     const handleSubmitFilter = async () => {
-        console.log('allValue: ', allValues);
+        //  console.log('allValue: ', allValues);
         setAllValues((prevState) => ({
             ...prevState,
             isShowLoading: true,

@@ -115,7 +115,6 @@ function Home() {
 
 
 
-
                 if (amountTicket && amountTicket.dataMovie && dataMovieTheater && dataMovieTheater.movie) {
 
 
@@ -130,14 +129,20 @@ function Home() {
                                     "#8e5ea2",
                                     "#3cba9f",
                                     "#e8c3b9",
-                                    "#c45850"
+                                    "#c45850",
+                                    "rgb(239, 161, 255)",
+                                    "rgb(239, 245, 129)",
+                                    "rgb(129, 228, 245)"
                                 ],
                                 borderColor: [
                                     "#3e95cd",
                                     "#8e5ea2",
                                     "#3cba9f",
                                     "#e8c3b9",
-                                    "#c45850"
+                                    "#c45850",
+                                    "rgb(239, 161, 255)",
+                                    "rgb(239, 245, 129)",
+                                    "rgb(129, 228, 245)"
                                 ],
                             },
                         ],
@@ -147,7 +152,7 @@ function Home() {
                     let arrMonth = dataPrice.map(item => item.createdAt);
                     let uniqueChars = [...new Set(arrMonth)];
 
-                    console.log('dataPrice: ', dataPrice)
+                    //   console.log('dataPrice: ', dataPrice)
 
                     const result = dataPrice.reduce((r, { tenRap, sum, createdAt }) => {
                         let arrSum = [];
@@ -190,15 +195,23 @@ function Home() {
                                             "#8e5ea2",
                                             "#3cba9f",
                                             "#e8c3b9",
-                                            "#c45850"
+                                            "#c45850",
+                                            "rgb(239, 161, 255)",
+                                            "rgb(239, 245, 129)",
+                                            "rgb(129, 228, 245)"
                                         ],
+
+
 
                                         borderColor: [
                                             "#3e95cd",
                                             "#8e5ea2",
                                             "#3cba9f",
                                             "#e8c3b9",
-                                            "#c45850"
+                                            "#c45850",
+                                            "rgb(239, 161, 255)",
+                                            "rgb(239, 245, 129)",
+                                            "rgb(129, 228, 245)"
                                         ],
                                     }
                                 )
@@ -217,7 +230,10 @@ function Home() {
                                     "#8e5ea2",
                                     "#3cba9f",
                                     "#e8c3b9",
-                                    "#c45850"
+                                    "#c45850",
+                                    "rgb(239, 161, 255)",
+                                    "rgb(239, 245, 129)",
+                                    "rgb(129, 228, 245)"
                                 ],
 
                             },
@@ -238,7 +254,10 @@ function Home() {
                                     "#8e5ea2",
                                     "#3cba9f",
                                     "#e8c3b9",
-                                    "#c45850"
+                                    "#c45850",
+                                    "rgb(239, 161, 255)",
+                                    "rgb(239, 245, 129)",
+                                    "rgb(129, 228, 245)"
                                 ],
 
                             },
@@ -272,7 +291,10 @@ function Home() {
                                     "#8e5ea2",
                                     "#3cba9f",
                                     "#e8c3b9",
-                                    "#c45850"
+                                    "#c45850",
+                                    "rgb(239, 161, 255)",
+                                    "rgb(239, 245, 129)",
+                                    "rgb(129, 228, 245)"
                                 ],
 
                             },
@@ -391,7 +413,10 @@ function Home() {
                             "#8e5ea2",
                             "#3cba9f",
                             "#e8c3b9",
-                            "#c45850"
+                            "#c45850",
+                            "rgb(239, 161, 255)",
+                            "rgb(239, 245, 129)",
+                            "rgb(129, 228, 245)"
                         ],
 
                     },
@@ -407,7 +432,7 @@ function Home() {
 
     const handleClickTheaterSales = async (id) => {
 
-        console.log('allValues.uniqueChars: ', allValues.uniqueChars);
+        //  console.log('allValues.uniqueChars: ', allValues.uniqueChars);
 
         let eachTheaterRevenue = await getEachTheaterRevenue(id, allValues.selectType);
         // console.log(eachTheaterRevenue)
@@ -423,7 +448,7 @@ function Home() {
 
         let uniqueChars = [...new Set(arrMonth)];
 
-        console.log('uniqueChars: ', uniqueChars)
+        // console.log('uniqueChars: ', uniqueChars)
 
 
 
@@ -461,7 +486,7 @@ function Home() {
             labels: uniqueChars,
             datasets:
                 Object.keys(result).map(function (key, index) {
-                    console.log(result[key].arrSum)
+                    //console.log(result[key].arrSum)
                     return (
                         {
                             label: result[key].tenRap,
@@ -471,7 +496,10 @@ function Home() {
                                 "#8e5ea2",
                                 "#3cba9f",
                                 "#e8c3b9",
-                                "#c45850"
+                                "#c45850",
+                                "rgb(239, 161, 255)",
+                                "rgb(239, 245, 129)",
+                                "rgb(129, 228, 245)"
                             ],
 
                             borderColor: [
@@ -479,7 +507,10 @@ function Home() {
                                 "#8e5ea2",
                                 "#3cba9f",
                                 "#e8c3b9",
-                                "#c45850"
+                                "#c45850",
+                                "rgb(239, 161, 255)",
+                                "rgb(239, 245, 129)",
+                                "rgb(129, 228, 245)"
                             ],
                         }
                     )
@@ -493,17 +524,15 @@ function Home() {
     const handleSelectType = async (type) => {
 
         let eachTheaterRevenue = await getEachTheaterRevenue((allValues.movieTheaterId ? allValues.movieTheaterId : null), type);
-        console.log(eachTheaterRevenue)
+        // console.log(eachTheaterRevenue)
 
 
         let dataPrice = eachTheaterRevenue.data;
-
         let arrMonth = dataPrice.map(item => item.createdAt);
-
         let uniqueChars = [...new Set(arrMonth)];
 
 
-        const result = dataPrice.reverse().reduce((r, { tenRap, sum, createdAt }) => {
+        const result = dataPrice.reduce((r, { tenRap, sum, createdAt }) => {
             let arrSum = [];
 
             if (r[tenRap]) {
@@ -534,9 +563,7 @@ function Home() {
 
         }
 
-
-
-        console.log('result: ', result);
+        //  console.log('result: ', result);
 
         setAllValues((prevState) => ({
             ...prevState,
@@ -546,10 +573,11 @@ function Home() {
         }));
 
         setPriceTheaterData({
-            labels: (type === 2) ? uniqueChars.reverse() : uniqueChars,
+            //labels: (type === 2) ? uniqueChars.reverse() : uniqueChars,
+            labels: uniqueChars,
             datasets:
                 Object.keys(result).map(function (key, index) {
-                    console.log(result[key].arrSum)
+                    //  console.log(result[key].arrSum)
                     return (
                         {
                             label: result[key].tenRap,
@@ -559,7 +587,10 @@ function Home() {
                                 "#8e5ea2",
                                 "#3cba9f",
                                 "#e8c3b9",
-                                "#c45850"
+                                "#c45850",
+                                "rgb(239, 161, 255)",
+                                "rgb(239, 245, 129)",
+                                "rgb(129, 228, 245)"
                             ],
 
                             borderColor: [
@@ -567,7 +598,10 @@ function Home() {
                                 "#8e5ea2",
                                 "#3cba9f",
                                 "#e8c3b9",
-                                "#c45850"
+                                "#c45850",
+                                "rgb(239, 161, 255)",
+                                "rgb(239, 245, 129)",
+                                "rgb(129, 228, 245)"
                             ],
                         }
                     )
@@ -638,7 +672,7 @@ function Home() {
                                                     </div>
                                                     <div className="col-auto">
                                                         <i className="fas fa-users fa-2x text-success" />
-                                                        <i class="fas fa-camera-movie"></i>
+                                                        <i className="fas fa-camera-movie"></i>
                                                     </div>
                                                 </div>
                                             </div>
@@ -799,7 +833,7 @@ function Home() {
 
                                                             </div>
                                                             <div className="card-body">
-                                                                <BarChart options={options} chartData={userData} />
+                                                                <BarChart options={options} chartData={userData} type={1} />
 
                                                             </div>
                                                         </div>

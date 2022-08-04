@@ -115,7 +115,7 @@ export default function ModalAddFood(props) {
     }
 
     const handleChangeSelect = async (selectedOption, name) => {
-        console.log('name: ', handleChangeSelect)
+        // console.log('name: ', handleChangeSelect)
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
         stateCopy[stateName] = selectedOption;

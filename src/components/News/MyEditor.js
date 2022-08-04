@@ -1,9 +1,16 @@
 import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import './MyEdittor.scss';
+
 
 const API_URL = "http://localhost:8000";
 const UPLOAD_ENDPOINT = "upload_files";
+
+
+
+
+
 
 export default function MyEditor({ handleChangeCKEdittor, ...props }) {
 

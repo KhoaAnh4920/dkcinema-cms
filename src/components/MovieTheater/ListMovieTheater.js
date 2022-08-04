@@ -72,7 +72,7 @@ function ListMovieTheater() {
 
 
     const columns = [
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tên rạp chiếu', field: 'tenRap' },
         { title: 'Địa chỉ', field: 'address' },
         { title: 'Số điện thoại', field: 'soDienThoai' },

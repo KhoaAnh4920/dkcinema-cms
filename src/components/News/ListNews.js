@@ -65,8 +65,7 @@ function ListNews() {
     };
 
     const columns = [
-        // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tiêu đề', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
         { title: 'Ảnh', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 150, height: 100 }} /> },
         {
@@ -83,8 +82,8 @@ function ListNews() {
         {
             title: 'Trạng thái', field: 'status', render: rowData => <>
                 <div className="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
-                    <label class="custom-control-label" for={rowData.id}></label>
+                    <input type="checkbox" className="custom-control-input" id={rowData.id} checked={rowData.status} onChange={() => handleChange(rowData)} />
+                    <label className="custom-control-label" for={rowData.id}></label>
                 </div>
             </>
         },

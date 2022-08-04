@@ -33,7 +33,7 @@ function Users() {
         setShowLoading(true);
         // You can await here
         const userData = await getAllUser();
-        console.log("userData: ", userData);
+        // console.log("userData: ", userData);
         if (userData && userData.user) {
             let response = userData.user.map((item, index) => {
                 if (item.UserRoles)
@@ -61,7 +61,7 @@ function Users() {
 
     const columns = [
         // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'Mã', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Ảnh', field: 'avatar', render: rowData => <img src={rowData.avatar} style={{ width: 60, height: 60, borderRadius: '50%' }} /> },
         { title: 'Họ Và Tên', field: 'fullName' },
         { title: 'Giới Tính', field: 'gender', render: rowData => (rowData.gender) ? 'Nam' : 'Nữ' },
@@ -104,11 +104,11 @@ function Users() {
 
     const saveNewUserFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //  console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
-            console.log("Check formatedDate: ", formatedDate);
+            //   console.log("Check formatedDate: ", formatedDate);
 
             let res = await createNewUserService({
                 email: data.email,
@@ -139,7 +139,7 @@ function Users() {
 
     const saveEditUserFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //  console.log("Check data from modal: ", data);
 
         if (data) {
             let formatedDate = new Date(data.birthday).getTime(); // convert timestamp //
@@ -224,7 +224,6 @@ function Users() {
                                                     dataUser: (dataUser.errCode === 0) ? dataUser.data : {}
                                                 });
                                             }
-                                            // onClick: (event, rowData) => history.push(`/edit-user/${rowData.id}`)
 
                                         },
                                         // {

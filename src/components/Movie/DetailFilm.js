@@ -70,7 +70,7 @@ export default function DetailFilm() {
     useEffect(() => {
         async function fetchDetailMovie() {
             let dataMovie = await getDetailFilm(id);
-            console.log("dataMovie:", dataMovie);
+            //   console.log("dataMovie:", dataMovie);
 
             if (dataMovie && dataMovie.data) {
                 let poster = '';

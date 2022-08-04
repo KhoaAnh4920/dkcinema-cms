@@ -77,7 +77,7 @@ function EditCombo() {
 
         let result = [];
 
-        console.log('dataDetailCombo.data[0]: ', dataDetailCombo.data[0])
+        //  console.log('dataDetailCombo.data[0]: ', dataDetailCombo.data[0])
 
         if (dataDetailCombo.data[0].image && dataDetailCombo.data[0].public_id_image) {
 
@@ -91,7 +91,7 @@ function EditCombo() {
         }
 
 
-        console.log('result: ', result)
+        // console.log('result: ', result)
 
 
         setValImg((prevState) => ({
@@ -123,8 +123,8 @@ function EditCombo() {
     const test = (e) => {
         const isNegative = $(e.target).closest('.btn-minus').is('.btn-minus');
         const input = $(e.target).closest('.input-group').find('input');
-        console.log("input: ", input);
-        console.log("id: ", input[0].id);
+        // console.log("input: ", input);
+        // console.log("id: ", input[0].id);
         if (input.is('input')) {
             input[0][isNegative ? 'stepDown' : 'stepUp']()
         }
@@ -136,7 +136,7 @@ function EditCombo() {
         //     ...prevState,
         //     isLoadingButton: true
         // }))
-        console.log("Check all value: ", allValues);
+        //  console.log("Check all value: ", allValues);
         let quantity = document.getElementsByClassName("quantity");
         let items = [];
         for (let a = 0; a < quantity.length; a++) {
@@ -146,7 +146,7 @@ function EditCombo() {
                 obj.amount = +quantity[a].value;
                 items.push(obj);
             }
-            console.log(allValues.listFood)
+            //  console.log(allValues.listFood)
             if (+quantity[a].value === 0) {
                 let res = allValues.listFood.some(item => (item.id === +quantity[a].id && item.amount !== 0));
                 if (res) {
@@ -235,7 +235,7 @@ function EditCombo() {
 
     const handleChangeImage = ({ fileList }) => {
 
-        console.log(fileList);
+        //  console.log(fileList);
         if (fileList.length > 1) {
             toast.error("Chỉ được tải lên 1 ảnh");
             return;
@@ -254,7 +254,7 @@ function EditCombo() {
                 return;
             }
         }
-        console.log(fileList);
+        //  console.log(fileList);
         setValImg((prevState) => ({
             ...prevState,
             fileList

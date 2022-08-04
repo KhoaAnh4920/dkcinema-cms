@@ -139,7 +139,7 @@ export default function EditFilms() {
     }
 
     const beforeUpload = file => {
-        console.log("file:", file);
+        //  console.log("file:", file);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.addEventListener('load', event => {
@@ -149,11 +149,11 @@ export default function EditFilms() {
             image.addEventListener('load', () => {
                 const { width, height } = image;
                 // set image width and height to your state here
-                console.log(width, height);
+                // console.log(width, height);
             });
         });
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        console.log(isJpgOrPng);
+        //  console.log(isJpgOrPng);
         return isJpgOrPng;
     };
 
@@ -602,7 +602,7 @@ export default function EditFilms() {
                                                         <label htmlFor="exampleInputEmail1">Thể loại</label>
 
                                                         <div className='row' style={{ marginLeft: '0px' }}>
-                                                            {/* <input type="checkbox" class="custom-control-input" checked id="customCheck3" /> */}
+                                                            {/* <input type="checkbox" className="custom-control-input" checked id="customCheck3" /> */}
 
                                                             {allValues.listTypeMovie && allValues.listTypeMovie.length > 0 && allValues.MovieOfType &&
                                                                 allValues.listTypeMovie.map((item, index) => {

@@ -205,14 +205,11 @@ function ConfirmBill() {
             });
 
             if (bookData && bookData.data) {
-
-
                 let response = bookData.data.map(item => {
                     item.nameMovie = item.BookingTicket[0].TicketShowtime.ShowtimeMovie.name;
 
                     return item;
                 })
-
 
                 setAllValues((prevState) => ({
                     ...prevState,

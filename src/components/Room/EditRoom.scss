@@ -19,7 +19,7 @@
             padding-top: 40px;
 
             .title-main {
-                margin-bottom: 50px;
+                margin-bottom: 10px;
                 color: #6777ef !important;
                 font-weight: 700;
                 text-transform: uppercase;
@@ -76,16 +76,17 @@
                                 width: 20px;
                                 background-color: #C5EABF;
                                 text-align: center;
+                                font-size: 12px;
                                 margin: 0;
                                 padding: 0;
 
                                 &:hover {
                                     cursor: pointer;
-                                    background-color: #FCAF17;
+                                    background-color: #fed990;
                                 }
 
                                 &.active {
-                                    background-color: #FCAF17;
+                                    background-color: #fed990;
                                     border: none;
                                 }
                             }
@@ -159,7 +160,7 @@
 
                                 height: 20px;
                                 width: 20px;
-                                background-color: #FCAF17;
+                                background-color: #fed990;
                                 text-align: center;
                                 margin-top: 10px;
                                 padding: 0;

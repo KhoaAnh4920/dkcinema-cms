@@ -46,49 +46,13 @@ function TotalComment() {
     }, []);
 
 
-    const handleChange = async (data) => {
-
-        console.log('data: ', data);
-
-        setShowLoading(true);
-
-        let res = await updateStatusNews({
-            id: data.id,
-            status: !data.status
-        })
-
-        if (res && res.errCode === 0) {
-            toast.success("Thay đổi trạng thái thành công")
-            await fetchDataPost();
-        }
-
-    };
-
     const columns = [
-        // { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.avatar} style={{ width: 40, borderRadius: '50%' }} /> },
-        { title: 'ID', field: 'id' },
+        { title: 'STT', field: 'stt', key: 'stt', render: (rowData, index) => <>{rowData.tableData.id + 1}</> },
         { title: 'Tiêu đề', field: 'title', render: rowData => <span className='title-news' style={{ display: 'inline-block', width: '180px', }}>{rowData.title}</span> },
         { title: 'Ảnh', field: 'thumbnail', render: rowData => <img src={rowData.thumbnail} style={{ width: 100, height: 80 }} /> },
         { title: 'Tổng số bình luận', field: 'CommentNews', render: rowData => <span>{rowData.CommentNews.length}</span> },
 
     ]
-
-    const handleOnDeletePost = async (id) => {
-        try {
-            setShowLoading(true);
-            let res = await deleteNews(id);
-            if (res && res.errCode === 0) {
-                toast.success("Xóa bình luận thành công")
-                await fetchDataPost();
-            } else {
-                toast.error(res.errMessage)
-            }
-
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
 
 
 
@@ -127,7 +91,7 @@ function TotalComment() {
 
                                         {
 
-                                            icon: () => <i class="fas fa-info-circle" style={{ 'fontSize': '16px' }}></i>,
+                                            icon: () => <i className="fas fa-info-circle" style={{ 'fontSize': '16px' }}></i>,
                                             onClick: async (event, rowData) => {
                                                 history.push(`/detail-comment/${rowData.id}`);
                                             },

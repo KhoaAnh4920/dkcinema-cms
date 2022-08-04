@@ -106,7 +106,7 @@ function ListFood() {
 
     const saveEditFoodFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //  console.log("Check data from modal: ", data);
 
         if (data) {
             let res = await editFoodService({
@@ -139,7 +139,7 @@ function ListFood() {
 
     const saveNewFoodFromModal = async (data) => {
 
-        console.log("Check data from modal: ", data);
+        //  console.log("Check data from modal: ", data);
 
         if (data) {
 

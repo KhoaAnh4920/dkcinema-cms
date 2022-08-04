@@ -29,7 +29,7 @@ class MenuGroup extends Component {
                         <i className="fas fa-film"></i>
                     }
                     {id === 'tableFood' &&
-                        <i class='fas fa-hamburger'></i>
+                        <i className='fas fa-hamburger'></i>
                     }
                     {id === 'tableCombo' &&
                         <i className='fas fa-recycle'></i>

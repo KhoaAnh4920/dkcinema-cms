@@ -94,7 +94,7 @@ export default function EditMovieTheater() {
             const movieTheaterData = await getAllMovieTheater();
             const movieTheaterEdit = await getEditMovieTheater(id);
 
-            console.log('movieTheaterEdit: ', movieTheaterEdit)
+            //  console.log('movieTheaterEdit: ', movieTheaterEdit)
 
             if (movieTheaterEdit && movieTheaterEdit.data) {
                 const location = await testFunctionParent(movieTheaterEdit.data.cityCode, movieTheaterEdit.data.districtCode, movieTheaterEdit.data.wardCode);
@@ -111,7 +111,7 @@ export default function EditMovieTheater() {
                 //  let selectedUser = setDefaultValue(listUser, movieTheaterEdit.data.userId);
 
                 let result = [];
-                console.log('movieTheaterEdit.data.MovieTheaterImage: ', movieTheaterEdit.data.MovieTheaterImage)
+                //  console.log('movieTheaterEdit.data.MovieTheaterImage: ', movieTheaterEdit.data.MovieTheaterImage)
 
                 if (movieTheaterEdit.data.MovieTheaterImage && movieTheaterEdit.data.MovieTheaterImage.length > 0) {
 
@@ -238,7 +238,7 @@ export default function EditMovieTheater() {
         await Promise.all(valImg.fileList.map(async (item, index) => {
             let obj = {};
             if (item.originFileObj) {
-                console.log("Check item: ", item.originFileObj);
+                //  console.log("Check item: ", item.originFileObj);
                 obj.image = await getBase64(item.originFileObj);
                 obj.fileName = item.name;
             } else {
@@ -249,7 +249,7 @@ export default function EditMovieTheater() {
             result.push(obj);
         }))
 
-        console.log("Chec res: ", result);
+        //   console.log("Chec res: ", result);
 
 
         let res = await editMovieTheater({
@@ -351,7 +351,7 @@ export default function EditMovieTheater() {
     const handleChangeImage = ({ fileList }) => {
         if (fileList.length > 0 && fileList[fileList.length - 1].originFileObj) {
             const isJpgOrPng = fileList[fileList.length - 1].type === 'image/jpeg' || fileList[fileList.length - 1].type === 'image/png';
-            console.log(isJpgOrPng);
+            //   console.log(isJpgOrPng);
             if (!isJpgOrPng) {
                 toast.error("Please choose image");
                 return;
@@ -365,7 +365,7 @@ export default function EditMovieTheater() {
 
     const handleRemove = async (e) => {
 
-        console.log('item remove: ', e);
+        //  console.log('item remove: ', e);
 
 
         if (e.public_id && typeof (e.uid) !== 'string') {
