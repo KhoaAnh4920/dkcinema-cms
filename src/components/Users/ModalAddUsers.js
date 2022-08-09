@@ -19,8 +19,6 @@ import { useForm } from "react-hook-form";
 
 export default function ModalAddUsers(props) {
 
-    // const [isOpen, setOpenModal] = useState(false);
-    // const [show, setShow] = useState(false);
     const fileUploader = useRef(null);
     const [allValues, setAllValues] = useState({
         phone: '',
@@ -59,8 +57,6 @@ export default function ModalAddUsers(props) {
         formState: { errors },
     } = useForm();
 
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
 
     const buildDataInputSelect = (inputData, type) => {
         let result = [];

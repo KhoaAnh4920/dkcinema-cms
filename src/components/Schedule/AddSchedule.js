@@ -145,49 +145,6 @@ export default function AddSchedule() {
 
     };
 
-    async function fetchDataRoom(movieTheaterId) {
-        // You can await here
-        const roomData = await getAllRoom(movieTheaterId);
-
-        let listRoom = buildDataInputSelect(roomData.room);
-
-        if (roomData && roomData.room) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isShowLoading: false,
-                dataRoom: roomData.room,
-                listRoom: listRoom,
-                selectedRoom: listRoom[0] || {}
-            }));
-        }
-    }
-
-    async function fetchDataMovie(status) {
-        // You can await here
-        const dataMovie = await getAllFilmsByStatus(status);
-
-        console.log("Check phim: ", dataMovie);
-
-        let listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
-
-        if (dataMovie && dataMovie.data) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isShowLoading: false,
-                listMovie: listMovie
-            }));
-        }
-    }
-
-    // async function fetchDataSchedule(data) {
-    //     // You can await here
-    //     let dataRes = await getAllSchedule(data);
-    //     setAllValues((prevState) => ({
-    //         ...prevState,
-    //         listSchedule: dataRes.data.reverse(),
-    //     }))
-    // }
-
     const fetchAllData = async (movieTheaterId, status) => {
         let roomData = await getAllRoom(movieTheaterId);
         const dataMovie = await getAllFilmsByStatus(status);

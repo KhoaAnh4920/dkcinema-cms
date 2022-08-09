@@ -123,17 +123,19 @@ function ListNews() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <LoadingOverlay
-                            active={isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
-                            <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
+
+                        <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
+
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
 
                                 <MaterialTable
                                     title="Danh sách bài viết"
@@ -182,10 +184,10 @@ function ListNews() {
 
                                     }}
                                 />
+                            </LoadingOverlay>
 
+                        </div>
 
-                            </div>
-                        </LoadingOverlay>
 
 
                     </div>

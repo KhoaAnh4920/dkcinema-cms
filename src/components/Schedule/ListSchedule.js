@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
-import { getAllRoom, deleteRoomService } from '../../services/RoomService';
+import { getAllRoom } from '../../services/RoomService';
 import MaterialTable from 'material-table';
-import Swal from 'sweetalert2';
 import Footer from '../../containers/System/Share/Footer';
 import './ListSchedule.scss';
 import Sidebar from '../../containers/System/Share/Sidebar';
@@ -24,10 +23,6 @@ import { Button } from 'react-bootstrap';
 
 function ListSchedule() {
 
-    const [listRoom, setRoomData] = useState([]);
-    const [movieTheaterId, setMovieTheaterId] = useState();
-    const [checked, setChecked] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [allValues, setAllValues] = useState({
         isShowLoading: true,
         dateSchedule: new Date(),
@@ -63,40 +58,6 @@ function ListSchedule() {
         return result;
     }
 
-
-    async function fetchDataRoom(movieTheaterId) {
-        // You can await here
-        const roomData = await getAllRoom(movieTheaterId);
-
-        let listRoom = buildDataInputSelect(roomData.room);
-
-        if (roomData && roomData.room) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isShowLoading: false,
-                dataRoom: roomData.room,
-                listRoom: listRoom,
-                selectedRoom: listRoom[0] || {}
-            }));
-        }
-    }
-
-    async function fetchDataMovie(status) {
-        // You can await here
-        const dataMovie = await getAllFilmsByStatus(status);
-
-        //  console.log("Check phim: ", dataMovie);
-
-        let listMovie = buildDataInputSelect(dataMovie.data, 'MOVIE');
-
-        if (dataMovie && dataMovie.data) {
-            setAllValues((prevState) => ({
-                ...prevState,
-                isShowLoading: false,
-                listMovie: listMovie
-            }));
-        }
-    }
 
     async function fetchDataSchedule(data) {
         // You can await here
@@ -354,24 +315,6 @@ function ListSchedule() {
         setAllValues({ ...allValues, dateSchedule: date[0] })
     }
 
-    const customStyles = {
-        // control: base => ({
-        //     ...base,
-        //     height: 30,
-        //     minHeight: 30,
-        // }),
-        // dropdownIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 5,
-        //     paddingBottom: 10,
-        // }),
-        // clearIndicator: (styles) => ({
-        //     ...styles,
-        //     paddingTop: 7,
-        //     paddingBottom: 7,
-        // }),
-    };
-
     const handleSubmitFilter = () => {
         setAllValues((prevState) => ({
             ...prevState,
@@ -438,8 +381,6 @@ function ListSchedule() {
                                                 options={allValues.listRoom}
                                                 placeholder='Select room'
                                                 name='selectedRoom'
-                                                styles={customStyles}
-                                            // styles={this.props.colourStyles}
                                             />
                                         </div>
                                         <div className='horizon-input'>
@@ -451,8 +392,6 @@ function ListSchedule() {
                                                 options={allValues.listMovie}
                                                 placeholder='Select movie'
                                                 name='selectedMovie'
-                                                styles={customStyles}
-                                            // styles={this.props.colourStyles}
                                             />
                                         </div>
 
@@ -472,9 +411,6 @@ function ListSchedule() {
 
 
                                         </div>
-
-
-
 
                                     </div>
                                 </div>
@@ -510,23 +446,23 @@ function ListSchedule() {
                                             },
                                             isFreeAction: true,
                                         },
-                                        {
-                                            icon: 'delete',
-                                            tooltip: 'Delete schedule',
-                                            // onClick: (event, rowData) => Swal.fire({
-                                            //     title: 'Are you sure?',
-                                            //     text: "You won't be able to revert this!",
-                                            //     icon: 'warning',
-                                            //     showCancelButton: true,
-                                            //     confirmButtonColor: '#3085d6',
-                                            //     cancelButtonColor: '#d33',
-                                            //     confirmButtonText: 'Yes, delete it!'
-                                            // }).then((result) => {
-                                            //     if (result.isConfirmed) {
-                                            //         handleOnDeleteRoom(rowData.id)
-                                            //     }
-                                            // })
-                                        }
+                                        // {
+                                        //     icon: 'delete',
+                                        //     tooltip: 'Delete schedule',
+                                        //     // onClick: (event, rowData) => Swal.fire({
+                                        //     //     title: 'Are you sure?',
+                                        //     //     text: "You won't be able to revert this!",
+                                        //     //     icon: 'warning',
+                                        //     //     showCancelButton: true,
+                                        //     //     confirmButtonColor: '#3085d6',
+                                        //     //     cancelButtonColor: '#d33',
+                                        //     //     confirmButtonText: 'Yes, delete it!'
+                                        //     // }).then((result) => {
+                                        //     //     if (result.isConfirmed) {
+                                        //     //         handleOnDeleteRoom(rowData.id)
+                                        //     //     }
+                                        //     // })
+                                        // }
                                     ]}
                                     options={{
                                         actionsColumnIndex: -1,

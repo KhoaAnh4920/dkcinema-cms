@@ -19,8 +19,7 @@ import { useForm } from "react-hook-form";
 
 export default function ModalEditUsers(props) {
 
-    // const [isOpen, setOpenModal] = useState(false);
-    // const [show, setShow] = useState(false);
+
     const fileUploader = useRef(null);
     const [allValues, setAllValues] = useState({
         phone: '',
@@ -251,8 +250,6 @@ export default function ModalEditUsers(props) {
         let stateName = name.name; // Lấy tên của select - selectedOption: lấy giá trị đc chọn trên select //
         let stateCopy = { ...allValues };
 
-
-
         stateCopy[stateName] = selectedOption;
 
         // if (stateName === 'selectedRoles' && selectedOption && (selectedOption.value === 2 || selectedOption.value === 3 ))
@@ -282,13 +279,6 @@ export default function ModalEditUsers(props) {
 
         let allValuesInput = { ...allValues, selectedCity, selectedDistrict, selectedWard };
         props.saveEditUser(allValuesInput);
-
-        // let isValid = this.checkValidateInput();
-        // if (isValid) {
-
-        //     this.props.saveEditPlaylist(this.state);
-
-        // }
 
     }
 

@@ -40,7 +40,6 @@ export default function EditFilms() {
         formState: { errors },
         reset
     } = useForm();
-    const [startDate, setStartDate] = useState(new Date());
 
     const [allValues, setAllValues] = useState({
         name: '',
@@ -138,24 +137,6 @@ export default function EditFilms() {
         }));
     }
 
-    const beforeUpload = file => {
-        //  console.log("file:", file);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.addEventListener('load', event => {
-            const _loadedImageUrl = event.target.result;
-            const image = document.createElement('img');
-            image.src = _loadedImageUrl;
-            image.addEventListener('load', () => {
-                const { width, height } = image;
-                // set image width and height to your state here
-                // console.log(width, height);
-            });
-        });
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        //  console.log(isJpgOrPng);
-        return isJpgOrPng;
-    };
 
     const handleRemove = async (e) => {
 
@@ -256,6 +237,12 @@ export default function EditFilms() {
                 defaultValues.url = dataMovie.data.url;
 
 
+
+                let formatDate = moment().format("DD/MM/YYYY")
+                let now = new Date().toLocaleDateString('vi-VN', { weekday: "long" });
+                let dateToday = now + ', ' + formatDate
+
+
                 setAllValues({
                     MovieOfType: dataMovie.data.MovieOfType,
                     id: id,
@@ -274,7 +261,8 @@ export default function EditFilms() {
                     listTypeMovie: typeData.dataTypeMovie,
                     url: dataMovie.data.url,
                     selectedStatus: selectedStatus,
-                    checked: checked
+                    checked: checked,
+                    dateToday: dateToday
                 })
 
                 setValImg((prevState) => ({
@@ -553,7 +541,8 @@ export default function EditFilms() {
                                                             className="form-control input-sm"
                                                             name='transName'
                                                             placeholder="Nhập tên phiên dịch"
-
+                                                            onChange={changeHandler}
+                                                            value={allValues.transName}
                                                         />
                                                     </div>
 

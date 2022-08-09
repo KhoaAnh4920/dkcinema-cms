@@ -115,8 +115,6 @@ function useLocationForm(shouldFetchInitialLocation) {
             selectedDistrict: null,
             selectedWard: null,
         });
-
-        //  console.log("Check city: ", state)
     }
 
     function onDistrictSelect(option) {

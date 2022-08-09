@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Header from '../../containers/System/Share/Header';
 import { getAllStaff, deleteUserService, createNewUserService, getEditUser, updateUserService } from '../../services/UserService';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import Swal from 'sweetalert2';
 import moment from 'moment';
 import Footer from '../../containers/System/Share/Footer';
@@ -15,7 +15,9 @@ import { toast } from 'react-toastify';
 import ModalEditStaff from './ModalEditStaff';
 import { useSelector } from "react-redux";
 import { userState } from "../../redux/userSlice";
-
+import { Button } from "@material-ui/core";
+//Material UI
+import { Paper } from "@material-ui/core";
 
 
 
@@ -235,6 +237,30 @@ function ListStaff() {
                                     title="Danh sách nhân viên"
                                     columns={columns}
                                     data={listUser}
+                                    // components={{
+                                    //     Toolbar: (props) => (
+                                    //         <div
+                                    //             style={{
+                                    //                 display: "flex",
+                                    //                 justifyContent: "flex-end",
+                                    //                 alignItems: "center"
+                                    //             }}
+                                    //         >
+                                    //             <Button
+                                    //                 type="button"
+                                    //                 className="btn btn-info btn-add-staff"
+                                    //                 data-toggle="modal"
+                                    //                 data-target="#myModalthree"
+                                    //             >
+                                    //                 Thêm nhân viên
+                                    //             </Button>
+                                    //             <div style={{ width: "13rem" }}>
+                                    //                 <MTableToolbar {...props} />
+                                    //             </div>
+                                    //         </div>
+                                    //     ),
+                                    //     Container: (props) => <Paper {...props} elevation={8} />
+                                    // }}
 
                                     actions={[
                                         {
@@ -284,8 +310,6 @@ function ListStaff() {
                                 />
                             </LoadingOverlay>
                         </div>
-
-
                     </div>
                     {/* Footer */}
                     <Footer />
@@ -309,10 +333,7 @@ function ListStaff() {
                     saveEditUser={saveEditUserFromModal}
                     dataUser={modalEditStaff.dataUser}
                 />
-
             }
-
-
         </>
     );
 }

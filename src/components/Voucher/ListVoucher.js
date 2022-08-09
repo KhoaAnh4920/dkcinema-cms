@@ -254,7 +254,7 @@ function ListVoucher() {
                                             // tooltip: 'Edit movie theater',
                                             onClick: async (event, rowData) => {
                                                 let dataVoucher = await getEditVoucher(+rowData.id);
-                                                console.log('rowData.id: ', rowData.id)
+                                                //  console.log('rowData.id: ', rowData.id)
                                                 setOpenModaEditVoucher({
                                                     isShow: true,
                                                     id: +rowData.id,

@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 function ListBanner() {
 
     const [listBanner, setBannerData] = useState([]);
-    const [isShowLoading, setShowLoading] = useState(false);
+    const [isShowLoading, setShowLoading] = useState(true);
 
     let history = useHistory();
 
@@ -120,17 +120,19 @@ function ListBanner() {
                         {/* TopBar */}
                         <Header />
                         {/* Topbar */}
-                        <LoadingOverlay
-                            active={isShowLoading}
-                            spinner={<BeatLoader color='#6777ef' size={20} />}
-                            styles={{
-                                overlay: (base) => ({
-                                    ...base,
-                                    background: '#fff'
-                                })
-                            }}
-                        >
-                            <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
+
+                        <div className="col-lg-12 mb-4" style={{ zIndex: 1 }}>
+
+                            <LoadingOverlay
+                                active={isShowLoading}
+                                spinner={<BeatLoader color='#6777ef' size={20} />}
+                                styles={{
+                                    overlay: (base) => ({
+                                        ...base,
+                                        background: '#fff'
+                                    })
+                                }}
+                            >
 
                                 <MaterialTable
                                     title="Danh sách banner"
@@ -186,9 +188,11 @@ function ListBanner() {
                                     }}
                                 />
 
+                            </LoadingOverlay>
 
-                            </div>
-                        </LoadingOverlay>
+
+                        </div>
+
                     </div>
                     {/* Footer */}
                     <Footer />
